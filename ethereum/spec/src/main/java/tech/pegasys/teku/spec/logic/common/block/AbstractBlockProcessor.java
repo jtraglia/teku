@@ -802,8 +802,8 @@ public abstract class AbstractBlockProcessor implements BlockProcessor {
       final UInt64 amount,
       final BLSSignature signature) {
     try {
-      return depositSignatureVerifier.verify(
-          pubkey, computeDepositSigningRoot(pubkey, withdrawalCredentials, amount), signature);
+      final Bytes signingRoot = computeDepositSigningRoot(pubkey, withdrawalCredentials, amount);
+      return depositSignatureVerifier.verify(pubkey, signingRoot, signature);
     } catch (final BlsException e) {
       return false;
     }
