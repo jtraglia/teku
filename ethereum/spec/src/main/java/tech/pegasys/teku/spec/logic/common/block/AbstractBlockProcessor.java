@@ -54,7 +54,6 @@ import tech.pegasys.teku.spec.datastructures.operations.AttestationData;
 import tech.pegasys.teku.spec.datastructures.operations.AttesterSlashing;
 import tech.pegasys.teku.spec.datastructures.operations.Deposit;
 import tech.pegasys.teku.spec.datastructures.operations.DepositData;
-import tech.pegasys.teku.spec.datastructures.operations.DepositMessage;
 import tech.pegasys.teku.spec.datastructures.operations.IndexedAttestation;
 import tech.pegasys.teku.spec.datastructures.operations.ProposerSlashing;
 import tech.pegasys.teku.spec.datastructures.operations.SignedVoluntaryExit;
@@ -79,6 +78,7 @@ import tech.pegasys.teku.spec.logic.common.util.AttestationUtil;
 import tech.pegasys.teku.spec.logic.common.util.BeaconStateUtil;
 import tech.pegasys.teku.spec.logic.common.util.ValidatorsUtil;
 import tech.pegasys.teku.spec.logic.versions.bellatrix.block.OptimisticExecutionPayloadExecutor;
+import tech.pegasys.teku.spec.logic.versions.electra.util.DepositUtilElectra;
 
 public abstract class AbstractBlockProcessor implements BlockProcessor {
 
@@ -106,6 +106,7 @@ public abstract class AbstractBlockProcessor implements BlockProcessor {
   protected final AttestationUtil attestationUtil;
   protected final ValidatorsUtil validatorsUtil;
   protected final OperationValidator operationValidator;
+  protected final DepositUtilElectra depositUtilElectra;
 
   protected AbstractBlockProcessor(
       final SpecConfig specConfig,
@@ -128,6 +129,7 @@ public abstract class AbstractBlockProcessor implements BlockProcessor {
     this.miscHelpers = miscHelpers;
     this.beaconStateAccessors = beaconStateAccessors;
     this.operationValidator = operationValidator;
+    this.depositUtilElectra = new DepositUtilElectra(specConfig, miscHelpers, beaconStateAccessors);
   }
 
   @Override
@@ -678,7 +680,7 @@ public abstract class AbstractBlockProcessor implements BlockProcessor {
         final BLSPublicKey pubkey = deposit.getData().getPubkey();
         publicKeys.add(List.of(pubkey));
         messages.add(
-            computeDepositSigningRoot(
+            depositUtilElectra.computeDepositSigningRoot(
                 pubkey,
                 deposit.getData().getWithdrawalCredentials(),
                 deposit.getData().getAmount()));
@@ -756,8 +758,9 @@ public abstract class AbstractBlockProcessor implements BlockProcessor {
       // Verify the deposit signature (proof of possession) which is not checked by the deposit
       // contract
       if (signatureAlreadyVerified
-          || isValidDepositSignature(pubkey, withdrawalCredentials, amount, signature)) {
-        addValidatorToRegistry(state, pubkey, withdrawalCredentials, amount);
+          || depositUtilElectra.isValidDepositSignature(
+              pubkey, withdrawalCredentials, amount, signature)) {
+        depositUtilElectra.addValidatorToRegistry(state, pubkey, withdrawalCredentials, amount);
       } else {
         handleInvalidDeposit(pubkey, maybePubkeyToIndexMap);
       }
@@ -793,38 +796,6 @@ public abstract class AbstractBlockProcessor implements BlockProcessor {
           // The validator won't be created so the calculated index won't be correct
           pubkeyToIndexMap.removeInt(pubkey);
         });
-  }
-
-  /** is_valid_deposit_signature */
-  protected boolean isValidDepositSignature(
-      final BLSPublicKey pubkey,
-      final Bytes32 withdrawalCredentials,
-      final UInt64 amount,
-      final BLSSignature signature) {
-    try {
-      final Bytes signingRoot = computeDepositSigningRoot(pubkey, withdrawalCredentials, amount);
-      return depositSignatureVerifier.verify(pubkey, signingRoot, signature);
-    } catch (final BlsException e) {
-      return false;
-    }
-  }
-
-  private Bytes computeDepositSigningRoot(
-      final BLSPublicKey pubkey, final Bytes32 withdrawalCredentials, final UInt64 amount) {
-    final Bytes32 domain = miscHelpers.computeDomain(Domain.DEPOSIT);
-    final DepositMessage depositMessage = new DepositMessage(pubkey, withdrawalCredentials, amount);
-    return miscHelpers.computeSigningRoot(depositMessage, domain);
-  }
-
-  protected void addValidatorToRegistry(
-      final MutableBeaconState state,
-      final BLSPublicKey pubkey,
-      final Bytes32 withdrawalCredentials,
-      final UInt64 amount) {
-    final Validator validator = getValidatorFromDeposit(pubkey, withdrawalCredentials, amount);
-    LOG.debug("Adding new validator with index {} to state", state.getValidators().size());
-    state.getValidators().append(validator);
-    state.getBalances().appendElement(amount);
   }
 
   protected Validator getValidatorFromDeposit(

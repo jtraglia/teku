@@ -33,7 +33,6 @@ import tech.pegasys.teku.infrastructure.bytes.Bytes20;
 import tech.pegasys.teku.infrastructure.ssz.SszList;
 import tech.pegasys.teku.infrastructure.ssz.SszMutableList;
 import tech.pegasys.teku.infrastructure.ssz.collections.SszBitlist;
-import tech.pegasys.teku.infrastructure.ssz.primitive.SszByte;
 import tech.pegasys.teku.infrastructure.ssz.primitive.SszBytes32;
 import tech.pegasys.teku.infrastructure.ssz.primitive.SszUInt64;
 import tech.pegasys.teku.infrastructure.unsigned.UInt64;
@@ -642,8 +641,9 @@ public class BlockProcessorElectra extends BlockProcessorDeneb {
       // Verify the deposit signature (proof of possession) which is not checked by the deposit
       // contract
       if (signatureAlreadyVerified
-          || isValidDepositSignature(pubkey, withdrawalCredentials, amount, signature)) {
-        addValidatorToRegistry(state, pubkey, withdrawalCredentials, ZERO);
+          || depositUtilElectra.isValidDepositSignature(
+              pubkey, withdrawalCredentials, amount, signature)) {
+        depositUtilElectra.addValidatorToRegistry(state, pubkey, withdrawalCredentials, ZERO);
         final PendingDeposit deposit =
             schemaDefinitionsElectra
                 .getPendingDepositSchema()
@@ -687,23 +687,6 @@ public class BlockProcessorElectra extends BlockProcessorDeneb {
         deposit.getData().getSignature(),
         maybePubkeyToIndexMap,
         signatureAlreadyVerified);
-  }
-
-  /** add_validator_to_registry */
-  @Override
-  protected void addValidatorToRegistry(
-      final MutableBeaconState state,
-      final BLSPublicKey pubkey,
-      final Bytes32 withdrawalCredentials,
-      final UInt64 amount) {
-    final Validator validator = getValidatorFromDeposit(pubkey, withdrawalCredentials, amount);
-
-    final MutableBeaconStateElectra stateElectra = MutableBeaconStateElectra.required(state);
-    stateElectra.getValidators().append(validator);
-    stateElectra.getBalances().appendElement(amount);
-    stateElectra.getPreviousEpochParticipation().append(SszByte.ZERO);
-    stateElectra.getCurrentEpochParticipation().append(SszByte.ZERO);
-    stateElectra.getInactivityScores().append(SszUInt64.ZERO);
   }
 
   @Override
