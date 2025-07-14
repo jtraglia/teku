@@ -11,6 +11,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
+/* JWT: lgtm */
 package tech.pegasys.teku.beaconrestapi.addon;
 
 import tech.pegasys.teku.api.DataProvider;

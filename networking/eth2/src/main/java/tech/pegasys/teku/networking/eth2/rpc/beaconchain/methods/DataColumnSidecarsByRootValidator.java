@@ -56,6 +56,7 @@ public class DataColumnSidecarsByRootValidator extends AbstractDataColumnSidecar
     final DataColumnIdentifier dataColumnIdentifier =
         DataColumnIdentifier.createFromSidecar(dataColumnSidecar);
     if (!expectedDataColumnIdentifiers.remove(dataColumnIdentifier)) {
+      /* JWT: handles duplicate identifiers too, good */
       throw new DataColumnSidecarsResponseInvalidResponseException(
           peer, InvalidResponseType.DATA_COLUMN_SIDECAR_UNEXPECTED_IDENTIFIER);
     }

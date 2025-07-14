@@ -74,6 +74,7 @@ public class BlockPublisherPhase0 extends AbstractBlockPublisher {
     // No-op for phase 0
   }
 
+  /* JWT: lgtm */
   @Override
   void publishDataColumnSidecars(
       final List<DataColumnSidecar> dataColumnSidecars,

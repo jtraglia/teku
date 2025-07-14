@@ -111,6 +111,7 @@ public class BlobSidecarsByRangeMessageHandler
     return spec.blobSidecarsAvailabilityDeprecationSlot().safeDecrement().min(maxSlot);
   }
 
+  /* JWT: lgtm, most just checking endSlotBeforeFulu usage */
   @Override
   public void onIncomingMessage(
       final String protocolId,
@@ -127,6 +128,7 @@ public class BlobSidecarsByRangeMessageHandler
         startSlot);
 
     if (startSlot.isGreaterThan(spec.blobSidecarsAvailabilityDeprecationSlot())) {
+      /* JWT: not an acronym... */
       LOG.trace(
           "Peer {} requested {} slots of blob sidecars starting at slot {} after FULU. BlobSidecarsByRange v1 is deprecated and the request will be ignored.",
           peer.getId(),
@@ -138,6 +140,7 @@ public class BlobSidecarsByRangeMessageHandler
     final UInt64 endSlotBeforeFulu = getEndSlotBeforeFulu(endSlot);
     final SpecConfigDeneb specConfig =
         SpecConfigDeneb.required(spec.atSlot(endSlotBeforeFulu).getConfig());
+    /* JWT: Hmm what if this request spans over Deneb & Electra? */
     final int requestedCount =
         calculateRequestedCount(
             message, spec.getMaxBlobsPerBlockAtSlot(endSlotBeforeFulu).orElseThrow());

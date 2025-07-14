@@ -624,6 +624,7 @@ public class BlockOperationSelectorFactory {
     };
   }
 
+  /* JWT: lgtm, beside missing check */
   public Function<SignedBlockContainer, List<DataColumnSidecar>> createDataColumnSidecarsSelector(
       final KZG kzg) {
     return blockContainer -> {
@@ -649,6 +650,7 @@ public class BlockOperationSelectorFactory {
 
         if (maybeBuilderPayload.isPresent()) {
           // from the builder payload
+          /* JWT: not really a fan of the blobsCellBundle name */
           final BlobsBundleFulu blobsCellBundle =
               maybeBuilderPayload.get().getOptionalBlobsCellBundle().orElseThrow();
           // consistency checks because the BlobsBundle comes from an external source (a builder)
@@ -728,6 +730,8 @@ public class BlockOperationSelectorFactory {
     checkState(
         blobsCellBundle.getCommitments().hashTreeRoot().equals(blockCommitments.hashTreeRoot()),
         "Commitments in the builder BlobsCellBundle don't match the commitments in the block");
+    /* JWT: need check that the number of proofs is correct... */
+    /* Eg: blockCommitments.size() * CELLS_PER_EXT_BLOB == blobsCellBundle.getProofs().size() */
     checkState(
         blockCommitments.size() == blobsCellBundle.getBlobs().size(),
         "The number of blobs in the builder BlobsCellBundle doesn't match the number of commitments in the block");

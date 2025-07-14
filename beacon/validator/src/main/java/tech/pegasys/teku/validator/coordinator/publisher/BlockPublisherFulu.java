@@ -11,6 +11,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
+/* JWT: lgtm, besides nit */
 package tech.pegasys.teku.validator.coordinator.publisher;
 
 import java.util.List;
@@ -51,6 +52,7 @@ public class BlockPublisherFulu extends BlockPublisherPhase0 {
   void publishBlobSidecars(
       final List<BlobSidecar> blobSidecars,
       final BlockPublishingPerformance blockPublishingPerformance) {
+    /* JWT: Fulu is not an acronym */
     throw new RuntimeException("Unexpected call to publishBlockSidecars in FULU");
   }
 

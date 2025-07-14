@@ -11,6 +11,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
+/* JWT: lgtm, very clean */
 package tech.pegasys.teku.spec.logic.versions.fulu.helpers;
 
 import java.util.Comparator;
@@ -43,6 +44,7 @@ class BpoForkSchedule {
 
   @SuppressWarnings("unused")
   public Optional<BlobParameters> getNextBpoFork(final UInt64 epoch) {
+    /* JWT: the plus one is necessary, good call */
     return Optional.ofNullable(epochToBlobParameters.ceilingEntry(epoch.plus(1)))
         .map(Map.Entry::getValue);
   }

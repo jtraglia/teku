@@ -153,6 +153,7 @@ public class MiscHelpersFulu extends MiscHelpersElectra {
                 specConfigFulu.getElectraForkEpoch(), specConfigFulu.getMaxBlobsPerBlock()));
   }
 
+  /* JWT: lgtm */
   private UInt256 incrementByModule(final UInt256 n) {
     if (n.equals(UInt256.MAX_VALUE)) {
       return UInt256.ZERO;
@@ -161,11 +162,14 @@ public class MiscHelpersFulu extends MiscHelpersElectra {
     }
   }
 
+  /* JWT: lgtm */
   public UInt64 computeSubnetForDataColumnSidecar(final UInt64 columnIndex) {
     return columnIndex.mod(specConfigFulu.getDataColumnSidecarSubnetCount());
   }
 
+  /* JWT: lgtm */
   public List<UInt64> computeDataColumnSidecarBackboneSubnets(
+          /* JWT: epoch isn't used, can it be deleted? */
       final UInt256 nodeId, final UInt64 epoch, final int groupCount) {
     final List<UInt64> columns = computeCustodyColumnIndexes(nodeId, groupCount);
     return columns.stream().map(this::computeSubnetForDataColumnSidecar).toList();
@@ -178,10 +182,12 @@ public class MiscHelpersFulu extends MiscHelpersElectra {
         .toList();
   }
 
+  /* JWT: lgtm, besides nits */
   public List<UInt64> computeColumnsForCustodyGroup(final UInt64 custodyGroup) {
     if (custodyGroup.isGreaterThanOrEqualTo(specConfigFulu.getNumberOfCustodyGroups())) {
       throw new IllegalArgumentException(
           String.format(
+                  /* JWT: s/couldn't/can't */
               "Custody group %s couldn't exceed number of groups %s",
               custodyGroup, specConfigFulu.getNumberOfCustodyGroups()));
     }
@@ -192,24 +198,28 @@ public class MiscHelpersFulu extends MiscHelpersElectra {
     return IntStream.range(0, columnsPerGroup)
         .mapToLong(
             i -> (long) specConfigFulu.getNumberOfCustodyGroups() * i + custodyGroup.intValue())
-        .sorted()
+        .sorted() /* JWT: why do we call sorted here? I think this can be removed. */
         .mapToObj(UInt64::valueOf)
         .toList();
   }
 
+  /* JWT: lgtm */
   private UInt64 computeCustodyGroupIndex(final UInt256 nodeId) {
     return bytesToUInt64(Hash.sha256(uint256ToBytes(nodeId)).slice(0, 8))
         .mod(specConfigFulu.getNumberOfCustodyGroups());
   }
 
+  /* JWT: lgtm */
   public List<UInt64> getCustodyGroups(final UInt256 nodeId, final int custodyGroupCount) {
     if (custodyGroupCount > specConfigFulu.getNumberOfCustodyGroups()) {
       throw new IllegalArgumentException(
           String.format(
+                  /* JWT: s/couldn't/can't */
               "Custody group count %s couldn't exceed number of groups %s",
               custodyGroupCount, specConfigFulu.getNumberOfCustodyGroups()));
     }
 
+    /* JWT: nice, this is super clean */
     return Stream.iterate(nodeId, this::incrementByModule)
         .map(this::computeCustodyGroupIndex)
         .distinct()
@@ -218,6 +228,7 @@ public class MiscHelpersFulu extends MiscHelpersElectra {
         .toList();
   }
 
+  /* JWT: lgtm, except it looks like it's provided non-finalized states */
   public UInt64 getValidatorsCustodyRequirement(
       final BeaconState state, final Set<UInt64> validatorIndices) {
     final UInt64 totalNodeBalance =
@@ -235,6 +246,7 @@ public class MiscHelpersFulu extends MiscHelpersElectra {
         .min(specConfigFulu.getNumberOfCustodyGroups());
   }
 
+  /* JWT: lgtm */
   public boolean verifyDataColumnSidecar(final DataColumnSidecar dataColumnSidecar) {
     final int numberOfColumns = specConfigFulu.getNumberOfColumns();
 

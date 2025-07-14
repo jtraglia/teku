@@ -78,6 +78,7 @@ public class ThrottlingSyncSource implements SyncSource {
                         maxDataColumnSidecarsPerMinute,
                         TIMEOUT_SECONDS,
                         timeProvider,
+                        /* JWT: should be plural, probably "columns" */
                         "throttling-dataColumn"))
             .orElse(RateTracker.NOOP);
   }
@@ -152,6 +153,7 @@ public class ThrottlingSyncSource implements SyncSource {
       final RpcResponseListener<DataColumnSidecar> listener) {
     final long maxColumnsSidecarsCount = count.times(columns.size()).longValue();
     if (dataColumnSidecarsRateTracker.approveObjectsRequest(maxColumnsSidecarsCount).isPresent()) {
+      /* JWT: aren't these two counts always going to be the same? */
       LOG.debug("Sending request for {} data column sidecars on {} columns", count, columns.size());
       return delegate.requestDataColumnSidecarsByRange(startSlot, count, columns, listener);
     } else {

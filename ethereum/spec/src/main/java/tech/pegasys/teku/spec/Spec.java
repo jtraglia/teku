@@ -432,6 +432,7 @@ public class Spec {
         .getSchemaDefinitions()
         .toVersionFulu()
         .orElseThrow(
+                /* JWT: FULU is not an acronym */
             () -> new RuntimeException("FULU milestone is required to deserialize column sidecar"))
         .getDataColumnSidecarSchema()
         .sszDeserialize(serializedSidecar);
@@ -970,6 +971,8 @@ public class Spec {
         .orElse(false);
   }
 
+  /* JWT: The function name is misleading, usage looks good */
+  /* I would be in favor of removing the function */
   public UInt64 blobSidecarsAvailabilityDeprecationSlot() {
     return getSpecConfigFulu()
         .map(maybeConfig -> computeStartSlotAtEpoch(maybeConfig.getFuluForkEpoch()))
@@ -1029,10 +1032,12 @@ public class Spec {
                 .getBlobSidecarSubnetCount());
   }
 
+  /* JWT: lgtm */
   public Optional<Integer> getNumberOfDataColumns() {
     return getSpecConfigFulu().map(SpecConfigFulu::getNumberOfColumns);
   }
 
+  /* JWT: lgtm */
   public Optional<Integer> getNumberOfDataColumnSubnets() {
     return getSpecConfigFulu().map(SpecConfigFulu::getDataColumnSidecarSubnetCount);
   }

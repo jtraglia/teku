@@ -53,6 +53,7 @@ public class SyncSourceFactory {
     final Optional<Integer> maybeMaxBlobSidecarsPerMinute =
         maybeMaxBlobsPerBlock.map(
             maxBlobsPerBlock -> this.maxBlobSidecarsPerMinute - (batchSize * maxBlobsPerBlock) - 1);
+    /* JWT: lgtm */
     final Optional<Integer> maxDataColumnSidecarsPerMinute =
         spec.getNumberOfDataColumns()
             .map(dataColumnsPerBlock -> maxBlocksPerMinute * dataColumnsPerBlock.intValue());

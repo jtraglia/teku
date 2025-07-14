@@ -104,6 +104,8 @@ public class CustodyGroupCountManagerImpl implements SlotEventsChannel, CustodyG
       return;
     }
 
+    /* JWT: will it only call getValidatorsCustodyRequirement for finalized states? Doesn't look like it does. */
+    /* See: https://github.com/ethereum/consensus-specs/blob/fa04352824563981732925fb5e3af0dcc33bd71c/specs/fulu/validator.md?plain=1#L114 */
     combinedChainDataClient
         .getBestFinalizedState()
         .thenAccept(

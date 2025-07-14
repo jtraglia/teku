@@ -11,6 +11,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
+/* JWT: lgtm */
 package tech.pegasys.teku.spec.datastructures.networking.libp2p.rpc;
 
 import java.util.List;
@@ -47,6 +48,7 @@ public class DataColumnSidecarsByRangeRequestMessage
       return new DataColumnSidecarsByRangeRequestMessage(this, node);
     }
 
+    /* JWT: unnecessary suppression */
     @SuppressWarnings("unchecked")
     public SszListSchema<SszUInt64, ?> getColumnsSchema() {
       return (SszListSchema<SszUInt64, ?>) getFieldSchema2();

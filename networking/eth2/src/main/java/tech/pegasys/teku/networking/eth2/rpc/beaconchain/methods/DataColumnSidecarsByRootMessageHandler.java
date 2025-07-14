@@ -99,6 +99,7 @@ public class DataColumnSidecarsByRootMessageHandler
             "Total number of data column sidecars requested in accepted data column sidecars by root requests from peers");
   }
 
+  /* JWT: Lol the name is wonky, should be validateAndMaybeRespond, but lgtm */
   private SafeFuture<Boolean> validateAndSendMaybeRespond(
       final DataColumnIdentifier identifier,
       final Optional<DataColumnSidecar> maybeSidecar,
@@ -111,6 +112,7 @@ public class DataColumnSidecarsByRootMessageHandler
                     .orElse(SafeFuture.completedFuture(false)));
   }
 
+  /* JWT: lgtm */
   @Override
   public Optional<RpcException> validateRequest(
       final String protocolId, final DataColumnSidecarsByRootRequestMessage request) {
@@ -127,6 +129,7 @@ public class DataColumnSidecarsByRootMessageHandler
     return Optional.empty();
   }
 
+  /* JWT: lgtm */
   @Override
   public void onIncomingMessage(
       final String protocolId,
@@ -198,6 +201,7 @@ public class DataColumnSidecarsByRootMessageHandler
             });
   }
 
+  /* JWT: not sure what this should be exactly, can follow up */
   private SafeFuture<Optional<DataColumnSidecar>> getNonCanonicalDataColumnSidecar(
       final DataColumnIdentifier identifier) {
     return combinedChainDataClient
@@ -215,6 +219,7 @@ public class DataColumnSidecarsByRootMessageHandler
             });
   }
 
+  /* JWT: lgtm */
   /**
    * Validations:
    *
@@ -248,6 +253,7 @@ public class DataColumnSidecarsByRootMessageHandler
             });
   }
 
+  /* JWT: lgtm */
   private SafeFuture<Optional<DataColumnSidecar>> retrieveDataColumnSidecar(
       final DataColumnIdentifier identifier) {
     return dataColumnSidecarCustody
@@ -262,6 +268,7 @@ public class DataColumnSidecarsByRootMessageHandler
             });
   }
 
+  /* JWT: lgtm */
   private void handleError(
       final ResponseCallback<DataColumnSidecar> callback, final Throwable error) {
     final Throwable rootCause = Throwables.getRootCause(error);

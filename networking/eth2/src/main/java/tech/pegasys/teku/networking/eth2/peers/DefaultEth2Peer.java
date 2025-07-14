@@ -438,6 +438,7 @@ class DefaultEth2Peer extends DelegatingPeer implements Eth2Peer {
     return spec.getMaxBlobsPerBlockAtSlot(slot).orElseThrow();
   }
 
+  /* JWT: lgtm besides little nit */
   @Override
   public SafeFuture<Void> requestDataColumnSidecarsByRange(
       final UInt64 startSlot,
@@ -452,6 +453,7 @@ class DefaultEth2Peer extends DelegatingPeer implements Eth2Peer {
               final DataColumnSidecarsByRangeRequestMessage request;
 
               if (startSlot.isLessThan(firstSupportedSlot)) {
+                /* JWT: this message mentions Deneb, should probably say Electra, no? */
                 LOG.debug(
                     "Requesting data column sidecars from slot {} instead of slot {} because the request is spanning the Deneb fork transition",
                     firstSupportedSlot,
