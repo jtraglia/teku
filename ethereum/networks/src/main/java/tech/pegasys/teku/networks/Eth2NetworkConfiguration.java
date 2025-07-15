@@ -80,7 +80,7 @@ public class Eth2NetworkConfiguration {
 
   public static final boolean DEFAULT_RUST_KZG_ENABLED = false;
 
-  public static final int DEFAULT_KZG_PRECOMPUTE = 0;
+  public static final int DEFAULT_KZG_PRECOMPUTE = 8;
 
   // at least 5, but happily up to 12
   public static final int DEFAULT_VALIDATOR_EXECUTOR_THREADS =
