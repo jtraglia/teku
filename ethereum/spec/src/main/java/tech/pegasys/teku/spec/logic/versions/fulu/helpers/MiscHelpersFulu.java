@@ -169,8 +169,10 @@ public class MiscHelpersFulu extends MiscHelpersElectra {
 
   /* JWT: lgtm */
   public List<UInt64> computeDataColumnSidecarBackboneSubnets(
-          /* JWT: epoch isn't used, can it be deleted? */
-      final UInt256 nodeId, final UInt64 epoch, final int groupCount) {
+      /* JWT: epoch isn't used, can it be deleted? */
+      final UInt256 nodeId,
+      final UInt64 epoch,
+      final int groupCount) {
     final List<UInt64> columns = computeCustodyColumnIndexes(nodeId, groupCount);
     return columns.stream().map(this::computeSubnetForDataColumnSidecar).toList();
   }
@@ -187,7 +189,7 @@ public class MiscHelpersFulu extends MiscHelpersElectra {
     if (custodyGroup.isGreaterThanOrEqualTo(specConfigFulu.getNumberOfCustodyGroups())) {
       throw new IllegalArgumentException(
           String.format(
-                  /* JWT: s/couldn't/can't */
+              /* JWT: s/couldn't/can't */
               "Custody group %s couldn't exceed number of groups %s",
               custodyGroup, specConfigFulu.getNumberOfCustodyGroups()));
     }
@@ -214,7 +216,7 @@ public class MiscHelpersFulu extends MiscHelpersElectra {
     if (custodyGroupCount > specConfigFulu.getNumberOfCustodyGroups()) {
       throw new IllegalArgumentException(
           String.format(
-                  /* JWT: s/couldn't/can't */
+              /* JWT: s/couldn't/can't */
               "Custody group count %s couldn't exceed number of groups %s",
               custodyGroupCount, specConfigFulu.getNumberOfCustodyGroups()));
     }

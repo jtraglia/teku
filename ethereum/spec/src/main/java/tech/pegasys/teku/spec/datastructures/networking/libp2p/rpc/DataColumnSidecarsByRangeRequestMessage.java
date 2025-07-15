@@ -11,7 +11,6 @@
  * specific language governing permissions and limitations under the License.
  */
 
-/* JWT: lgtm */
 package tech.pegasys.teku.spec.datastructures.networking.libp2p.rpc;
 
 import java.util.List;

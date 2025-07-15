@@ -432,7 +432,7 @@ public class Spec {
         .getSchemaDefinitions()
         .toVersionFulu()
         .orElseThrow(
-                /* JWT: FULU is not an acronym */
+            /* JWT: FULU is not an acronym */
             () -> new RuntimeException("FULU milestone is required to deserialize column sidecar"))
         .getDataColumnSidecarSchema()
         .sszDeserialize(serializedSidecar);

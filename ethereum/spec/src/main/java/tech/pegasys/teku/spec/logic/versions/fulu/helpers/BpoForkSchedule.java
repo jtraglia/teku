@@ -11,7 +11,6 @@
  * specific language governing permissions and limitations under the License.
  */
 
-/* JWT: lgtm, very clean */
 package tech.pegasys.teku.spec.logic.versions.fulu.helpers;
 
 import java.util.Comparator;

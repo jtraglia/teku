@@ -100,10 +100,11 @@ public class DataColumnReqRespBatchingImpl implements DataColumnReqResp {
     }
 
     final UInt64 firstNonFinalizedSlot = firstNonFinalizedSlotSupplier.get();
-    final List<ByRangeRequest> byRangeRequests =
-        generateByRangeRequests(nodeRequests, firstNonFinalizedSlot);
+    /* JWT: byroot should be first */
     final List<ByRootRequest> byRootRequests =
         generateByRootRequests(nodeRequests, firstNonFinalizedSlot);
+    final List<ByRangeRequest> byRangeRequests =
+        generateByRangeRequests(nodeRequests, firstNonFinalizedSlot);
     LOG.trace(
         "Processing prepared requests for node {}: byRoot({}), byRange({})",
         nodeId,
@@ -189,15 +190,9 @@ public class DataColumnReqRespBatchingImpl implements DataColumnReqResp {
             return;
           }
           final UInt64 column = nodeRequest.columnIdentifier.columnIndex();
-          final SlotAndBlockRoot slotAndBlockRoot =
-              nodeRequest.columnIdentifier().getSlotAndBlockRoot();
-          if (bySlotAndBlockRootMap.containsKey(slotAndBlockRoot)) {
-            bySlotAndBlockRootMap.get(slotAndBlockRoot).add(column);
-          } else {
-            final Set<UInt64> columns = new HashSet<>();
-            columns.add(column);
-            bySlotAndBlockRootMap.put(slotAndBlockRoot, columns);
-          }
+          final SlotAndBlockRoot key = nodeRequest.columnIdentifier().getSlotAndBlockRoot();
+          /* JWT: can simplify */
+          bySlotAndBlockRootMap.computeIfAbsent(key, k -> new HashSet<>()).add(column);
         });
 
     if (bySlotAndBlockRootMap.isEmpty()) {

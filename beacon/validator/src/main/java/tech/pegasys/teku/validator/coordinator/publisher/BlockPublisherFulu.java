@@ -11,7 +11,6 @@
  * specific language governing permissions and limitations under the License.
  */
 
-/* JWT: lgtm, besides nit */
 package tech.pegasys.teku.validator.coordinator.publisher;
 
 import java.util.List;
