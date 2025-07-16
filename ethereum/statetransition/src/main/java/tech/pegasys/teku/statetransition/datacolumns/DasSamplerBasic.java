@@ -58,6 +58,7 @@ public class DasSamplerBasic implements DataAvailabilitySampler, FinalizedCheckp
       final DataColumnSidecarRetriever retriever,
       final CustodyGroupCountManager custodyGroupCountManager) {
     this.currentSlotProvider = currentSlotProvider;
+    /* JWT: do we not need checkNotNull for currentSlotProvider & custodyGroupCountManager? */
     checkNotNull(spec);
     checkNotNull(db);
     checkNotNull(custody);
@@ -73,6 +74,8 @@ public class DasSamplerBasic implements DataAvailabilitySampler, FinalizedCheckp
     return SpecConfigFulu.required(spec.atSlot(slot).getConfig()).getNumberOfColumns();
   }
 
+  /* JWT: I suppose we can only sample from columns that we're subscribed too,
+   * otherwise we are not connected to the appropriate pubsub topics. */
   private List<DataColumnSlotAndIdentifier> calculateSamplingColumnIds(
       final UInt64 slot, final Bytes32 blockRoot) {
     return custodyGroupCountManager.getCustodyColumnIndices().stream()
@@ -114,6 +117,7 @@ public class DasSamplerBasic implements DataAvailabilitySampler, FinalizedCheckp
           final Set<DataColumnSlotAndIdentifier> columnsInCustody =
               new HashSet<>(columnsInCustodyList);
 
+          /* JWT: should be missingColumns */
           final Set<DataColumnSlotAndIdentifier> missingColumn =
               Sets.difference(requiredColumnIdentifiers, columnsInCustody);
 
@@ -133,6 +137,7 @@ public class DasSamplerBasic implements DataAvailabilitySampler, FinalizedCheckp
                 StringifyUtil.columnIndexesToString(existingColumnIndexes, getColumnCount(slot)));
           }
 
+          /* JWT: what if retrieve fails to get one or more columns? */
           final SafeFuture<List<DataColumnSidecar>> columnsRetrievedFuture =
               SafeFuture.collectAll(missingColumn.stream().map(retriever::retrieve))
                   .thenPeek(
