@@ -1402,7 +1402,8 @@ public class BeaconChainController extends Service implements BeaconChainControl
             blobSidecarGossipChannel,
             dataColumnSidecarGossipChannel,
             dutyMetrics,
-            beaconConfig.p2pConfig().isGossipBlobsAfterBlockEnabled());
+            beaconConfig.p2pConfig().isGossipBlobsAfterBlockEnabled(),
+            beaconConfig.eth2NetworkConfig().getWithholdDataColumnSidecarsCount());
 
     final ValidatorApiHandler validatorApiHandler =
         new ValidatorApiHandler(

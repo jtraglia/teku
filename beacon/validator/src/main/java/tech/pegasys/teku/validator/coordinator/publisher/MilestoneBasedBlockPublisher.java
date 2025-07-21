@@ -49,7 +49,8 @@ public class MilestoneBasedBlockPublisher implements BlockPublisher {
       final BlobSidecarGossipChannel blobSidecarGossipChannel,
       final DataColumnSidecarGossipChannel dataColumnSidecarGossipChannel,
       final DutyMetrics dutyMetrics,
-      final boolean gossipBlobsAfterBlock) {
+      final boolean gossipBlobsAfterBlock,
+      final int withholdDataColumnSidecarsCount) {
     this.spec = spec;
     final BlockPublisherPhase0 blockPublisherPhase0 =
         new BlockPublisherPhase0(
@@ -83,7 +84,8 @@ public class MilestoneBasedBlockPublisher implements BlockPublisher {
                     blockGossipChannel,
                     dataColumnSidecarGossipChannel,
                     dutyMetrics,
-                    gossipBlobsAfterBlock));
+                    gossipBlobsAfterBlock,
+                    withholdDataColumnSidecarsCount));
 
     // Populate forks publishers
     spec.getEnabledMilestones()

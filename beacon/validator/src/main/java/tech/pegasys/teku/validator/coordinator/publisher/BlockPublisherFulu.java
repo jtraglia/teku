@@ -28,6 +28,7 @@ import tech.pegasys.teku.validator.coordinator.DutyMetrics;
 public class BlockPublisherFulu extends BlockPublisherPhase0 {
 
   private final DataColumnSidecarGossipChannel dataColumnSidecarGossipChannel;
+  private final int withholdDataColumnSidecarsCount;
 
   public BlockPublisherFulu(
       final AsyncRunner asyncRunner,
@@ -36,7 +37,8 @@ public class BlockPublisherFulu extends BlockPublisherPhase0 {
       final BlockGossipChannel blockGossipChannel,
       final DataColumnSidecarGossipChannel dataColumnSidecarGossipChannel,
       final DutyMetrics dutyMetrics,
-      final boolean gossipBlobsAfterBlock) {
+      final boolean gossipBlobsAfterBlock,
+      final int withholdDataColumnSidecarsCount) {
     super(
         asyncRunner,
         blockFactory,
@@ -45,6 +47,7 @@ public class BlockPublisherFulu extends BlockPublisherPhase0 {
         dutyMetrics,
         gossipBlobsAfterBlock);
     this.dataColumnSidecarGossipChannel = dataColumnSidecarGossipChannel;
+    this.withholdDataColumnSidecarsCount = withholdDataColumnSidecarsCount;
   }
 
   @Override
@@ -59,7 +62,12 @@ public class BlockPublisherFulu extends BlockPublisherPhase0 {
       final List<DataColumnSidecar> dataColumnSidecars,
       final BlockPublishingPerformance blockPublishingPerformance) {
     blockPublishingPerformance.dataColumnSidecarsPublishingInitiated();
+    // Withhold the first N sidecars
+    final List<DataColumnSidecar> sidecarsToPublish =
+        dataColumnSidecars.subList(
+            Math.min(withholdDataColumnSidecarsCount, dataColumnSidecars.size()),
+            dataColumnSidecars.size());
     dataColumnSidecarGossipChannel.publishDataColumnSidecars(
-        dataColumnSidecars, RemoteOrigin.LOCAL_PROPOSAL);
+        sidecarsToPublish, RemoteOrigin.LOCAL_PROPOSAL);
   }
 }

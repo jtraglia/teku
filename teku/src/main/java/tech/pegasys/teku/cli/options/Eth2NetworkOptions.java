@@ -131,6 +131,15 @@ public class Eth2NetworkOptions {
   private OptionalLong dataColumnSidecarRecoveryMaxDelayMillis = OptionalLong.empty();
 
   @Option(
+      names = {"--Xwithhold-data-column-sidecars-count"},
+      paramLabel = "<NUMBER>",
+      description = "Number of data column sidecars to withhold when publishing.",
+      arity = "1",
+      showDefaultValue = Visibility.ALWAYS,
+      hidden = true)
+  private int withholdDataColumnSidecarsCount = 0;
+
+  @Option(
       names = {"--Xfork-choice-late-block-reorg-enabled"},
       paramLabel = "<BOOLEAN>",
       description = "Allow late blocks to be reorged out if they meet the requirements.",
@@ -477,7 +486,8 @@ public class Eth2NetworkOptions {
         .epochsStoreBlobs(epochsStoreBlobs)
         .forkChoiceUpdatedAlwaysSendPayloadAttributes(forkChoiceUpdatedAlwaysSendPayloadAttributes)
         .rustKzgEnabled(rustKzgEnabled)
-        .kzgPrecompute(kzgPrecompute);
+        .kzgPrecompute(kzgPrecompute)
+        .withholdDataColumnSidecarsCount(withholdDataColumnSidecarsCount);
     dataColumnSidecarRecoveryMaxDelayMillis.ifPresent(
         builder::dataColumnSidecarRecoveryMaxDelayMillis);
     asyncP2pMaxQueue.ifPresent(builder::asyncP2pMaxQueue);

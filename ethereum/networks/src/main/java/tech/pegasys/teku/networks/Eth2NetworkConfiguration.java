@@ -134,6 +134,7 @@ public class Eth2NetworkConfiguration {
   private final boolean aggregatingAttestationPoolProfilingEnabled;
   private final int aggregatingAttestationPoolV2BlockAggregationTimeLimit;
   private final int aggregatingAttestationPoolV2TotalBlockAggregationTimeLimit;
+  private final int withholdDataColumnSidecarsCount;
 
   private Eth2NetworkConfiguration(
       final Spec spec,
@@ -169,7 +170,8 @@ public class Eth2NetworkConfiguration {
       final boolean aggregatingAttestationPoolV2Enabled,
       final boolean aggregatingAttestationPoolProfilingEnabled,
       final int aggregatingAttestationPoolV2BlockAggregationTimeLimit,
-      final int aggregatingAttestationPoolV2TotalBlockAggregationTimeLimit) {
+      final int aggregatingAttestationPoolV2TotalBlockAggregationTimeLimit,
+      final int withholdDataColumnSidecarsCount) {
     this.spec = spec;
     this.constants = constants;
     this.stateBoostrapConfig = stateBoostrapConfig;
@@ -210,6 +212,7 @@ public class Eth2NetworkConfiguration {
         aggregatingAttestationPoolV2BlockAggregationTimeLimit;
     this.aggregatingAttestationPoolV2TotalBlockAggregationTimeLimit =
         aggregatingAttestationPoolV2TotalBlockAggregationTimeLimit;
+    this.withholdDataColumnSidecarsCount = withholdDataColumnSidecarsCount;
 
     LOG.debug(
         "P2P async queue - {} threads, max queue size {} ", asyncP2pMaxThreads, asyncP2pMaxQueue);
@@ -360,6 +363,10 @@ public class Eth2NetworkConfiguration {
     return dataColumnSidecarRecoveryMaxDelayMillis;
   }
 
+  public int getWithholdDataColumnSidecarsCount() {
+    return withholdDataColumnSidecarsCount;
+  }
+
   @Override
   public String toString() {
     return constants;
@@ -490,6 +497,7 @@ public class Eth2NetworkConfiguration {
         DEFAULT_AGGREGATING_ATTESTATION_POOL_V2_BLOCK_AGGREGATION_TIME_LIMIT_MILLIS;
     private int aggregatingAttestationPoolV2TotalBlockAggregationTimeLimit =
         DEFAULT_AGGREGATING_ATTESTATION_POOL_V2_TOTAL_BLOCK_AGGREGATION_TIME_LIMIT_MILLIS;
+    private int withholdDataColumnSidecarsCount = 0;
 
     public void spec(final Spec spec) {
       this.spec = spec;
@@ -597,7 +605,8 @@ public class Eth2NetworkConfiguration {
           aggregatingAttestationPoolV2Enabled,
           aggregatingAttestationPoolProfilingEnabled,
           aggregatingAttestationPoolV2BlockAggregationTimeLimit,
-          aggregatingAttestationPoolV2TotalBlockAggregationTimeLimit);
+          aggregatingAttestationPoolV2TotalBlockAggregationTimeLimit,
+          withholdDataColumnSidecarsCount);
     }
 
     private void validateCommandLineParameters() {
@@ -1185,6 +1194,11 @@ public class Eth2NetworkConfiguration {
 
     public Builder strictConfigLoadingEnabled(final boolean strictConfigLoadingEnabled) {
       this.strictConfigLoadingEnabled = strictConfigLoadingEnabled;
+      return this;
+    }
+
+    public Builder withholdDataColumnSidecarsCount(final int withholdDataColumnSidecarsCount) {
+      this.withholdDataColumnSidecarsCount = withholdDataColumnSidecarsCount;
       return this;
     }
   }
