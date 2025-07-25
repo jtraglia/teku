@@ -955,9 +955,11 @@
         state_summary_root: Root
     </spec>
 
-- name: IndexedAttestationPhase0
+- name: IndexedAttestation
   source:
-    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/operations/versions/phase0/IndexedAttestationPhase0.java
+    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/operations/IndexedAttestation.java
+    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/operations/IndexedAttestationSchema.java
+    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/schemas/registry/SchemaRegistryBuilder.java#L817-L819
   source_hash: 5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03
   spec: |
     <spec ssz_object="IndexedAttestation" fork="phase0" style="full" hash="b321d4c3">
@@ -969,7 +971,9 @@
 
 - name: IndexedAttestationElectra
   source:
-    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/operations/versions/electra/IndexedAttestationElectra.java
+    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/operations/IndexedAttestation.java
+    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/operations/IndexedAttestationSchema.java
+    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/schemas/registry/SchemaRegistryBuilder.java#L821-L823
   source_hash: 5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03
   spec: |
     <spec ssz_object="IndexedAttestation" fork="electra" style="full" hash="2f924640">
