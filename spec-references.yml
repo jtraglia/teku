@@ -809,7 +809,6 @@
         excess_blob_gas: uint64
     </spec>
 
-
 - name: ExecutionPayloadHeaderBellatrix
   source:
     - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/versions/bellatrix/ExecutionPayloadHeaderBellatrix.java
@@ -893,7 +892,6 @@
         # [New in Deneb:EIP4844]
         excess_blob_gas: uint64
     </spec>
-
 
 - name: ExecutionRequests
   source:
@@ -997,7 +995,6 @@
         current_sync_committee_branch: CurrentSyncCommitteeBranch
     </spec>
 
-
 - name: LightClientHeaderAltair
   source:
     - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/lightclient/LightClientHeader.java
@@ -1023,7 +1020,6 @@
         execution_branch: ExecutionBranch
     </spec>
 
-
 - name: LightClientUpdateAltair
   source:
     - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/lightclient/LightClientUpdate.java
@@ -1045,7 +1041,6 @@
         # Slot at which the aggregate signature was created (untrusted)
         signature_slot: Slot
     </spec>
-
 
 - name: MatrixEntry
   source:
@@ -1308,7 +1303,6 @@
         exit_epoch: Epoch
         withdrawable_epoch: Epoch
     </spec>
-
 
 - name: VoluntaryExit
   source:
