@@ -999,7 +999,7 @@
         current_sync_committee_branch: CurrentSyncCommitteeBranch
     </spec>
 
-- name: LightClientHeaderAltair
+- name: LightClientHeader
   source:
     - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/lightclient/LightClientHeader.java
     - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/lightclient/LightClientHeaderSchema.java
@@ -1010,21 +1010,7 @@
         beacon: BeaconBlockHeader
     </spec>
 
-- name: LightClientHeaderCapella
-  source:
-    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/lightclient/LightClientHeader.java
-  source_hash: 5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03
-  spec: |
-    <spec ssz_object="LightClientHeader" fork="capella" style="full" hash="366cbdcd">
-    class LightClientHeader(Container):
-        # Beacon block header
-        beacon: BeaconBlockHeader
-        # Execution payload header corresponding to `beacon.body_root` (from Capella onward)
-        execution: ExecutionPayloadHeader
-        execution_branch: ExecutionBranch
-    </spec>
-
-- name: LightClientUpdateAltair
+- name: LightClientUpdate
   source:
     - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/lightclient/LightClientUpdate.java
     - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/lightclient/LightClientUpdateSchema.java
