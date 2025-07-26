@@ -31,8 +31,8 @@ calculate_hash() {
                 exit 1
             fi
 
-            # Check if the file has enough lines
-            local total_lines=$(wc -l < "$file_path")
+            # Check if the file has enough lines (handle files without trailing newline)
+            local total_lines=$(awk 'END {print NR}' "$file_path")
             if (( end_line > total_lines )); then
                 echo "Error: Line range $line_range in $file_path exceeds file length (file has $total_lines lines)" >&2
                 exit 1
@@ -42,8 +42,8 @@ calculate_hash() {
         elif [[ "$line_range" =~ ^L([0-9]+)$ ]]; then
             local line_num="${BASH_REMATCH[1]}"
 
-            # Check if the file has enough lines
-            local total_lines=$(wc -l < "$file_path")
+            # Check if the file has enough lines (handle files without trailing newline)
+            local total_lines=$(awk 'END {print NR}' "$file_path")
             if (( line_num > total_lines )); then
                 echo "Error: Line number $line_range in $file_path exceeds file length (file has $total_lines lines)" >&2
                 exit 1

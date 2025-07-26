@@ -182,6 +182,14 @@
     <spec config_var="EPOCHS_PER_SUBNET_SUBSCRIPTION" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
     <spec config_var="EPOCHS_PER_SUBNET_SUBSCRIPTION" preset="minimal" style="full" version="v1.6.0-alpha.3" />
 
+- name: ETH1_FOLLOW_DISTANCE
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L72
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L70
+  spec: |
+    <spec config_var="ETH1_FOLLOW_DISTANCE" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="ETH1_FOLLOW_DISTANCE" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
 - name: FULU_FORK_EPOCH
   sources:
     - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L58
@@ -453,6 +461,14 @@
   spec: |
     <spec config_var="SAMPLES_PER_SLOT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
     <spec config_var="SAMPLES_PER_SLOT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: SECONDS_PER_ETH1_BLOCK
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L66
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L64
+  spec: |
+    <spec config_var="SECONDS_PER_ETH1_BLOCK" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="SECONDS_PER_ETH1_BLOCK" preset="minimal" style="full" version="v1.6.0-alpha.3" />
 
 - name: SECONDS_PER_SLOT
   sources:
