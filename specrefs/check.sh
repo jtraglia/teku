@@ -286,53 +286,6 @@ check_source_files() {
     fi
 }
 
-# Function to check combined coverage for mainnet and minimal files
-check_combined_coverage() {
-    local section_name="$1"
-    local mainnet_file="$2"
-    local minimal_file="$3"
-    local tag_type="$4"
-    shift 4
-    local exception_array=("$@")
-
-    echo "=== $section_name Coverage ==="
-
-    # Get expected item#fork pairs from ethspecify
-    local expected_pairs=$(parse_ethspecify_tags "$tag_type")
-
-    # Get actual item#fork pairs from both YAML files
-    local mainnet_pairs=$(extract_spec_tags "$mainnet_file" "$tag_type")
-    local minimal_pairs=$(extract_spec_tags "$minimal_file" "$tag_type")
-    local actual_pairs=$(echo -e "$mainnet_pairs\n$minimal_pairs" | sort | uniq)
-
-    local missing_count=0
-    local total_count=0
-
-    while IFS= read -r item_fork; do
-        [[ -z "$item_fork" ]] && continue
-        total_count=$((total_count + 1))
-
-        if is_excepted "$item_fork" "${exception_array[@]+\"${exception_array[@]}\"}"; then
-            continue  # Skip excepted items silently
-        fi
-
-        if ! echo "$actual_pairs" | grep -Fxq "$item_fork"; then
-            echo "MISSING: $item_fork"
-            missing_count=$((missing_count + 1))
-        fi
-    done <<< "$expected_pairs"
-
-    local found_count=$((total_count - missing_count))
-    echo "Coverage: $found_count/$total_count"
-    echo
-
-    # Return 0 if no missing, 1 if any missing (bash can only return 0-255)
-    if [[ $missing_count -eq 0 ]]; then
-        return 0
-    else
-        return 1
-    fi
-}
 
 # Function to check coverage for a specific section
 check_section_coverage() {
@@ -391,9 +344,11 @@ check_source_files "Preset Variables (Minimal)" "$SCRIPT_DIR/preset-variables-mi
 check_source_files "Dataclasses" "$SCRIPT_DIR/dataclasses.yml" || has_errors=true
 
 # Check spec tag coverage
-check_section_coverage "SSZ Objects" "$SCRIPT_DIR/ssz-objects.yml" "ssz_object" "${SSZ_EXCEPTIONS[@]+"${SSZ_EXCEPTIONS[@]}"}" || has_errors=true
-check_combined_coverage "Config Variables" "$SCRIPT_DIR/config-variables-mainnet.yml" "$SCRIPT_DIR/config-variables-minimal.yml" "config_var" "${CONFIG_EXCEPTIONS[@]+\"${CONFIG_EXCEPTIONS[@]}\"}" || has_errors=true
-check_combined_coverage "Preset Variables" "$SCRIPT_DIR/preset-variables-mainnet.yml" "$SCRIPT_DIR/preset-variables-minimal.yml" "preset_var" "${PRESET_EXCEPTIONS[@]+"${PRESET_EXCEPTIONS[@]}"}" || has_errors=true
+check_section_coverage "SSZ Objects" "$SCRIPT_DIR/ssz-objects.yml" "ssz_object" "${SSZ_EXCEPTIONS[@]}" || has_errors=true
+check_section_coverage "Config Variables (Mainnet)" "$SCRIPT_DIR/config-variables-mainnet.yml" "config_var" "${CONFIG_EXCEPTIONS[@]}" || has_errors=true
+check_section_coverage "Config Variables (Minimal)" "$SCRIPT_DIR/config-variables-minimal.yml" "config_var" "${CONFIG_EXCEPTIONS[@]}" || has_errors=true
+check_section_coverage "Preset Variables (Mainnet)" "$SCRIPT_DIR/preset-variables-mainnet.yml" "preset_var" "${PRESET_EXCEPTIONS[@]+"${PRESET_EXCEPTIONS[@]}"}" || has_errors=true
+check_section_coverage "Preset Variables (Minimal)" "$SCRIPT_DIR/preset-variables-minimal.yml" "preset_var" "${PRESET_EXCEPTIONS[@]+"${PRESET_EXCEPTIONS[@]}"}" || has_errors=true
 check_section_coverage "Dataclasses" "$SCRIPT_DIR/dataclasses.yml" "dataclass" "${DATACLASS_EXCEPTIONS[@]+"${DATACLASS_EXCEPTIONS[@]}"}" || has_errors=true
 
 echo "Spec references check complete!"
