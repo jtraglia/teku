@@ -1,0 +1,511 @@
+- name: ALTAIR_FORK_EPOCH
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L43
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L42
+  spec: |
+    <spec config_var="ALTAIR_FORK_EPOCH" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="ALTAIR_FORK_EPOCH" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: ALTAIR_FORK_VERSION
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L42
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L41
+  spec: |
+    <spec config_var="ALTAIR_FORK_VERSION" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="ALTAIR_FORK_VERSION" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: ATTESTATION_PROPAGATION_SLOT_RANGE
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L124
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L124
+  spec: |
+    <spec config_var="ATTESTATION_PROPAGATION_SLOT_RANGE" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="ATTESTATION_PROPAGATION_SLOT_RANGE" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: ATTESTATION_SUBNET_COUNT
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L132
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L132
+  spec: |
+    <spec config_var="ATTESTATION_SUBNET_COUNT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="ATTESTATION_SUBNET_COUNT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: ATTESTATION_SUBNET_EXTRA_BITS
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L133
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L133
+  spec: |
+    <spec config_var="ATTESTATION_SUBNET_EXTRA_BITS" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="ATTESTATION_SUBNET_EXTRA_BITS" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: ATTESTATION_SUBNET_PREFIX_BITS
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L135
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L135
+  spec: |
+    <spec config_var="ATTESTATION_SUBNET_PREFIX_BITS" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="ATTESTATION_SUBNET_PREFIX_BITS" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: BALANCE_PER_ADDITIONAL_CUSTODY_GROUP
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L170
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L170
+  spec: |
+    <spec config_var="BALANCE_PER_ADDITIONAL_CUSTODY_GROUP" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="BALANCE_PER_ADDITIONAL_CUSTODY_GROUP" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: BELLATRIX_FORK_EPOCH
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L46
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L45
+  spec: |
+    <spec config_var="BELLATRIX_FORK_EPOCH" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="BELLATRIX_FORK_EPOCH" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: BELLATRIX_FORK_VERSION
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L45
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L44
+  spec: |
+    <spec config_var="BELLATRIX_FORK_VERSION" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="BELLATRIX_FORK_VERSION" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: BLOB_SCHEDULE
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L175
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L172
+  spec: |
+    <spec config_var="BLOB_SCHEDULE" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="BLOB_SCHEDULE" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: BLOB_SIDECAR_SUBNET_COUNT
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L143
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L143
+  spec: |
+    <spec config_var="BLOB_SIDECAR_SUBNET_COUNT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="BLOB_SIDECAR_SUBNET_COUNT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: BLOB_SIDECAR_SUBNET_COUNT_ELECTRA
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L155
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L155
+  spec: |
+    <spec config_var="BLOB_SIDECAR_SUBNET_COUNT_ELECTRA" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="BLOB_SIDECAR_SUBNET_COUNT_ELECTRA" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: CAPELLA_FORK_EPOCH
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L49
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L48
+  spec: |
+    <spec config_var="CAPELLA_FORK_EPOCH" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="CAPELLA_FORK_EPOCH" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: CAPELLA_FORK_VERSION
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L48
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L47
+  spec: |
+    <spec config_var="CAPELLA_FORK_VERSION" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="CAPELLA_FORK_VERSION" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: CHURN_LIMIT_QUOTIENT
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L86
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L84
+  spec: |
+    <spec config_var="CHURN_LIMIT_QUOTIENT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="CHURN_LIMIT_QUOTIENT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: CUSTODY_REQUIREMENT
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L167
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L167
+  spec: |
+    <spec config_var="CUSTODY_REQUIREMENT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="CUSTODY_REQUIREMENT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: DATA_COLUMN_SIDECAR_SUBNET_COUNT
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L164
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L164
+  spec: |
+    <spec config_var="DATA_COLUMN_SIDECAR_SUBNET_COUNT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="DATA_COLUMN_SIDECAR_SUBNET_COUNT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: DENEB_FORK_EPOCH
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L52
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L51
+  spec: |
+    <spec config_var="DENEB_FORK_EPOCH" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="DENEB_FORK_EPOCH" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: DENEB_FORK_VERSION
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L51
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L50
+  spec: |
+    <spec config_var="DENEB_FORK_VERSION" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="DENEB_FORK_VERSION" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: EJECTION_BALANCE
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L82
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L80
+  spec: |
+    <spec config_var="EJECTION_BALANCE" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="EJECTION_BALANCE" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: ELECTRA_FORK_EPOCH
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L55
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L54
+  spec: |
+    <spec config_var="ELECTRA_FORK_EPOCH" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="ELECTRA_FORK_EPOCH" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: ELECTRA_FORK_VERSION
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L54
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L53
+  spec: |
+    <spec config_var="ELECTRA_FORK_VERSION" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="ELECTRA_FORK_VERSION" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: EPOCHS_PER_SUBNET_SUBSCRIPTION
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L117
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L117
+  spec: |
+    <spec config_var="EPOCHS_PER_SUBNET_SUBSCRIPTION" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="EPOCHS_PER_SUBNET_SUBSCRIPTION" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: FULU_FORK_EPOCH
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L58
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L57
+  spec: |
+    <spec config_var="FULU_FORK_EPOCH" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="FULU_FORK_EPOCH" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: FULU_FORK_VERSION
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L57
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L56
+  spec: |
+    <spec config_var="FULU_FORK_VERSION" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="FULU_FORK_VERSION" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: GENESIS_DELAY
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L32
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L32
+  spec: |
+    <spec config_var="GENESIS_DELAY" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="GENESIS_DELAY" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: GENESIS_FORK_VERSION
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L30
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L30
+  spec: |
+    <spec config_var="GENESIS_FORK_VERSION" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="GENESIS_FORK_VERSION" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: INACTIVITY_SCORE_BIAS
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L78
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L76
+  spec: |
+    <spec config_var="INACTIVITY_SCORE_BIAS" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="INACTIVITY_SCORE_BIAS" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: INACTIVITY_SCORE_RECOVERY_RATE
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L80
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L78
+  spec: |
+    <spec config_var="INACTIVITY_SCORE_RECOVERY_RATE" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="INACTIVITY_SCORE_RECOVERY_RATE" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: MAXIMUM_GOSSIP_CLOCK_DISPARITY
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L126
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L126
+  spec: |
+    <spec config_var="MAXIMUM_GOSSIP_CLOCK_DISPARITY" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="MAXIMUM_GOSSIP_CLOCK_DISPARITY" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: MAX_BLOBS_PER_BLOCK
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L145
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L145
+  spec: |
+    <spec config_var="MAX_BLOBS_PER_BLOCK" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="MAX_BLOBS_PER_BLOCK" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: MAX_BLOBS_PER_BLOCK_ELECTRA
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L157
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L157
+  spec: |
+    <spec config_var="MAX_BLOBS_PER_BLOCK_ELECTRA" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="MAX_BLOBS_PER_BLOCK_ELECTRA" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: MAX_PAYLOAD_SIZE
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L113
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L113
+  spec: |
+    <spec config_var="MAX_PAYLOAD_SIZE" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="MAX_PAYLOAD_SIZE" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: MAX_PER_EPOCH_ACTIVATION_CHURN_LIMIT
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L88
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L86
+  spec: |
+    <spec config_var="MAX_PER_EPOCH_ACTIVATION_CHURN_LIMIT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="MAX_PER_EPOCH_ACTIVATION_CHURN_LIMIT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: MAX_PER_EPOCH_ACTIVATION_EXIT_CHURN_LIMIT
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L153
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L153
+  spec: |
+    <spec config_var="MAX_PER_EPOCH_ACTIVATION_EXIT_CHURN_LIMIT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="MAX_PER_EPOCH_ACTIVATION_EXIT_CHURN_LIMIT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: MAX_REQUEST_BLOB_SIDECARS
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L147
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L147
+  spec: |
+    <spec config_var="MAX_REQUEST_BLOB_SIDECARS" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="MAX_REQUEST_BLOB_SIDECARS" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: MAX_REQUEST_BLOB_SIDECARS_ELECTRA
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L159
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L159
+  spec: |
+    <spec config_var="MAX_REQUEST_BLOB_SIDECARS_ELECTRA" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="MAX_REQUEST_BLOB_SIDECARS_ELECTRA" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: MAX_REQUEST_BLOCKS
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L115
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L115
+  spec: |
+    <spec config_var="MAX_REQUEST_BLOCKS" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="MAX_REQUEST_BLOCKS" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: MAX_REQUEST_BLOCKS_DENEB
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L139
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L139
+  spec: |
+    <spec config_var="MAX_REQUEST_BLOCKS_DENEB" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="MAX_REQUEST_BLOCKS_DENEB" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: MAX_REQUEST_DATA_COLUMN_SIDECARS
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L165
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L165
+  spec: |
+    <spec config_var="MAX_REQUEST_DATA_COLUMN_SIDECARS" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="MAX_REQUEST_DATA_COLUMN_SIDECARS" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: MESSAGE_DOMAIN_INVALID_SNAPPY
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L127
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L127
+  spec: |
+    <spec config_var="MESSAGE_DOMAIN_INVALID_SNAPPY" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="MESSAGE_DOMAIN_INVALID_SNAPPY" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: MESSAGE_DOMAIN_VALID_SNAPPY
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L128
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L128
+  spec: |
+    <spec config_var="MESSAGE_DOMAIN_VALID_SNAPPY" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="MESSAGE_DOMAIN_VALID_SNAPPY" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: MIN_EPOCHS_FOR_BLOB_SIDECARS_REQUESTS
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L141
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L141
+  spec: |
+    <spec config_var="MIN_EPOCHS_FOR_BLOB_SIDECARS_REQUESTS" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="MIN_EPOCHS_FOR_BLOB_SIDECARS_REQUESTS" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: MIN_EPOCHS_FOR_BLOCK_REQUESTS
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L119
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L119
+  spec: |
+    <spec config_var="MIN_EPOCHS_FOR_BLOCK_REQUESTS" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="MIN_EPOCHS_FOR_BLOCK_REQUESTS" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: MIN_EPOCHS_FOR_DATA_COLUMN_SIDECARS_REQUESTS
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L169
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L169
+  spec: |
+    <spec config_var="MIN_EPOCHS_FOR_DATA_COLUMN_SIDECARS_REQUESTS" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="MIN_EPOCHS_FOR_DATA_COLUMN_SIDECARS_REQUESTS" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: MIN_GENESIS_ACTIVE_VALIDATOR_COUNT
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L26
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L26
+  spec: |
+    <spec config_var="MIN_GENESIS_ACTIVE_VALIDATOR_COUNT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="MIN_GENESIS_ACTIVE_VALIDATOR_COUNT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: MIN_GENESIS_TIME
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L28
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L28
+  spec: |
+    <spec config_var="MIN_GENESIS_TIME" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="MIN_GENESIS_TIME" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: MIN_PER_EPOCH_CHURN_LIMIT
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L84
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L82
+  spec: |
+    <spec config_var="MIN_PER_EPOCH_CHURN_LIMIT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="MIN_PER_EPOCH_CHURN_LIMIT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: MIN_PER_EPOCH_CHURN_LIMIT_ELECTRA
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L151
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L151
+  spec: |
+    <spec config_var="MIN_PER_EPOCH_CHURN_LIMIT_ELECTRA" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="MIN_PER_EPOCH_CHURN_LIMIT_ELECTRA" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: MIN_VALIDATOR_WITHDRAWABILITY_DELAY
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L68
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L66
+  spec: |
+    <spec config_var="MIN_VALIDATOR_WITHDRAWABILITY_DELAY" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="MIN_VALIDATOR_WITHDRAWABILITY_DELAY" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: NUMBER_OF_COLUMNS
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L162
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L162
+  spec: |
+    <spec config_var="NUMBER_OF_COLUMNS" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="NUMBER_OF_COLUMNS" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: NUMBER_OF_CUSTODY_GROUPS
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L163
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L163
+  spec: |
+    <spec config_var="NUMBER_OF_CUSTODY_GROUPS" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="NUMBER_OF_CUSTODY_GROUPS" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: PROPOSER_SCORE_BOOST
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L93
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L92
+  spec: |
+    <spec config_var="PROPOSER_SCORE_BOOST" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="PROPOSER_SCORE_BOOST" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: REORG_HEAD_WEIGHT_THRESHOLD
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L95
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L94
+  spec: |
+    <spec config_var="REORG_HEAD_WEIGHT_THRESHOLD" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="REORG_HEAD_WEIGHT_THRESHOLD" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: REORG_MAX_EPOCHS_SINCE_FINALIZATION
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L99
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L98
+  spec: |
+    <spec config_var="REORG_MAX_EPOCHS_SINCE_FINALIZATION" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="REORG_MAX_EPOCHS_SINCE_FINALIZATION" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: REORG_PARENT_WEIGHT_THRESHOLD
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L97
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L96
+  spec: |
+    <spec config_var="REORG_PARENT_WEIGHT_THRESHOLD" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="REORG_PARENT_WEIGHT_THRESHOLD" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: SAMPLES_PER_SLOT
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L166
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L166
+  spec: |
+    <spec config_var="SAMPLES_PER_SLOT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="SAMPLES_PER_SLOT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: SECONDS_PER_SLOT
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L64
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L62
+  spec: |
+    <spec config_var="SECONDS_PER_SLOT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="SECONDS_PER_SLOT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: SHARD_COMMITTEE_PERIOD
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L70
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L68
+  spec: |
+    <spec config_var="SHARD_COMMITTEE_PERIOD" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="SHARD_COMMITTEE_PERIOD" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: SUBNETS_PER_NODE
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L130
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L130
+  spec: |
+    <spec config_var="SUBNETS_PER_NODE" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="SUBNETS_PER_NODE" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: TERMINAL_BLOCK_HASH
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L18
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L18
+  spec: |
+    <spec config_var="TERMINAL_BLOCK_HASH" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="TERMINAL_BLOCK_HASH" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: TERMINAL_BLOCK_HASH_ACTIVATION_EPOCH
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L19
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L19
+  spec: |
+    <spec config_var="TERMINAL_BLOCK_HASH_ACTIVATION_EPOCH" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="TERMINAL_BLOCK_HASH_ACTIVATION_EPOCH" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: TERMINAL_TOTAL_DIFFICULTY
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L16
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L16
+  spec: |
+    <spec config_var="TERMINAL_TOTAL_DIFFICULTY" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="TERMINAL_TOTAL_DIFFICULTY" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+
+- name: VALIDATOR_CUSTODY_REQUIREMENT
+  sources:
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/mainnet.yaml#L168
+    - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/configs/minimal.yaml#L168
+  spec: |
+    <spec config_var="VALIDATOR_CUSTODY_REQUIREMENT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
+    <spec config_var="VALIDATOR_CUSTODY_REQUIREMENT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
