@@ -104,6 +104,20 @@
     class NewPayloadRequest(object):
         execution_payload: ExecutionPayload
     </spec>
+    <spec dataclass="NewPayloadRequest" fork="deneb" style="full" version="v1.6.0-alpha.3" hash="26cf2e26">
+    class NewPayloadRequest(object):
+        execution_payload: ExecutionPayload
+        versioned_hashes: Sequence[VersionedHash]
+        parent_beacon_block_root: Root
+    </spec>
+    <spec dataclass="NewPayloadRequest" fork="electra" style="full" version="v1.6.0-alpha.3" hash="b1f69cc9">
+    class NewPayloadRequest(object):
+        execution_payload: ExecutionPayload
+        versioned_hashes: Sequence[VersionedHash]
+        parent_beacon_block_root: Root
+        # [New in Electra]
+        execution_requests: ExecutionRequests
+    </spec>
 
 - name: PayloadAttributesV1
   sources:

@@ -8,6 +8,13 @@
         aggregate: Attestation
         selection_proof: BLSSignature
     </spec>
+    <spec ssz_object="AggregateAndProof" fork="electra" style="full" version="v1.6.0-alpha.3" hash="a7f482d7">
+    class AggregateAndProof(Container):
+        aggregator_index: ValidatorIndex
+        # [Modified in Electra:EIP7549]
+        aggregate: Attestation
+        selection_proof: BLSSignature
+    </spec>
 
 - name: AttestationPhase0
   sources:
@@ -61,6 +68,13 @@
     <spec ssz_object="AttesterSlashing" fork="phase0" style="full" version="v1.6.0-alpha.3" hash="caf8a91a">
     class AttesterSlashing(Container):
         attestation_1: IndexedAttestation
+        attestation_2: IndexedAttestation
+    </spec>
+    <spec ssz_object="AttesterSlashing" fork="electra" style="full" version="v1.6.0-alpha.3" hash="2b9f773d">
+    class AttesterSlashing(Container):
+        # [Modified in Electra:EIP7549]
+        attestation_1: IndexedAttestation
+        # [Modified in Electra:EIP7549]
         attestation_2: IndexedAttestation
     </spec>
 
@@ -1068,6 +1082,12 @@
   spec: |
     <spec ssz_object="SignedAggregateAndProof" fork="phase0" style="full" version="v1.6.0-alpha.3" hash="52046edd">
     class SignedAggregateAndProof(Container):
+        message: AggregateAndProof
+        signature: BLSSignature
+    </spec>
+    <spec ssz_object="SignedAggregateAndProof" fork="electra" style="full" version="v1.6.0-alpha.3" hash="7e784e12">
+    class SignedAggregateAndProof(Container):
+        # [Modified in Electra:EIP7549]
         message: AggregateAndProof
         signature: BLSSignature
     </spec>
