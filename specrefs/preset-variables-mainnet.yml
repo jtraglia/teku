@@ -7,7 +7,6 @@
     BASE_REWARD_FACTOR: uint64 = 64
     </spec>
 
-
 - name: BYTES_PER_LOGS_BLOOM
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/bellatrix.yaml
@@ -16,7 +15,6 @@
     <spec preset_var="BYTES_PER_LOGS_BLOOM" preset="mainnet" fork="bellatrix" style="full" hash="97101cb2">
     BYTES_PER_LOGS_BLOOM: uint64 = 256
     </spec>
-
 
 - name: EFFECTIVE_BALANCE_INCREMENT
   sources:
@@ -27,7 +25,6 @@
     EFFECTIVE_BALANCE_INCREMENT: Gwei = 1000000000
     </spec>
 
-
 - name: EPOCHS_PER_ETH1_VOTING_PERIOD
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml
@@ -36,7 +33,6 @@
     <spec preset_var="EPOCHS_PER_ETH1_VOTING_PERIOD" preset="mainnet" fork="phase0" style="full" hash="6b6a0053">
     EPOCHS_PER_ETH1_VOTING_PERIOD: uint64 = 64
     </spec>
-
 
 - name: EPOCHS_PER_HISTORICAL_VECTOR
   sources:
@@ -47,7 +43,6 @@
     EPOCHS_PER_HISTORICAL_VECTOR: uint64 = 65536
     </spec>
 
-
 - name: EPOCHS_PER_SLASHINGS_VECTOR
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml
@@ -56,7 +51,6 @@
     <spec preset_var="EPOCHS_PER_SLASHINGS_VECTOR" preset="mainnet" fork="phase0" style="full" hash="c237469a">
     EPOCHS_PER_SLASHINGS_VECTOR: uint64 = 8192
     </spec>
-
 
 - name: EPOCHS_PER_SYNC_COMMITTEE_PERIOD
   sources:
@@ -67,7 +61,6 @@
     EPOCHS_PER_SYNC_COMMITTEE_PERIOD: uint64 = 256
     </spec>
 
-
 - name: FIELD_ELEMENTS_PER_BLOB
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/deneb.yaml
@@ -76,7 +69,6 @@
     <spec preset_var="FIELD_ELEMENTS_PER_BLOB" preset="mainnet" fork="deneb" style="full" hash="a86948eb">
     FIELD_ELEMENTS_PER_BLOB: uint64 = 4096
     </spec>
-
 
 - name: FIELD_ELEMENTS_PER_CELL
   sources:
@@ -87,7 +79,6 @@
     FIELD_ELEMENTS_PER_CELL: uint64 = 64
     </spec>
 
-
 - name: FIELD_ELEMENTS_PER_EXT_BLOB
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/fulu.yaml
@@ -96,7 +87,6 @@
     <spec preset_var="FIELD_ELEMENTS_PER_EXT_BLOB" preset="mainnet" fork="fulu" style="full" hash="6994b51d">
     FIELD_ELEMENTS_PER_EXT_BLOB = 8192
     </spec>
-
 
 - name: HISTORICAL_ROOTS_LIMIT
   sources:
@@ -107,7 +97,6 @@
     HISTORICAL_ROOTS_LIMIT: uint64 = 16777216
     </spec>
 
-
 - name: HYSTERESIS_DOWNWARD_MULTIPLIER
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml
@@ -116,7 +105,6 @@
     <spec preset_var="HYSTERESIS_DOWNWARD_MULTIPLIER" preset="mainnet" fork="phase0" style="full" hash="95d603c9">
     HYSTERESIS_DOWNWARD_MULTIPLIER: uint64 = 1
     </spec>
-
 
 - name: HYSTERESIS_QUOTIENT
   sources:
@@ -127,7 +115,6 @@
     HYSTERESIS_QUOTIENT: uint64 = 4
     </spec>
 
-
 - name: HYSTERESIS_UPWARD_MULTIPLIER
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml
@@ -136,7 +123,6 @@
     <spec preset_var="HYSTERESIS_UPWARD_MULTIPLIER" preset="mainnet" fork="phase0" style="full" hash="34607474">
     HYSTERESIS_UPWARD_MULTIPLIER: uint64 = 5
     </spec>
-
 
 - name: INACTIVITY_PENALTY_QUOTIENT
   sources:
@@ -147,7 +133,6 @@
     INACTIVITY_PENALTY_QUOTIENT: uint64 = 67108864
     </spec>
 
-
 - name: INACTIVITY_PENALTY_QUOTIENT_ALTAIR
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/altair.yaml
@@ -156,7 +141,6 @@
     <spec preset_var="INACTIVITY_PENALTY_QUOTIENT_ALTAIR" preset="mainnet" fork="altair" style="full" hash="d0d3c505">
     INACTIVITY_PENALTY_QUOTIENT_ALTAIR: uint64 = 50331648
     </spec>
-
 
 - name: INACTIVITY_PENALTY_QUOTIENT_BELLATRIX
   sources:
@@ -167,7 +151,6 @@
     INACTIVITY_PENALTY_QUOTIENT_BELLATRIX: uint64 = 16777216
     </spec>
 
-
 - name: KZG_COMMITMENTS_INCLUSION_PROOF_DEPTH
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/fulu.yaml
@@ -176,7 +159,6 @@
     <spec preset_var="KZG_COMMITMENTS_INCLUSION_PROOF_DEPTH" preset="mainnet" fork="fulu" style="full" hash="22280638">
     KZG_COMMITMENTS_INCLUSION_PROOF_DEPTH: uint64 = 4
     </spec>
-
 
 - name: KZG_COMMITMENT_INCLUSION_PROOF_DEPTH
   sources:
@@ -187,7 +169,6 @@
     KZG_COMMITMENT_INCLUSION_PROOF_DEPTH: uint64 = 17
     </spec>
 
-
 - name: MAX_ATTESTATIONS
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml
@@ -196,7 +177,6 @@
     <spec preset_var="MAX_ATTESTATIONS" preset="mainnet" fork="phase0" style="full" hash="afe55d3f">
     MAX_ATTESTATIONS = 128
     </spec>
-
 
 - name: MAX_ATTESTATIONS_ELECTRA
   sources:
@@ -207,7 +187,6 @@
     MAX_ATTESTATIONS_ELECTRA = 8
     </spec>
 
-
 - name: MAX_ATTESTER_SLASHINGS
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml
@@ -216,7 +195,6 @@
     <spec preset_var="MAX_ATTESTER_SLASHINGS" preset="mainnet" fork="phase0" style="full" hash="c1416d33">
     MAX_ATTESTER_SLASHINGS = 2
     </spec>
-
 
 - name: MAX_ATTESTER_SLASHINGS_ELECTRA
   sources:
@@ -227,7 +205,6 @@
     MAX_ATTESTER_SLASHINGS_ELECTRA = 1
     </spec>
 
-
 - name: MAX_BLOB_COMMITMENTS_PER_BLOCK
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/deneb.yaml
@@ -236,7 +213,6 @@
     <spec preset_var="MAX_BLOB_COMMITMENTS_PER_BLOCK" preset="mainnet" fork="deneb" style="full" hash="0ad15e8f">
     MAX_BLOB_COMMITMENTS_PER_BLOCK: uint64 = 4096
     </spec>
-
 
 - name: MAX_BLS_TO_EXECUTION_CHANGES
   sources:
@@ -247,7 +223,6 @@
     MAX_BLS_TO_EXECUTION_CHANGES = 16
     </spec>
 
-
 - name: MAX_BYTES_PER_TRANSACTION
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/bellatrix.yaml
@@ -256,7 +231,6 @@
     <spec preset_var="MAX_BYTES_PER_TRANSACTION" preset="mainnet" fork="bellatrix" style="full" hash="3684e68f">
     MAX_BYTES_PER_TRANSACTION: uint64 = 1073741824
     </spec>
-
 
 - name: MAX_COMMITTEES_PER_SLOT
   sources:
@@ -267,7 +241,6 @@
     MAX_COMMITTEES_PER_SLOT: uint64 = 64
     </spec>
 
-
 - name: MAX_CONSOLIDATION_REQUESTS_PER_PAYLOAD
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/electra.yaml
@@ -276,7 +249,6 @@
     <spec preset_var="MAX_CONSOLIDATION_REQUESTS_PER_PAYLOAD" preset="mainnet" fork="electra" style="full" hash="59ec80e5">
     MAX_CONSOLIDATION_REQUESTS_PER_PAYLOAD: uint64 = 2
     </spec>
-
 
 - name: MAX_DEPOSITS
   sources:
@@ -287,7 +259,6 @@
     MAX_DEPOSITS = 16
     </spec>
 
-
 - name: MAX_DEPOSIT_REQUESTS_PER_PAYLOAD
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/electra.yaml
@@ -296,7 +267,6 @@
     <spec preset_var="MAX_DEPOSIT_REQUESTS_PER_PAYLOAD" preset="mainnet" fork="electra" style="full" hash="6c60ff83">
     MAX_DEPOSIT_REQUESTS_PER_PAYLOAD: uint64 = 8192
     </spec>
-
 
 - name: MAX_EFFECTIVE_BALANCE
   sources:
@@ -307,7 +277,6 @@
     MAX_EFFECTIVE_BALANCE: Gwei = 32000000000
     </spec>
 
-
 - name: MAX_EFFECTIVE_BALANCE_ELECTRA
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/electra.yaml
@@ -316,7 +285,6 @@
     <spec preset_var="MAX_EFFECTIVE_BALANCE_ELECTRA" preset="mainnet" fork="electra" style="full" hash="2ec17dc4">
     MAX_EFFECTIVE_BALANCE_ELECTRA: Gwei = 2048000000000
     </spec>
-
 
 - name: MAX_EXTRA_DATA_BYTES
   sources:
@@ -327,7 +295,6 @@
     MAX_EXTRA_DATA_BYTES = 32
     </spec>
 
-
 - name: MAX_PENDING_DEPOSITS_PER_EPOCH
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/electra.yaml
@@ -336,7 +303,6 @@
     <spec preset_var="MAX_PENDING_DEPOSITS_PER_EPOCH" preset="mainnet" fork="electra" style="full" hash="f532a46f">
     MAX_PENDING_DEPOSITS_PER_EPOCH: uint64 = 16
     </spec>
-
 
 - name: MAX_PENDING_PARTIALS_PER_WITHDRAWALS_SWEEP
   sources:
@@ -347,7 +313,6 @@
     MAX_PENDING_PARTIALS_PER_WITHDRAWALS_SWEEP: uint64 = 8
     </spec>
 
-
 - name: MAX_PROPOSER_SLASHINGS
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml
@@ -356,7 +321,6 @@
     <spec preset_var="MAX_PROPOSER_SLASHINGS" preset="mainnet" fork="phase0" style="full" hash="87bfd9ed">
     MAX_PROPOSER_SLASHINGS = 16
     </spec>
-
 
 - name: MAX_SEED_LOOKAHEAD
   sources:
@@ -367,7 +331,6 @@
     MAX_SEED_LOOKAHEAD: uint64 = 4
     </spec>
 
-
 - name: MAX_TRANSACTIONS_PER_PAYLOAD
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/bellatrix.yaml
@@ -376,7 +339,6 @@
     <spec preset_var="MAX_TRANSACTIONS_PER_PAYLOAD" preset="mainnet" fork="bellatrix" style="full" hash="1088e3b2">
     MAX_TRANSACTIONS_PER_PAYLOAD: uint64 = 1048576
     </spec>
-
 
 - name: MAX_VALIDATORS_PER_COMMITTEE
   sources:
@@ -387,7 +349,6 @@
     MAX_VALIDATORS_PER_COMMITTEE: uint64 = 2048
     </spec>
 
-
 - name: MAX_VALIDATORS_PER_WITHDRAWALS_SWEEP
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/capella.yaml
@@ -396,7 +357,6 @@
     <spec preset_var="MAX_VALIDATORS_PER_WITHDRAWALS_SWEEP" preset="mainnet" fork="capella" style="full" hash="ac61940c">
     MAX_VALIDATORS_PER_WITHDRAWALS_SWEEP = 16384
     </spec>
-
 
 - name: MAX_VOLUNTARY_EXITS
   sources:
@@ -407,7 +367,6 @@
     MAX_VOLUNTARY_EXITS = 16
     </spec>
 
-
 - name: MAX_WITHDRAWALS_PER_PAYLOAD
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/capella.yaml
@@ -416,7 +375,6 @@
     <spec preset_var="MAX_WITHDRAWALS_PER_PAYLOAD" preset="mainnet" fork="capella" style="full" hash="c406effb">
     MAX_WITHDRAWALS_PER_PAYLOAD: uint64 = 16
     </spec>
-
 
 - name: MAX_WITHDRAWAL_REQUESTS_PER_PAYLOAD
   sources:
@@ -427,7 +385,6 @@
     MAX_WITHDRAWAL_REQUESTS_PER_PAYLOAD: uint64 = 16
     </spec>
 
-
 - name: MIN_ACTIVATION_BALANCE
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/electra.yaml
@@ -436,7 +393,6 @@
     <spec preset_var="MIN_ACTIVATION_BALANCE" preset="mainnet" fork="electra" style="full" hash="fcbcbab5">
     MIN_ACTIVATION_BALANCE: Gwei = 32000000000
     </spec>
-
 
 - name: MIN_ATTESTATION_INCLUSION_DELAY
   sources:
@@ -447,7 +403,6 @@
     MIN_ATTESTATION_INCLUSION_DELAY: uint64 = 1
     </spec>
 
-
 - name: MIN_DEPOSIT_AMOUNT
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml
@@ -456,7 +411,6 @@
     <spec preset_var="MIN_DEPOSIT_AMOUNT" preset="mainnet" fork="phase0" style="full" hash="388f2923">
     MIN_DEPOSIT_AMOUNT: Gwei = 1000000000
     </spec>
-
 
 - name: MIN_EPOCHS_TO_INACTIVITY_PENALTY
   sources:
@@ -467,7 +421,6 @@
     MIN_EPOCHS_TO_INACTIVITY_PENALTY: uint64 = 4
     </spec>
 
-
 - name: MIN_SEED_LOOKAHEAD
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml
@@ -476,7 +429,6 @@
     <spec preset_var="MIN_SEED_LOOKAHEAD" preset="mainnet" fork="phase0" style="full" hash="48a0462b">
     MIN_SEED_LOOKAHEAD: uint64 = 1
     </spec>
-
 
 - name: MIN_SLASHING_PENALTY_QUOTIENT
   sources:
@@ -487,7 +439,6 @@
     MIN_SLASHING_PENALTY_QUOTIENT: uint64 = 128
     </spec>
 
-
 - name: MIN_SLASHING_PENALTY_QUOTIENT_ALTAIR
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/altair.yaml
@@ -496,7 +447,6 @@
     <spec preset_var="MIN_SLASHING_PENALTY_QUOTIENT_ALTAIR" preset="mainnet" fork="altair" style="full" hash="4845bc05">
     MIN_SLASHING_PENALTY_QUOTIENT_ALTAIR: uint64 = 64
     </spec>
-
 
 - name: MIN_SLASHING_PENALTY_QUOTIENT_BELLATRIX
   sources:
@@ -507,7 +457,6 @@
     MIN_SLASHING_PENALTY_QUOTIENT_BELLATRIX: uint64 = 32
     </spec>
 
-
 - name: MIN_SLASHING_PENALTY_QUOTIENT_ELECTRA
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/electra.yaml
@@ -516,7 +465,6 @@
     <spec preset_var="MIN_SLASHING_PENALTY_QUOTIENT_ELECTRA" preset="mainnet" fork="electra" style="full" hash="03888289">
     MIN_SLASHING_PENALTY_QUOTIENT_ELECTRA: uint64 = 4096
     </spec>
-
 
 - name: MIN_SYNC_COMMITTEE_PARTICIPANTS
   sources:
@@ -527,7 +475,6 @@
     MIN_SYNC_COMMITTEE_PARTICIPANTS = 1
     </spec>
 
-
 - name: PENDING_CONSOLIDATIONS_LIMIT
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/electra.yaml
@@ -536,7 +483,6 @@
     <spec preset_var="PENDING_CONSOLIDATIONS_LIMIT" preset="mainnet" fork="electra" style="full" hash="f28398d0">
     PENDING_CONSOLIDATIONS_LIMIT: uint64 = 262144
     </spec>
-
 
 - name: PENDING_DEPOSITS_LIMIT
   sources:
@@ -547,7 +493,6 @@
     PENDING_DEPOSITS_LIMIT: uint64 = 134217728
     </spec>
 
-
 - name: PENDING_PARTIAL_WITHDRAWALS_LIMIT
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/electra.yaml
@@ -556,7 +501,6 @@
     <spec preset_var="PENDING_PARTIAL_WITHDRAWALS_LIMIT" preset="mainnet" fork="electra" style="full" hash="9ae3fe56">
     PENDING_PARTIAL_WITHDRAWALS_LIMIT: uint64 = 134217728
     </spec>
-
 
 - name: PROPORTIONAL_SLASHING_MULTIPLIER
   sources:
@@ -567,7 +511,6 @@
     PROPORTIONAL_SLASHING_MULTIPLIER: uint64 = 1
     </spec>
 
-
 - name: PROPORTIONAL_SLASHING_MULTIPLIER_ALTAIR
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/altair.yaml
@@ -576,7 +519,6 @@
     <spec preset_var="PROPORTIONAL_SLASHING_MULTIPLIER_ALTAIR" preset="mainnet" fork="altair" style="full" hash="5e6aedb9">
     PROPORTIONAL_SLASHING_MULTIPLIER_ALTAIR: uint64 = 2
     </spec>
-
 
 - name: PROPORTIONAL_SLASHING_MULTIPLIER_BELLATRIX
   sources:
@@ -587,7 +529,6 @@
     PROPORTIONAL_SLASHING_MULTIPLIER_BELLATRIX: uint64 = 3
     </spec>
 
-
 - name: PROPOSER_REWARD_QUOTIENT
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml
@@ -596,7 +537,6 @@
     <spec preset_var="PROPOSER_REWARD_QUOTIENT" preset="mainnet" fork="phase0" style="full" hash="a60dab3e">
     PROPOSER_REWARD_QUOTIENT: uint64 = 8
     </spec>
-
 
 - name: SHUFFLE_ROUND_COUNT
   sources:
@@ -607,7 +547,6 @@
     SHUFFLE_ROUND_COUNT: uint64 = 90
     </spec>
 
-
 - name: SLOTS_PER_EPOCH
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml
@@ -616,7 +555,6 @@
     <spec preset_var="SLOTS_PER_EPOCH" preset="mainnet" fork="phase0" style="full" hash="cb41af43">
     SLOTS_PER_EPOCH: uint64 = 32
     </spec>
-
 
 - name: SLOTS_PER_HISTORICAL_ROOT
   sources:
@@ -627,7 +565,6 @@
     SLOTS_PER_HISTORICAL_ROOT: uint64 = 8192
     </spec>
 
-
 - name: SYNC_COMMITTEE_SIZE
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/altair.yaml
@@ -636,7 +573,6 @@
     <spec preset_var="SYNC_COMMITTEE_SIZE" preset="mainnet" fork="altair" style="full" hash="d31740c9">
     SYNC_COMMITTEE_SIZE: uint64 = 512
     </spec>
-
 
 - name: TARGET_COMMITTEE_SIZE
   sources:
@@ -647,7 +583,6 @@
     TARGET_COMMITTEE_SIZE: uint64 = 128
     </spec>
 
-
 - name: UPDATE_TIMEOUT
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/altair.yaml
@@ -656,7 +591,6 @@
     <spec preset_var="UPDATE_TIMEOUT" preset="mainnet" fork="altair" style="full" hash="e633d57e">
     UPDATE_TIMEOUT = 8192
     </spec>
-
 
 - name: VALIDATOR_REGISTRY_LIMIT
   sources:
@@ -667,7 +601,6 @@
     VALIDATOR_REGISTRY_LIMIT: uint64 = 1099511627776
     </spec>
 
-
 - name: WHISTLEBLOWER_REWARD_QUOTIENT
   sources:
     - file: ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml
@@ -676,7 +609,6 @@
     <spec preset_var="WHISTLEBLOWER_REWARD_QUOTIENT" preset="mainnet" fork="phase0" style="full" hash="62962c52">
     WHISTLEBLOWER_REWARD_QUOTIENT: uint64 = 512
     </spec>
-
 
 - name: WHISTLEBLOWER_REWARD_QUOTIENT_ELECTRA
   sources:
