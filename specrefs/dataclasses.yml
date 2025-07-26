@@ -4,83 +4,143 @@
 dataclasses:
   - name: BlobParameters
     sources:
-      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/logic/versions/fulu/helpers/BlobParameters.java
+    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/logic/versions/fulu/helpers/BlobParameters.java # e941445b
     spec: |
-      <spec dataclass="BlobParameters" fork="fulu" style="full" version="v1.6.0-alpha.3" />
+      <spec dataclass="BlobParameters" fork="fulu" style="full" version="v1.6.0-alpha.3" hash="a4575aa8">
+      class BlobParameters:
+          epoch: Epoch
+          max_blobs_per_block: uint64
+      </spec>
 
   - name: BlobsBundleDeneb
     sources:
-      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/BlobsBundleSchema.java
-      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/BlobsBundle.java
-      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/versions/deneb/BlobsBundleDeneb.java
-      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/versions/deneb/BlobsBundleSchemaDeneb.java
+    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/BlobsBundleSchema.java # 6aca31d5
+    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/BlobsBundle.java # a54290df
+    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/versions/deneb/BlobsBundleDeneb.java # 6beaa74a
+    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/versions/deneb/BlobsBundleSchemaDeneb.java # 67c9e287
     spec: |
-      <spec dataclass="BlobsBundle" fork="deneb" style="full" version="v1.6.0-alpha.3" />
+      <spec dataclass="BlobsBundle" fork="deneb" style="full" version="v1.6.0-alpha.3" hash="8d6e7be6">
+      class BlobsBundle(object):
+          commitments: List[KZGCommitment, MAX_BLOB_COMMITMENTS_PER_BLOCK]
+          proofs: List[KZGProof, MAX_BLOB_COMMITMENTS_PER_BLOCK]
+          blobs: List[Blob, MAX_BLOB_COMMITMENTS_PER_BLOCK]
+      </spec>
 
   - name: BlobsBundleFulu
     sources:
-      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/BlobsBundleSchema.java
-      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/BlobsBundle.java
-      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/versions/fulu/BlobsBundleFulu.java
-      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/versions/fulu/BlobsBundleSchemaFulu.java
+    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/BlobsBundleSchema.java # 6aca31d5
+    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/BlobsBundle.java # a54290df
+    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/versions/fulu/BlobsBundleFulu.java # 1bad050f
+    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/versions/fulu/BlobsBundleSchemaFulu.java # 63dec07d
     spec: |
-      <spec dataclass="BlobsBundle" fork="deneb" style="full" version="v1.6.0-alpha.3" />
+      <spec dataclass="BlobsBundle" fork="fulu" style="full" version="v1.6.0-alpha.3" hash="e265362d">
+      class BlobsBundle(object):
+          commitments: List[KZGCommitment, MAX_BLOB_COMMITMENTS_PER_BLOCK]
+          # [Modified in Fulu:EIP7594]
+          proofs: List[KZGProof, FIELD_ELEMENTS_PER_EXT_BLOB * MAX_BLOB_COMMITMENTS_PER_BLOCK]
+          blobs: List[Blob, MAX_BLOB_COMMITMENTS_PER_BLOCK]
+      </spec>
 
   - name: GetPayloadResponseV1
     sources:
-      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
-      - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/methods/EngineGetPayloadV1.java
+    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java # a14ac45e
+    - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/methods/EngineGetPayloadV1.java # ae20b21d
     spec: |
-      <spec dataclass="GetPayloadResponse" fork="bellatrix" style="full" version="v1.6.0-alpha.3" />
+      <spec dataclass="GetPayloadResponse" fork="bellatrix" style="full" version="v1.6.0-alpha.3" hash="bc71e6e6">
+      class GetPayloadResponse(object):
+          execution_payload: ExecutionPayload
+      </spec>
 
   - name: GetPayloadResponseV2
     sources:
-      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
-      - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/GetPayloadV2Response.java
+    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java # a14ac45e
+    - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/GetPayloadV2Response.java # 00446d46
     spec: |
-      <spec dataclass="GetPayloadResponse" fork="capella" style="full" version="v1.6.0-alpha.3" />
+      <spec dataclass="GetPayloadResponse" fork="capella" style="full" version="v1.6.0-alpha.3" hash="5f10deae">
+      class GetPayloadResponse(object):
+          execution_payload: ExecutionPayload
+          block_value: uint256
+      </spec>
 
   - name: GetPayloadResponseV3
     sources:
-      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
-      - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/GetPayloadV3Response.java
+    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java # a14ac45e
+    - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/GetPayloadV3Response.java # a128c2e0
     spec: |
-      <spec dataclass="GetPayloadResponse" fork="deneb" style="full" version="v1.6.0-alpha.3" />
+      <spec dataclass="GetPayloadResponse" fork="deneb" style="full" version="v1.6.0-alpha.3" hash="243ad324">
+      class GetPayloadResponse(object):
+          execution_payload: ExecutionPayload
+          block_value: uint256
+          blobs_bundle: BlobsBundle  # [New in Deneb:EIP4844]
+      </spec>
 
   - name: GetPayloadResponseV4
     sources:
-      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
-      - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/GetPayloadV4Response.java
+    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java # a14ac45e
+    - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/GetPayloadV4Response.java # 4c44cbf2
     spec: |
-      <spec dataclass="GetPayloadResponse" fork="electra" style="full" version="v1.6.0-alpha.3" />
+      <spec dataclass="GetPayloadResponse" fork="electra" style="full" version="v1.6.0-alpha.3" hash="43f23b8d">
+      class GetPayloadResponse(object):
+          execution_payload: ExecutionPayload
+          block_value: uint256
+          blobs_bundle: BlobsBundle
+          execution_requests: Sequence[bytes]  # [New in Electra]
+      </spec>
 
   - name: GetPayloadResponseV5
     sources:
-      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
-      - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/GetPayloadV5Response.java
+    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java # a14ac45e
+    - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/GetPayloadV5Response.java # e6eda61e
     spec: |
-      <spec dataclass="GetPayloadResponse" fork="fulu" style="full" version="v1.6.0-alpha.3" />
+      <spec dataclass="GetPayloadResponse" fork="fulu" style="full" version="v1.6.0-alpha.3" hash="38a6e364">
+      class GetPayloadResponse(object):
+          execution_payload: ExecutionPayload
+          block_value: uint256
+          blobs_bundle: BlobsBundle  # [Modified in Fulu:EIP7594]
+          execution_requests: Sequence[bytes]
+      </spec>
 
   - name: NewPayloadRequest
     sources:
-      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/NewPayloadRequest.java
+    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/NewPayloadRequest.java # 2bc40943
     spec: |
-      <spec dataclass="NewPayloadRequest" fork="bellatrix" style="full" version="v1.6.0-alpha.3" />
+      <spec dataclass="NewPayloadRequest" fork="bellatrix" style="full" version="v1.6.0-alpha.3" hash="4d32e8c7">
+      class NewPayloadRequest(object):
+          execution_payload: ExecutionPayload
+      </spec>
 
   - name: PayloadAttributesV1
     sources:
-      - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/PayloadAttributesV1.java
+    - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/PayloadAttributesV1.java # 33a77e59
     spec: |
-      <spec dataclass="PayloadAttributes" fork="bellatrix" style="full" version="v1.6.0-alpha.3" />
+      <spec dataclass="PayloadAttributes" fork="bellatrix" style="full" version="v1.6.0-alpha.3" hash="8f6fc523">
+      class PayloadAttributes(object):
+          timestamp: uint64
+          prev_randao: Bytes32
+          suggested_fee_recipient: ExecutionAddress
+      </spec>
 
   - name: PayloadAttributesV2
     sources:
-      - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/PayloadAttributesV2.java
+    - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/PayloadAttributesV2.java # fa7fd096
     spec: |
-      <spec dataclass="PayloadAttributes" fork="capella" style="full" version="v1.6.0-alpha.3" />
+      <spec dataclass="PayloadAttributes" fork="capella" style="full" version="v1.6.0-alpha.3" hash="730ada60">
+      class PayloadAttributes(object):
+          timestamp: uint64
+          prev_randao: Bytes32
+          suggested_fee_recipient: ExecutionAddress
+          withdrawals: Sequence[Withdrawal]  # [New in Capella]
+      </spec>
 
   - name: PayloadAttributesV3
     sources:
-      - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/PayloadAttributesV3.java
+    - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/PayloadAttributesV3.java # 7a0b40a4
     spec: |
-      <spec dataclass="PayloadAttributes" fork="deneb" style="full" version="v1.6.0-alpha.3" />
+      <spec dataclass="PayloadAttributes" fork="deneb" style="full" version="v1.6.0-alpha.3" hash="9598d52c">
+      class PayloadAttributes(object):
+          timestamp: uint64
+          prev_randao: Bytes32
+          suggested_fee_recipient: ExecutionAddress
+          withdrawals: Sequence[Withdrawal]
+          parent_beacon_block_root: Root  # [New in Deneb:EIP4788]
+      </spec>
