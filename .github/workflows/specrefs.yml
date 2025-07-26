@@ -1,0 +1,36 @@
+name: Check Spec References
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-specrefs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install ethspecify
+      run: python3 -mpip install ethspecify
+
+    - name: Run spec references update
+      run: |
+        ethspecify process --path=specrefs
+        specrefs/update.sh
+
+    - name: Check for differences
+      run: |
+        if ! git diff --exit-code specrefs; then
+          echo "❌ Spec references are out-of-date!"
+          echo ""
+          git diff specrefs
+          exit 1
+        else
+          echo "✅ Spec references are up-to-date!"
+        fi
+
+    - name: Run spec references check
+      run: specrefs/check.sh

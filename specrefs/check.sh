@@ -93,6 +93,247 @@ extract_spec_tags() {
     done | sort
 }
 
+# Function to validate that a source file exists and search string can be found
+validate_source_file() {
+    local source_path="$1"
+    local repo_root="$(dirname "$SCRIPT_DIR")"
+    
+    # Extract file path and line range (legacy format)
+    local file_path="$source_path"
+    local line_range=""
+    
+    if [[ "$source_path" =~ ^(.+)#(L[0-9]+-L[0-9]+|L[0-9]+)$ ]]; then
+        file_path="${BASH_REMATCH[1]}"
+        line_range="${BASH_REMATCH[2]}"
+    fi
+    
+    # Resolve full file path
+    local full_path="$repo_root/$file_path"
+    
+    # Check if file exists
+    if [[ ! -f "$full_path" ]]; then
+        echo "MISSING FILE: $source_path"
+        return 1
+    fi
+    
+    # If line range specified, validate it (legacy format)
+    if [[ -n "$line_range" ]]; then
+        local total_lines=$(awk 'END {print NR}' "$full_path")
+        
+        if [[ "$line_range" =~ ^L([0-9]+)-L([0-9]+)$ ]]; then
+            local start_line="${BASH_REMATCH[1]}"
+            local end_line="${BASH_REMATCH[2]}"
+            
+            if (( start_line > total_lines || end_line > total_lines )); then
+                echo "INVALID LINE RANGE: $source_path (file has $total_lines lines)"
+                return 1
+            fi
+            
+            if (( start_line > end_line )); then
+                echo "INVALID LINE RANGE: $source_path (start > end)"
+                return 1
+            fi
+            
+        elif [[ "$line_range" =~ ^L([0-9]+)$ ]]; then
+            local line_num="${BASH_REMATCH[1]}"
+            
+            if (( line_num > total_lines )); then
+                echo "INVALID LINE NUMBER: $source_path (file has $total_lines lines)"
+                return 1
+            fi
+        fi
+    fi
+    
+    return 0
+}
+
+# Function to validate that a search string can be found in a file
+validate_search_string() {
+    local file_path="$1"
+    local search_string="$2"
+    local repo_root="$(dirname "$SCRIPT_DIR")"
+    
+    # Resolve full file path
+    local full_path="$repo_root/$file_path"
+    
+    # Check if file exists
+    if [[ ! -f "$full_path" ]]; then
+        echo "MISSING FILE: $file_path"
+        return 1
+    fi
+    
+    # Check if search string can be found
+    if ! grep -F "$search_string" "$full_path" >/dev/null 2>&1; then
+        echo "SEARCH NOT FOUND: '$search_string' in $file_path"
+        return 1
+    fi
+    
+    return 0
+}
+
+# Function to check source files for a specific YAML file
+check_source_files() {
+    local section_name="$1"
+    local yaml_file="$2"
+    
+    echo "=== $section_name Source Files ==="
+    
+    if [[ ! -f "$yaml_file" ]]; then
+        echo "YAML file not found: $yaml_file"
+        return 1
+    fi
+    
+    local error_count=0
+    local total_count=0
+    local in_sources_section=false
+    local current_file=""
+    local current_search=""
+    local is_legacy_format=false
+    
+    # Extract all source file paths from the YAML file
+    while IFS= read -r line; do
+        # Check if we're starting a sources section
+        if [[ "$line" =~ ^[[:space:]]*sources:[[:space:]]*$ ]]; then
+            in_sources_section=true
+            current_file=""
+            current_search=""
+            is_legacy_format=false
+            
+        # Check if we're leaving the sources section (new top-level key or end of sources)
+        elif [[ "$in_sources_section" == true ]] && [[ "$line" =~ ^[[:space:]]*[a-zA-Z_][a-zA-Z0-9_]*:[[:space:]]*.*$ ]]; then
+            # Validate any pending entry before leaving sources section
+            if [[ -n "$current_file" ]]; then
+                total_count=$((total_count + 1))
+                if [[ -n "$current_search" ]]; then
+                    # Had search string, validate it
+                    if ! validate_search_string "$current_file" "$current_search"; then
+                        error_count=$((error_count + 1))
+                    fi
+                else
+                    # No search string, just validate file exists
+                    if ! validate_source_file "$current_file"; then
+                        error_count=$((error_count + 1))
+                    fi
+                fi
+                current_file=""
+                current_search=""
+            fi
+            in_sources_section=false
+            
+        # Match source file lines only when in sources section
+        elif [[ "$in_sources_section" == true ]]; then
+            if [[ "$line" =~ ^[[:space:]]*-[[:space:]]*file:[[:space:]]*(.+)$ ]]; then
+                # New format: file field - validate any pending entry first
+                if [[ -n "$current_file" ]]; then
+                    total_count=$((total_count + 1))
+                    if [[ -n "$current_search" ]]; then
+                        # Had search string, validate it
+                        if ! validate_search_string "$current_file" "$current_search"; then
+                            error_count=$((error_count + 1))
+                        fi
+                    else
+                        # No search string, just validate file exists
+                        if ! validate_source_file "$current_file"; then
+                            error_count=$((error_count + 1))
+                        fi
+                    fi
+                fi
+                
+                # Start new entry
+                current_file="${BASH_REMATCH[1]}"
+                current_search=""
+                
+            elif [[ "$line" =~ ^[[:space:]]*search:[[:space:]]*(.+)$ ]]; then
+                # New format: search field
+                current_search="${BASH_REMATCH[1]}"
+                
+            elif [[ "$line" =~ ^[[:space:]]*-[[:space:]]+(.+)$ ]]; then
+                # Legacy format: direct file path (possibly with line numbers)
+                local source_path="${BASH_REMATCH[1]}"
+                total_count=$((total_count + 1))
+                
+                if ! validate_source_file "$source_path"; then
+                    error_count=$((error_count + 1))
+                fi
+            fi
+        fi
+    done < "$yaml_file"
+    
+    # Handle the last entry if it exists
+    if [[ -n "$current_file" ]]; then
+        total_count=$((total_count + 1))
+        if [[ -n "$current_search" ]]; then
+            # Had search string, validate it
+            if ! validate_search_string "$current_file" "$current_search"; then
+                error_count=$((error_count + 1))
+            fi
+        else
+            # No search string, just validate file exists
+            if ! validate_source_file "$current_file"; then
+                error_count=$((error_count + 1))
+            fi
+        fi
+    fi
+    
+    local valid_count=$((total_count - error_count))
+    echo "Source Files: $valid_count/$total_count valid"
+    echo
+    
+    if [[ $error_count -eq 0 ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Function to check combined coverage for mainnet and minimal files
+check_combined_coverage() {
+    local section_name="$1"
+    local mainnet_file="$2"
+    local minimal_file="$3"
+    local tag_type="$4"
+    shift 4
+    local exception_array=("$@")
+
+    echo "=== $section_name Coverage ==="
+
+    # Get expected item#fork pairs from ethspecify
+    local expected_pairs=$(parse_ethspecify_tags "$tag_type")
+
+    # Get actual item#fork pairs from both YAML files
+    local mainnet_pairs=$(extract_spec_tags "$mainnet_file" "$tag_type")
+    local minimal_pairs=$(extract_spec_tags "$minimal_file" "$tag_type")
+    local actual_pairs=$(echo -e "$mainnet_pairs\n$minimal_pairs" | sort | uniq)
+
+    local missing_count=0
+    local total_count=0
+
+    while IFS= read -r item_fork; do
+        [[ -z "$item_fork" ]] && continue
+        total_count=$((total_count + 1))
+
+        if is_excepted "$item_fork" "${exception_array[@]+\"${exception_array[@]}\"}"; then
+            continue  # Skip excepted items silently
+        fi
+
+        if ! echo "$actual_pairs" | grep -Fxq "$item_fork"; then
+            echo "MISSING: $item_fork"
+            missing_count=$((missing_count + 1))
+        fi
+    done <<< "$expected_pairs"
+
+    local found_count=$((total_count - missing_count))
+    echo "Coverage: $found_count/$total_count"
+    echo
+
+    # Return 0 if no missing, 1 if any missing (bash can only return 0-255)
+    if [[ $missing_count -eq 0 ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 # Function to check coverage for a specific section
 check_section_coverage() {
     local section_name="$1"
@@ -101,7 +342,7 @@ check_section_coverage() {
     shift 3
     local exception_array=("$@")
 
-    echo "=== $section_name ==="
+    echo "=== $section_name Coverage ==="
 
     # Get expected item#fork pairs from ethspecify
     local expected_pairs=$(parse_ethspecify_tags "$tag_type")
@@ -138,17 +379,30 @@ check_section_coverage() {
     fi
 }
 
-# Check each section (handle empty arrays safely) and track overall status
-has_missing=false
+# Check source files and spec tag coverage for each section
+has_errors=false
 
-check_section_coverage "SSZ Objects" "$SCRIPT_DIR/ssz-objects.yml" "ssz_object" "${SSZ_EXCEPTIONS[@]+"${SSZ_EXCEPTIONS[@]}"}" || has_missing=true
-check_section_coverage "Config Variables" "$SCRIPT_DIR/config-variables.yml" "config_var" "${CONFIG_EXCEPTIONS[@]+"${CONFIG_EXCEPTIONS[@]}"}" || has_missing=true
-check_section_coverage "Preset Variables" "$SCRIPT_DIR/preset-variables.yml" "preset_var" "${PRESET_EXCEPTIONS[@]+"${PRESET_EXCEPTIONS[@]}"}" || has_missing=true
-check_section_coverage "Dataclasses" "$SCRIPT_DIR/dataclasses.yml" "dataclass" "${DATACLASS_EXCEPTIONS[@]+"${DATACLASS_EXCEPTIONS[@]}"}" || has_missing=true
+# Check source files
+check_source_files "SSZ Objects" "$SCRIPT_DIR/ssz-objects.yml" || has_errors=true
+check_source_files "Config Variables (Mainnet)" "$SCRIPT_DIR/config-variables-mainnet.yml" || has_errors=true
+check_source_files "Config Variables (Minimal)" "$SCRIPT_DIR/config-variables-minimal.yml" || has_errors=true
+check_source_files "Preset Variables (Mainnet)" "$SCRIPT_DIR/preset-variables-mainnet.yml" || has_errors=true
+check_source_files "Preset Variables (Minimal)" "$SCRIPT_DIR/preset-variables-minimal.yml" || has_errors=true
+check_source_files "Dataclasses" "$SCRIPT_DIR/dataclasses.yml" || has_errors=true
+
+# Check spec tag coverage
+check_section_coverage "SSZ Objects" "$SCRIPT_DIR/ssz-objects.yml" "ssz_object" "${SSZ_EXCEPTIONS[@]+"${SSZ_EXCEPTIONS[@]}"}" || has_errors=true
+check_combined_coverage "Config Variables" "$SCRIPT_DIR/config-variables-mainnet.yml" "$SCRIPT_DIR/config-variables-minimal.yml" "config_var" "${CONFIG_EXCEPTIONS[@]+\"${CONFIG_EXCEPTIONS[@]}\"}" || has_errors=true
+check_combined_coverage "Preset Variables" "$SCRIPT_DIR/preset-variables-mainnet.yml" "$SCRIPT_DIR/preset-variables-minimal.yml" "preset_var" "${PRESET_EXCEPTIONS[@]+"${PRESET_EXCEPTIONS[@]}"}" || has_errors=true
+check_section_coverage "Dataclasses" "$SCRIPT_DIR/dataclasses.yml" "dataclass" "${DATACLASS_EXCEPTIONS[@]+"${DATACLASS_EXCEPTIONS[@]}"}" || has_errors=true
+
+echo "Spec references check complete!"
 
 # Exit with appropriate code
-if [[ $has_missing == false ]]; then
+if [[ $has_errors == false ]]; then
+    echo "✓ All checks passed!"
     exit 0
 else
+    echo "✗ Some checks failed"
     exit 1
 fi

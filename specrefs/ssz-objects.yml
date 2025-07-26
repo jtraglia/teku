@@ -1,6 +1,7 @@
 - name: AggregateAndProof
   sources:
-    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/operations/AggregateAndProof.java
+    - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/operations/AggregateAndProof.java
+      search: "class AggregateAndProof"
   spec: |
     <spec ssz_object="AggregateAndProof" fork="phase0" style="full" hash="a218764f">
     class AggregateAndProof(Container):
@@ -929,7 +930,7 @@
   sources:
     - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/operations/IndexedAttestation.java
     - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/operations/IndexedAttestationSchema.java
-    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/schemas/registry/SchemaRegistryBuilder.java#L817-L819 # 6438e03d
+    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/schemas/registry/SchemaRegistryBuilder.java#L817-L819
   spec: |
     <spec ssz_object="IndexedAttestation" fork="phase0" style="full" hash="b321d4c3">
     class IndexedAttestation(Container):
@@ -942,7 +943,7 @@
   sources:
     - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/operations/IndexedAttestation.java
     - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/operations/IndexedAttestationSchema.java
-    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/schemas/registry/SchemaRegistryBuilder.java#L821-L823 # b7075440
+    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/schemas/registry/SchemaRegistryBuilder.java#L821-L823
   spec: |
     <spec ssz_object="IndexedAttestation" fork="electra" style="full" hash="2f924640">
     class IndexedAttestation(Container):
