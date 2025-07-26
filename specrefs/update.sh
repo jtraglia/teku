@@ -1,18 +1,13 @@
 #!/bin/bash
 
-# Script to add/update hash comments to spec-refs files.
+# Script to add/update hash comments to all *.yml files in the same directory.
 # Adds sha256 hashes (truncated to 8 chars) as comments to each source file.
 # Handles #L... line ranges if present.
 
 set -euo pipefail
 
-YAML_FILE="${1}"
-TEMP_FILE=$(mktemp)
-
-if [[ ! -f "$YAML_FILE" ]]; then
-    echo "Error: YAML file '$YAML_FILE' not found"
-    exit 1
-fi
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Function to calculate hash for a file or line range
 calculate_hash() {
@@ -65,51 +60,87 @@ calculate_hash() {
     fi
 }
 
-# Main processing
-{
-    in_source_section=false
+# Function to process a single YAML file
+process_yaml_file() {
+    local yaml_file="$1"
+    local temp_file=$(mktemp)
 
-    while IFS= read -r line; do
-        if [[ "$line" =~ ^[[:space:]]*sources:[[:space:]]*$ ]]; then
-            # Start of sources section
-            echo "$line"
-            in_source_section=true
-        elif [[ "$in_source_section" == true ]]; then
-            if [[ "$line" =~ ^[[:space:]]*-[[:space:]]+(.+)$ ]]; then
-                # This is a source file line - add hash comment if not already present
-                source_file="${BASH_REMATCH[1]}"
+    echo "Processing: $(basename "$yaml_file")"
 
-                # Check if line already has a hash comment
-                if [[ "$source_file" =~ ^(.+)[[:space:]]+#[[:space:]]+[a-f0-9]{8}$ ]]; then
-                    # Hash comment already exists, just output the line
-                    echo "$line"
-                else
-                    # No hash comment, calculate and add it
-                    clean_source_file="$source_file"
+    {
+        in_source_section=false
+
+        while IFS= read -r line; do
+            if [[ "$line" =~ ^[[:space:]]*sources:[[:space:]]*$ ]]; then
+                # Start of sources section
+                echo "$line"
+                in_source_section=true
+            elif [[ "$in_source_section" == true ]]; then
+                if [[ "$line" =~ ^[[:space:]]*-[[:space:]]+(.+)$ ]]; then
+                    # This is a source file line
+                    source_file="${BASH_REMATCH[1]}"
+
+                    # Check if line already has a hash comment and extract the base source file
+                    if [[ "$source_file" =~ ^(.+)[[:space:]]+#[[:space:]]+.+$ ]]; then
+                        # Hash comment exists, extract base file path for recalculation
+                        base_source_file="${BASH_REMATCH[1]}"
+                    else
+                        # No hash comment
+                        base_source_file="$source_file"
+                    fi
+
+                    # Calculate hash for the base source file
+                    clean_source_file="$base_source_file"
                     line_range=""
 
                     # Check if source has line range
-                    if [[ "$source_file" =~ ^(.+)#(L[0-9]+-L[0-9]+|L[0-9]+)$ ]]; then
+                    if [[ "$base_source_file" =~ ^(.+)#(L[0-9]+-L[0-9]+|L[0-9]+)$ ]]; then
                         clean_source_file="${BASH_REMATCH[1]}"
                         line_range="${BASH_REMATCH[2]}"
                     fi
 
-                    hash=$(calculate_hash "$clean_source_file" "$line_range")
-                    echo "    - $source_file # $hash"
+                    # Resolve the file path relative to the parent directory of the script directory
+                    # (source paths are relative to the teku project root)
+                    if [[ "$clean_source_file" = /* ]]; then
+                        # Absolute path, use as is
+                        resolved_file="$clean_source_file"
+                    else
+                        # Relative path, resolve from parent of script directory
+                        resolved_file="$(dirname "$SCRIPT_DIR")/$clean_source_file"
+                    fi
+
+                    hash=$(calculate_hash "$resolved_file" "$line_range")
+
+                    echo "    - $base_source_file # $hash"
+                else
+                    # End of sources section
+                    echo "$line"
+                    in_source_section=false
                 fi
             else
-                # End of sources section
+                # Regular line, just pass through
                 echo "$line"
-                in_source_section=false
             fi
-        else
-            # Regular line, just pass through
-            echo "$line"
-        fi
-    done
-} < "$YAML_FILE" > "$TEMP_FILE"
+        done
+    } < "$yaml_file" > "$temp_file"
 
-# Replace original file with updated version
-mv "$TEMP_FILE" "$YAML_FILE"
+    # Replace original file with updated version
+    mv "$temp_file" "$yaml_file"
+}
 
-echo "Successfully added hash comments to sources in $YAML_FILE"
+# Main processing
+# Find all yml files in the script directory
+yml_files=()
+while IFS= read -r -d '' file; do
+    yml_files+=("$file")
+done < <(find "$SCRIPT_DIR" -maxdepth 1 -name "*.yml" -type f -print0)
+
+if [[ ${#yml_files[@]} -eq 0 ]]; then
+    echo "No *.yml files found in $SCRIPT_DIR"
+    exit 1
+fi
+
+# Process each yml file
+for yml_file in "${yml_files[@]}"; do
+    process_yaml_file "$yml_file"
+done
