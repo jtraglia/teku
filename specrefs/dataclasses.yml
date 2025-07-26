@@ -1,0 +1,86 @@
+# Dataclasses Reference
+# This file maps dataclass objects to their implementation sources in the Teku codebase
+
+dataclasses:
+  - name: BlobParameters
+    sources:
+      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/logic/versions/fulu/helpers/BlobParameters.java
+    spec: |
+      <spec dataclass="BlobParameters" fork="fulu" style="full" version="v1.6.0-alpha.3" />
+
+  - name: BlobsBundleDeneb
+    sources:
+      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/BlobsBundleSchema.java
+      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/BlobsBundle.java
+      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/versions/deneb/BlobsBundleDeneb.java
+      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/versions/deneb/BlobsBundleSchemaDeneb.java
+    spec: |
+      <spec dataclass="BlobsBundle" fork="deneb" style="full" version="v1.6.0-alpha.3" />
+
+  - name: BlobsBundleFulu
+    sources:
+      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/BlobsBundleSchema.java
+      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/BlobsBundle.java
+      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/versions/fulu/BlobsBundleFulu.java
+      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/versions/fulu/BlobsBundleSchemaFulu.java
+    spec: |
+      <spec dataclass="BlobsBundle" fork="deneb" style="full" version="v1.6.0-alpha.3" />
+
+  - name: GetPayloadResponseV1
+    sources:
+      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
+      - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/methods/EngineGetPayloadV1.java
+    spec: |
+      <spec dataclass="GetPayloadResponse" fork="bellatrix" style="full" version="v1.6.0-alpha.3" />
+
+  - name: GetPayloadResponseV2
+    sources:
+      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
+      - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/GetPayloadV2Response.java
+    spec: |
+      <spec dataclass="GetPayloadResponse" fork="capella" style="full" version="v1.6.0-alpha.3" />
+
+  - name: GetPayloadResponseV3
+    sources:
+      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
+      - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/GetPayloadV3Response.java
+    spec: |
+      <spec dataclass="GetPayloadResponse" fork="deneb" style="full" version="v1.6.0-alpha.3" />
+
+  - name: GetPayloadResponseV4
+    sources:
+      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
+      - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/GetPayloadV4Response.java
+    spec: |
+      <spec dataclass="GetPayloadResponse" fork="electra" style="full" version="v1.6.0-alpha.3" />
+
+  - name: GetPayloadResponseV5
+    sources:
+      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
+      - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/GetPayloadV5Response.java
+    spec: |
+      <spec dataclass="GetPayloadResponse" fork="fulu" style="full" version="v1.6.0-alpha.3" />
+
+  - name: NewPayloadRequest
+    sources:
+      - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/NewPayloadRequest.java
+    spec: |
+      <spec dataclass="NewPayloadRequest" fork="bellatrix" style="full" version="v1.6.0-alpha.3" />
+
+  - name: PayloadAttributesV1
+    sources:
+      - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/PayloadAttributesV1.java
+    spec: |
+      <spec dataclass="PayloadAttributes" fork="bellatrix" style="full" version="v1.6.0-alpha.3" />
+
+  - name: PayloadAttributesV2
+    sources:
+      - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/PayloadAttributesV2.java
+    spec: |
+      <spec dataclass="PayloadAttributes" fork="capella" style="full" version="v1.6.0-alpha.3" />
+
+  - name: PayloadAttributesV3
+    sources:
+      - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/PayloadAttributesV3.java
+    spec: |
+      <spec dataclass="PayloadAttributes" fork="deneb" style="full" version="v1.6.0-alpha.3" />
