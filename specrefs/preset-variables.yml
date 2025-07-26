@@ -7,549 +7,549 @@ preset_variables:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L63
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L63
     spec: |
-      <spec preset_var="BASE_REWARD_FACTOR" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="BASE_REWARD_FACTOR" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="BASE_REWARD_FACTOR" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="BASE_REWARD_FACTOR" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: BYTES_PER_LOGS_BLOOM
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/bellatrix.yaml#L19
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/bellatrix.yaml#L19
     spec: |
-      <spec preset_var="BYTES_PER_LOGS_BLOOM" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="BYTES_PER_LOGS_BLOOM" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="BYTES_PER_LOGS_BLOOM" preset="mainnet" fork="bellatrix" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="BYTES_PER_LOGS_BLOOM" preset="minimal" fork="bellatrix" style="full" version="v1.6.0-alpha.3" />
 
   - name: EFFECTIVE_BALANCE_INCREMENT
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L27
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L27
     spec: |
-      <spec preset_var="EFFECTIVE_BALANCE_INCREMENT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="EFFECTIVE_BALANCE_INCREMENT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="EFFECTIVE_BALANCE_INCREMENT" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="EFFECTIVE_BALANCE_INCREMENT" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: EPOCHS_PER_ETH1_VOTING_PERIOD
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L41
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L41
     spec: |
-      <spec preset_var="EPOCHS_PER_ETH1_VOTING_PERIOD" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="EPOCHS_PER_ETH1_VOTING_PERIOD" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="EPOCHS_PER_ETH1_VOTING_PERIOD" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="EPOCHS_PER_ETH1_VOTING_PERIOD" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: EPOCHS_PER_HISTORICAL_VECTOR
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L51
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L51
     spec: |
-      <spec preset_var="EPOCHS_PER_HISTORICAL_VECTOR" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="EPOCHS_PER_HISTORICAL_VECTOR" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="EPOCHS_PER_HISTORICAL_VECTOR" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="EPOCHS_PER_HISTORICAL_VECTOR" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: EPOCHS_PER_SLASHINGS_VECTOR
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L53
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L53
     spec: |
-      <spec preset_var="EPOCHS_PER_SLASHINGS_VECTOR" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="EPOCHS_PER_SLASHINGS_VECTOR" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="EPOCHS_PER_SLASHINGS_VECTOR" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="EPOCHS_PER_SLASHINGS_VECTOR" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: EPOCHS_PER_SYNC_COMMITTEE_PERIOD
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/altair.yaml#L18
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/altair.yaml#L18
     spec: |
-      <spec preset_var="EPOCHS_PER_SYNC_COMMITTEE_PERIOD" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="EPOCHS_PER_SYNC_COMMITTEE_PERIOD" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="EPOCHS_PER_SYNC_COMMITTEE_PERIOD" preset="mainnet" fork="altair" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="EPOCHS_PER_SYNC_COMMITTEE_PERIOD" preset="minimal" fork="altair" style="full" version="v1.6.0-alpha.3" />
 
   - name: FIELD_ELEMENTS_PER_BLOB
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/deneb.yaml#L16
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/deneb.yaml#L16
     spec: |
-      <spec preset_var="FIELD_ELEMENTS_PER_BLOB" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="FIELD_ELEMENTS_PER_BLOB" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="FIELD_ELEMENTS_PER_BLOB" preset="mainnet" fork="deneb" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="FIELD_ELEMENTS_PER_BLOB" preset="minimal" fork="deneb" style="full" version="v1.6.0-alpha.3" />
 
   - name: FIELD_ELEMENTS_PER_CELL
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/fulu.yaml#L6
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/fulu.yaml#L6
     spec: |
-      <spec preset_var="FIELD_ELEMENTS_PER_CELL" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="FIELD_ELEMENTS_PER_CELL" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="FIELD_ELEMENTS_PER_CELL" preset="mainnet" fork="fulu" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="FIELD_ELEMENTS_PER_CELL" preset="minimal" fork="fulu" style="full" version="v1.6.0-alpha.3" />
 
   - name: FIELD_ELEMENTS_PER_EXT_BLOB
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/fulu.yaml#L8
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/fulu.yaml#L8
     spec: |
-      <spec preset_var="FIELD_ELEMENTS_PER_EXT_BLOB" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="FIELD_ELEMENTS_PER_EXT_BLOB" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="FIELD_ELEMENTS_PER_EXT_BLOB" preset="mainnet" fork="fulu" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="FIELD_ELEMENTS_PER_EXT_BLOB" preset="minimal" fork="fulu" style="full" version="v1.6.0-alpha.3" />
 
   - name: HISTORICAL_ROOTS_LIMIT
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L55
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L55
     spec: |
-      <spec preset_var="HISTORICAL_ROOTS_LIMIT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="HISTORICAL_ROOTS_LIMIT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="HISTORICAL_ROOTS_LIMIT" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="HISTORICAL_ROOTS_LIMIT" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: HYSTERESIS_DOWNWARD_MULTIPLIER
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L16
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L16
     spec: |
-      <spec preset_var="HYSTERESIS_DOWNWARD_MULTIPLIER" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="HYSTERESIS_DOWNWARD_MULTIPLIER" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="HYSTERESIS_DOWNWARD_MULTIPLIER" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="HYSTERESIS_DOWNWARD_MULTIPLIER" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: HYSTERESIS_QUOTIENT
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L14
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L14
     spec: |
-      <spec preset_var="HYSTERESIS_QUOTIENT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="HYSTERESIS_QUOTIENT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="HYSTERESIS_QUOTIENT" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="HYSTERESIS_QUOTIENT" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: HYSTERESIS_UPWARD_MULTIPLIER
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L18
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L18
     spec: |
-      <spec preset_var="HYSTERESIS_UPWARD_MULTIPLIER" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="HYSTERESIS_UPWARD_MULTIPLIER" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="HYSTERESIS_UPWARD_MULTIPLIER" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="HYSTERESIS_UPWARD_MULTIPLIER" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: INACTIVITY_PENALTY_QUOTIENT
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L69
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L69
     spec: |
-      <spec preset_var="INACTIVITY_PENALTY_QUOTIENT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="INACTIVITY_PENALTY_QUOTIENT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="INACTIVITY_PENALTY_QUOTIENT" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="INACTIVITY_PENALTY_QUOTIENT" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: INACTIVITY_PENALTY_QUOTIENT_ALTAIR
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/altair.yaml#L6
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/altair.yaml#L6
     spec: |
-      <spec preset_var="INACTIVITY_PENALTY_QUOTIENT_ALTAIR" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="INACTIVITY_PENALTY_QUOTIENT_ALTAIR" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="INACTIVITY_PENALTY_QUOTIENT_ALTAIR" preset="mainnet" fork="altair" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="INACTIVITY_PENALTY_QUOTIENT_ALTAIR" preset="minimal" fork="altair" style="full" version="v1.6.0-alpha.3" />
 
   - name: INACTIVITY_PENALTY_QUOTIENT_BELLATRIX
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/bellatrix.yaml#L6
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/bellatrix.yaml#L6
     spec: |
-      <spec preset_var="INACTIVITY_PENALTY_QUOTIENT_BELLATRIX" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="INACTIVITY_PENALTY_QUOTIENT_BELLATRIX" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="INACTIVITY_PENALTY_QUOTIENT_BELLATRIX" preset="mainnet" fork="bellatrix" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="INACTIVITY_PENALTY_QUOTIENT_BELLATRIX" preset="minimal" fork="bellatrix" style="full" version="v1.6.0-alpha.3" />
 
   - name: KZG_COMMITMENTS_INCLUSION_PROOF_DEPTH
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/fulu.yaml#L10
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/fulu.yaml#L10
     spec: |
-      <spec preset_var="KZG_COMMITMENTS_INCLUSION_PROOF_DEPTH" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="KZG_COMMITMENTS_INCLUSION_PROOF_DEPTH" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="KZG_COMMITMENTS_INCLUSION_PROOF_DEPTH" preset="mainnet" fork="fulu" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="KZG_COMMITMENTS_INCLUSION_PROOF_DEPTH" preset="minimal" fork="fulu" style="full" version="v1.6.0-alpha.3" />
 
   - name: KZG_COMMITMENT_INCLUSION_PROOF_DEPTH
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/deneb.yaml#L11
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/deneb.yaml#L11
     spec: |
-      <spec preset_var="KZG_COMMITMENT_INCLUSION_PROOF_DEPTH" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="KZG_COMMITMENT_INCLUSION_PROOF_DEPTH" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="KZG_COMMITMENT_INCLUSION_PROOF_DEPTH" preset="mainnet" fork="deneb" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="KZG_COMMITMENT_INCLUSION_PROOF_DEPTH" preset="minimal" fork="deneb" style="full" version="v1.6.0-alpha.3" />
 
   - name: MAX_ATTESTATIONS
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L83
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L83
     spec: |
-      <spec preset_var="MAX_ATTESTATIONS" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MAX_ATTESTATIONS" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_ATTESTATIONS" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_ATTESTATIONS" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: MAX_ATTESTATIONS_ELECTRA
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/electra.yaml#L31
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/electra.yaml#L31
     spec: |
-      <spec preset_var="MAX_ATTESTATIONS_ELECTRA" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MAX_ATTESTATIONS_ELECTRA" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_ATTESTATIONS_ELECTRA" preset="mainnet" fork="electra" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_ATTESTATIONS_ELECTRA" preset="minimal" fork="electra" style="full" version="v1.6.0-alpha.3" />
 
   - name: MAX_ATTESTER_SLASHINGS
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L81
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L81
     spec: |
-      <spec preset_var="MAX_ATTESTER_SLASHINGS" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MAX_ATTESTER_SLASHINGS" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_ATTESTER_SLASHINGS" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_ATTESTER_SLASHINGS" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: MAX_ATTESTER_SLASHINGS_ELECTRA
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/electra.yaml#L29
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/electra.yaml#L29
     spec: |
-      <spec preset_var="MAX_ATTESTER_SLASHINGS_ELECTRA" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MAX_ATTESTER_SLASHINGS_ELECTRA" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_ATTESTER_SLASHINGS_ELECTRA" preset="mainnet" fork="electra" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_ATTESTER_SLASHINGS_ELECTRA" preset="minimal" fork="electra" style="full" version="v1.6.0-alpha.3" />
 
   - name: MAX_BLOB_COMMITMENTS_PER_BLOCK
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/deneb.yaml#L6
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/deneb.yaml#L6
     spec: |
-      <spec preset_var="MAX_BLOB_COMMITMENTS_PER_BLOCK" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MAX_BLOB_COMMITMENTS_PER_BLOCK" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_BLOB_COMMITMENTS_PER_BLOCK" preset="mainnet" fork="deneb" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_BLOB_COMMITMENTS_PER_BLOCK" preset="minimal" fork="deneb" style="full" version="v1.6.0-alpha.3" />
 
   - name: MAX_BLS_TO_EXECUTION_CHANGES
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/capella.yaml#L6
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/capella.yaml#L6
     spec: |
-      <spec preset_var="MAX_BLS_TO_EXECUTION_CHANGES" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MAX_BLS_TO_EXECUTION_CHANGES" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_BLS_TO_EXECUTION_CHANGES" preset="mainnet" fork="capella" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_BLS_TO_EXECUTION_CHANGES" preset="minimal" fork="capella" style="full" version="v1.6.0-alpha.3" />
 
   - name: MAX_BYTES_PER_TRANSACTION
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/bellatrix.yaml#L15
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/bellatrix.yaml#L15
     spec: |
-      <spec preset_var="MAX_BYTES_PER_TRANSACTION" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MAX_BYTES_PER_TRANSACTION" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_BYTES_PER_TRANSACTION" preset="mainnet" fork="bellatrix" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_BYTES_PER_TRANSACTION" preset="minimal" fork="bellatrix" style="full" version="v1.6.0-alpha.3" />
 
   - name: MAX_COMMITTEES_PER_SLOT
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L6
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L6
     spec: |
-      <spec preset_var="MAX_COMMITTEES_PER_SLOT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MAX_COMMITTEES_PER_SLOT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_COMMITTEES_PER_SLOT" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_COMMITTEES_PER_SLOT" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: MAX_CONSOLIDATION_REQUESTS_PER_PAYLOAD
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/electra.yaml#L33
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/electra.yaml#L33
     spec: |
-      <spec preset_var="MAX_CONSOLIDATION_REQUESTS_PER_PAYLOAD" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MAX_CONSOLIDATION_REQUESTS_PER_PAYLOAD" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_CONSOLIDATION_REQUESTS_PER_PAYLOAD" preset="mainnet" fork="electra" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_CONSOLIDATION_REQUESTS_PER_PAYLOAD" preset="minimal" fork="electra" style="full" version="v1.6.0-alpha.3" />
 
   - name: MAX_DEPOSITS
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L85
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L85
     spec: |
-      <spec preset_var="MAX_DEPOSITS" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MAX_DEPOSITS" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_DEPOSITS" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_DEPOSITS" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: MAX_DEPOSIT_REQUESTS_PER_PAYLOAD
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/electra.yaml#L38
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/electra.yaml#L38
     spec: |
-      <spec preset_var="MAX_DEPOSIT_REQUESTS_PER_PAYLOAD" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MAX_DEPOSIT_REQUESTS_PER_PAYLOAD" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_DEPOSIT_REQUESTS_PER_PAYLOAD" preset="mainnet" fork="electra" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_DEPOSIT_REQUESTS_PER_PAYLOAD" preset="minimal" fork="electra" style="full" version="v1.6.0-alpha.3" />
 
   - name: MAX_EFFECTIVE_BALANCE
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L25
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L25
     spec: |
-      <spec preset_var="MAX_EFFECTIVE_BALANCE" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MAX_EFFECTIVE_BALANCE" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_EFFECTIVE_BALANCE" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_EFFECTIVE_BALANCE" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: MAX_EFFECTIVE_BALANCE_ELECTRA
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/electra.yaml#L8
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/electra.yaml#L8
     spec: |
-      <spec preset_var="MAX_EFFECTIVE_BALANCE_ELECTRA" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MAX_EFFECTIVE_BALANCE_ELECTRA" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_EFFECTIVE_BALANCE_ELECTRA" preset="mainnet" fork="electra" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_EFFECTIVE_BALANCE_ELECTRA" preset="minimal" fork="electra" style="full" version="v1.6.0-alpha.3" />
 
   - name: MAX_EXTRA_DATA_BYTES
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/bellatrix.yaml#L21
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/bellatrix.yaml#L21
     spec: |
-      <spec preset_var="MAX_EXTRA_DATA_BYTES" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MAX_EXTRA_DATA_BYTES" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_EXTRA_DATA_BYTES" preset="mainnet" fork="bellatrix" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_EXTRA_DATA_BYTES" preset="minimal" fork="bellatrix" style="full" version="v1.6.0-alpha.3" />
 
   - name: MAX_PENDING_DEPOSITS_PER_EPOCH
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/electra.yaml#L50
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/electra.yaml#L50
     spec: |
-      <spec preset_var="MAX_PENDING_DEPOSITS_PER_EPOCH" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MAX_PENDING_DEPOSITS_PER_EPOCH" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_PENDING_DEPOSITS_PER_EPOCH" preset="mainnet" fork="electra" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_PENDING_DEPOSITS_PER_EPOCH" preset="minimal" fork="electra" style="full" version="v1.6.0-alpha.3" />
 
   - name: MAX_PENDING_PARTIALS_PER_WITHDRAWALS_SWEEP
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/electra.yaml#L45
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/electra.yaml#L45
     spec: |
-      <spec preset_var="MAX_PENDING_PARTIALS_PER_WITHDRAWALS_SWEEP" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MAX_PENDING_PARTIALS_PER_WITHDRAWALS_SWEEP" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_PENDING_PARTIALS_PER_WITHDRAWALS_SWEEP" preset="mainnet" fork="electra" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_PENDING_PARTIALS_PER_WITHDRAWALS_SWEEP" preset="minimal" fork="electra" style="full" version="v1.6.0-alpha.3" />
 
   - name: MAX_PROPOSER_SLASHINGS
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L79
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L79
     spec: |
-      <spec preset_var="MAX_PROPOSER_SLASHINGS" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MAX_PROPOSER_SLASHINGS" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_PROPOSER_SLASHINGS" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_PROPOSER_SLASHINGS" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: MAX_SEED_LOOKAHEAD
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L39
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L39
     spec: |
-      <spec preset_var="MAX_SEED_LOOKAHEAD" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MAX_SEED_LOOKAHEAD" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_SEED_LOOKAHEAD" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_SEED_LOOKAHEAD" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: MAX_TRANSACTIONS_PER_PAYLOAD
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/bellatrix.yaml#L17
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/bellatrix.yaml#L17
     spec: |
-      <spec preset_var="MAX_TRANSACTIONS_PER_PAYLOAD" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MAX_TRANSACTIONS_PER_PAYLOAD" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_TRANSACTIONS_PER_PAYLOAD" preset="mainnet" fork="bellatrix" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_TRANSACTIONS_PER_PAYLOAD" preset="minimal" fork="bellatrix" style="full" version="v1.6.0-alpha.3" />
 
   - name: MAX_VALIDATORS_PER_COMMITTEE
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L10
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L10
     spec: |
-      <spec preset_var="MAX_VALIDATORS_PER_COMMITTEE" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MAX_VALIDATORS_PER_COMMITTEE" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_VALIDATORS_PER_COMMITTEE" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_VALIDATORS_PER_COMMITTEE" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: MAX_VALIDATORS_PER_WITHDRAWALS_SWEEP
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/capella.yaml#L17
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/capella.yaml#L17
     spec: |
-      <spec preset_var="MAX_VALIDATORS_PER_WITHDRAWALS_SWEEP" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MAX_VALIDATORS_PER_WITHDRAWALS_SWEEP" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_VALIDATORS_PER_WITHDRAWALS_SWEEP" preset="mainnet" fork="capella" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_VALIDATORS_PER_WITHDRAWALS_SWEEP" preset="minimal" fork="capella" style="full" version="v1.6.0-alpha.3" />
 
   - name: MAX_VOLUNTARY_EXITS
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L87
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L87
     spec: |
-      <spec preset_var="MAX_VOLUNTARY_EXITS" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MAX_VOLUNTARY_EXITS" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_VOLUNTARY_EXITS" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_VOLUNTARY_EXITS" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: MAX_WITHDRAWALS_PER_PAYLOAD
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/capella.yaml#L12
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/capella.yaml#L12
     spec: |
-      <spec preset_var="MAX_WITHDRAWALS_PER_PAYLOAD" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MAX_WITHDRAWALS_PER_PAYLOAD" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_WITHDRAWALS_PER_PAYLOAD" preset="mainnet" fork="capella" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_WITHDRAWALS_PER_PAYLOAD" preset="minimal" fork="capella" style="full" version="v1.6.0-alpha.3" />
 
   - name: MAX_WITHDRAWAL_REQUESTS_PER_PAYLOAD
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/electra.yaml#L40
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/electra.yaml#L40
     spec: |
-      <spec preset_var="MAX_WITHDRAWAL_REQUESTS_PER_PAYLOAD" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MAX_WITHDRAWAL_REQUESTS_PER_PAYLOAD" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_WITHDRAWAL_REQUESTS_PER_PAYLOAD" preset="mainnet" fork="electra" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MAX_WITHDRAWAL_REQUESTS_PER_PAYLOAD" preset="minimal" fork="electra" style="full" version="v1.6.0-alpha.3" />
 
   - name: MIN_ACTIVATION_BALANCE
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/electra.yaml#L6
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/electra.yaml#L6
     spec: |
-      <spec preset_var="MIN_ACTIVATION_BALANCE" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MIN_ACTIVATION_BALANCE" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MIN_ACTIVATION_BALANCE" preset="mainnet" fork="electra" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MIN_ACTIVATION_BALANCE" preset="minimal" fork="electra" style="full" version="v1.6.0-alpha.3" />
 
   - name: MIN_ATTESTATION_INCLUSION_DELAY
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L33
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L33
     spec: |
-      <spec preset_var="MIN_ATTESTATION_INCLUSION_DELAY" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MIN_ATTESTATION_INCLUSION_DELAY" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MIN_ATTESTATION_INCLUSION_DELAY" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MIN_ATTESTATION_INCLUSION_DELAY" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: MIN_DEPOSIT_AMOUNT
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L23
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L23
     spec: |
-      <spec preset_var="MIN_DEPOSIT_AMOUNT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MIN_DEPOSIT_AMOUNT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MIN_DEPOSIT_AMOUNT" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MIN_DEPOSIT_AMOUNT" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: MIN_EPOCHS_TO_INACTIVITY_PENALTY
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L45
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L45
     spec: |
-      <spec preset_var="MIN_EPOCHS_TO_INACTIVITY_PENALTY" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MIN_EPOCHS_TO_INACTIVITY_PENALTY" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MIN_EPOCHS_TO_INACTIVITY_PENALTY" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MIN_EPOCHS_TO_INACTIVITY_PENALTY" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: MIN_SEED_LOOKAHEAD
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L37
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L37
     spec: |
-      <spec preset_var="MIN_SEED_LOOKAHEAD" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MIN_SEED_LOOKAHEAD" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MIN_SEED_LOOKAHEAD" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MIN_SEED_LOOKAHEAD" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: MIN_SLASHING_PENALTY_QUOTIENT
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L71
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L71
     spec: |
-      <spec preset_var="MIN_SLASHING_PENALTY_QUOTIENT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MIN_SLASHING_PENALTY_QUOTIENT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MIN_SLASHING_PENALTY_QUOTIENT" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MIN_SLASHING_PENALTY_QUOTIENT" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: MIN_SLASHING_PENALTY_QUOTIENT_ALTAIR
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/altair.yaml#L8
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/altair.yaml#L8
     spec: |
-      <spec preset_var="MIN_SLASHING_PENALTY_QUOTIENT_ALTAIR" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MIN_SLASHING_PENALTY_QUOTIENT_ALTAIR" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MIN_SLASHING_PENALTY_QUOTIENT_ALTAIR" preset="mainnet" fork="altair" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MIN_SLASHING_PENALTY_QUOTIENT_ALTAIR" preset="minimal" fork="altair" style="full" version="v1.6.0-alpha.3" />
 
   - name: MIN_SLASHING_PENALTY_QUOTIENT_BELLATRIX
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/bellatrix.yaml#L8
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/bellatrix.yaml#L8
     spec: |
-      <spec preset_var="MIN_SLASHING_PENALTY_QUOTIENT_BELLATRIX" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MIN_SLASHING_PENALTY_QUOTIENT_BELLATRIX" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MIN_SLASHING_PENALTY_QUOTIENT_BELLATRIX" preset="mainnet" fork="bellatrix" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MIN_SLASHING_PENALTY_QUOTIENT_BELLATRIX" preset="minimal" fork="bellatrix" style="full" version="v1.6.0-alpha.3" />
 
   - name: MIN_SLASHING_PENALTY_QUOTIENT_ELECTRA
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/electra.yaml#L22
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/electra.yaml#L22
     spec: |
-      <spec preset_var="MIN_SLASHING_PENALTY_QUOTIENT_ELECTRA" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MIN_SLASHING_PENALTY_QUOTIENT_ELECTRA" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MIN_SLASHING_PENALTY_QUOTIENT_ELECTRA" preset="mainnet" fork="electra" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MIN_SLASHING_PENALTY_QUOTIENT_ELECTRA" preset="minimal" fork="electra" style="full" version="v1.6.0-alpha.3" />
 
   - name: MIN_SYNC_COMMITTEE_PARTICIPANTS
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/altair.yaml#L24
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/altair.yaml#L24
     spec: |
-      <spec preset_var="MIN_SYNC_COMMITTEE_PARTICIPANTS" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="MIN_SYNC_COMMITTEE_PARTICIPANTS" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MIN_SYNC_COMMITTEE_PARTICIPANTS" preset="mainnet" fork="altair" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="MIN_SYNC_COMMITTEE_PARTICIPANTS" preset="minimal" fork="altair" style="full" version="v1.6.0-alpha.3" />
 
   - name: PENDING_CONSOLIDATIONS_LIMIT
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/electra.yaml#L17
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/electra.yaml#L17
     spec: |
-      <spec preset_var="PENDING_CONSOLIDATIONS_LIMIT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="PENDING_CONSOLIDATIONS_LIMIT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="PENDING_CONSOLIDATIONS_LIMIT" preset="mainnet" fork="electra" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="PENDING_CONSOLIDATIONS_LIMIT" preset="minimal" fork="electra" style="full" version="v1.6.0-alpha.3" />
 
   - name: PENDING_DEPOSITS_LIMIT
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/electra.yaml#L13
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/electra.yaml#L13
     spec: |
-      <spec preset_var="PENDING_DEPOSITS_LIMIT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="PENDING_DEPOSITS_LIMIT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="PENDING_DEPOSITS_LIMIT" preset="mainnet" fork="electra" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="PENDING_DEPOSITS_LIMIT" preset="minimal" fork="electra" style="full" version="v1.6.0-alpha.3" />
 
   - name: PENDING_PARTIAL_WITHDRAWALS_LIMIT
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/electra.yaml#L15
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/electra.yaml#L15
     spec: |
-      <spec preset_var="PENDING_PARTIAL_WITHDRAWALS_LIMIT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="PENDING_PARTIAL_WITHDRAWALS_LIMIT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="PENDING_PARTIAL_WITHDRAWALS_LIMIT" preset="mainnet" fork="electra" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="PENDING_PARTIAL_WITHDRAWALS_LIMIT" preset="minimal" fork="electra" style="full" version="v1.6.0-alpha.3" />
 
   - name: PROPORTIONAL_SLASHING_MULTIPLIER
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L73
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L73
     spec: |
-      <spec preset_var="PROPORTIONAL_SLASHING_MULTIPLIER" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="PROPORTIONAL_SLASHING_MULTIPLIER" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="PROPORTIONAL_SLASHING_MULTIPLIER" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="PROPORTIONAL_SLASHING_MULTIPLIER" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: PROPORTIONAL_SLASHING_MULTIPLIER_ALTAIR
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/altair.yaml#L10
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/altair.yaml#L10
     spec: |
-      <spec preset_var="PROPORTIONAL_SLASHING_MULTIPLIER_ALTAIR" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="PROPORTIONAL_SLASHING_MULTIPLIER_ALTAIR" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="PROPORTIONAL_SLASHING_MULTIPLIER_ALTAIR" preset="mainnet" fork="altair" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="PROPORTIONAL_SLASHING_MULTIPLIER_ALTAIR" preset="minimal" fork="altair" style="full" version="v1.6.0-alpha.3" />
 
   - name: PROPORTIONAL_SLASHING_MULTIPLIER_BELLATRIX
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/bellatrix.yaml#L10
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/bellatrix.yaml#L10
     spec: |
-      <spec preset_var="PROPORTIONAL_SLASHING_MULTIPLIER_BELLATRIX" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="PROPORTIONAL_SLASHING_MULTIPLIER_BELLATRIX" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="PROPORTIONAL_SLASHING_MULTIPLIER_BELLATRIX" preset="mainnet" fork="bellatrix" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="PROPORTIONAL_SLASHING_MULTIPLIER_BELLATRIX" preset="minimal" fork="bellatrix" style="full" version="v1.6.0-alpha.3" />
 
   - name: PROPOSER_REWARD_QUOTIENT
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L67
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L67
     spec: |
-      <spec preset_var="PROPOSER_REWARD_QUOTIENT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="PROPOSER_REWARD_QUOTIENT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="PROPOSER_REWARD_QUOTIENT" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="PROPOSER_REWARD_QUOTIENT" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: SHUFFLE_ROUND_COUNT
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L12
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L12
     spec: |
-      <spec preset_var="SHUFFLE_ROUND_COUNT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="SHUFFLE_ROUND_COUNT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="SHUFFLE_ROUND_COUNT" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="SHUFFLE_ROUND_COUNT" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: SLOTS_PER_EPOCH
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L35
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L35
     spec: |
-      <spec preset_var="SLOTS_PER_EPOCH" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="SLOTS_PER_EPOCH" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="SLOTS_PER_EPOCH" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="SLOTS_PER_EPOCH" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: SLOTS_PER_HISTORICAL_ROOT
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L43
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L43
     spec: |
-      <spec preset_var="SLOTS_PER_HISTORICAL_ROOT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="SLOTS_PER_HISTORICAL_ROOT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="SLOTS_PER_HISTORICAL_ROOT" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="SLOTS_PER_HISTORICAL_ROOT" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: SYNC_COMMITTEE_SIZE
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/altair.yaml#L16
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/altair.yaml#L16
     spec: |
-      <spec preset_var="SYNC_COMMITTEE_SIZE" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="SYNC_COMMITTEE_SIZE" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="SYNC_COMMITTEE_SIZE" preset="mainnet" fork="altair" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="SYNC_COMMITTEE_SIZE" preset="minimal" fork="altair" style="full" version="v1.6.0-alpha.3" />
 
   - name: TARGET_COMMITTEE_SIZE
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L8
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L8
     spec: |
-      <spec preset_var="TARGET_COMMITTEE_SIZE" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="TARGET_COMMITTEE_SIZE" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="TARGET_COMMITTEE_SIZE" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="TARGET_COMMITTEE_SIZE" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: UPDATE_TIMEOUT
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/altair.yaml#L26
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/altair.yaml#L26
     spec: |
-      <spec preset_var="UPDATE_TIMEOUT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="UPDATE_TIMEOUT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="UPDATE_TIMEOUT" preset="mainnet" fork="altair" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="UPDATE_TIMEOUT" preset="minimal" fork="altair" style="full" version="v1.6.0-alpha.3" />
 
   - name: VALIDATOR_REGISTRY_LIMIT
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L57
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L57
     spec: |
-      <spec preset_var="VALIDATOR_REGISTRY_LIMIT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="VALIDATOR_REGISTRY_LIMIT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="VALIDATOR_REGISTRY_LIMIT" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="VALIDATOR_REGISTRY_LIMIT" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: WHISTLEBLOWER_REWARD_QUOTIENT
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/phase0.yaml#L65
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/phase0.yaml#L65
     spec: |
-      <spec preset_var="WHISTLEBLOWER_REWARD_QUOTIENT" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="WHISTLEBLOWER_REWARD_QUOTIENT" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="WHISTLEBLOWER_REWARD_QUOTIENT" preset="mainnet" fork="phase0" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="WHISTLEBLOWER_REWARD_QUOTIENT" preset="minimal" fork="phase0" style="full" version="v1.6.0-alpha.3" />
 
   - name: WHISTLEBLOWER_REWARD_QUOTIENT_ELECTRA
     sources:
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/mainnet/electra.yaml#L24
       - ethereum/spec/src/main/resources/tech/pegasys/teku/spec/config/presets/minimal/electra.yaml#L24
     spec: |
-      <spec preset_var="WHISTLEBLOWER_REWARD_QUOTIENT_ELECTRA" preset="mainnet" style="full" version="v1.6.0-alpha.3" />
-      <spec preset_var="WHISTLEBLOWER_REWARD_QUOTIENT_ELECTRA" preset="minimal" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="WHISTLEBLOWER_REWARD_QUOTIENT_ELECTRA" preset="mainnet" fork="electra" style="full" version="v1.6.0-alpha.3" />
+      <spec preset_var="WHISTLEBLOWER_REWARD_QUOTIENT_ELECTRA" preset="minimal" fork="electra" style="full" version="v1.6.0-alpha.3" />
