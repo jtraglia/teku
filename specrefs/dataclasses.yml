@@ -1,6 +1,3 @@
-# Dataclasses Reference
-# This file maps dataclass objects to their implementation sources in the Teku codebase
-
 dataclasses:
   - name: BlobParameters
     sources:
