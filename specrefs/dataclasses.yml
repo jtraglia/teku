@@ -1,6 +1,6 @@
 - name: BlobParameters
   sources:
-    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/logic/versions/fulu/helpers/BlobParameters.java
+    - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/logic/versions/fulu/helpers/BlobParameters.java
   spec: |
     <spec dataclass="BlobParameters" fork="fulu" style="full" hash="a4575aa8">
     class BlobParameters:
@@ -10,10 +10,10 @@
 
 - name: BlobsBundleDeneb
   sources:
-    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/BlobsBundle.java
-    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/BlobsBundleSchema.java
-    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/versions/deneb/BlobsBundleDeneb.java
-    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/versions/deneb/BlobsBundleSchemaDeneb.java
+    - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/BlobsBundle.java
+    - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/BlobsBundleSchema.java
+    - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/versions/deneb/BlobsBundleDeneb.java
+    - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/versions/deneb/BlobsBundleSchemaDeneb.java
   spec: |
     <spec dataclass="BlobsBundle" fork="deneb" style="full" hash="8d6e7be6">
     class BlobsBundle(object):
@@ -24,10 +24,10 @@
 
 - name: BlobsBundleFulu
   sources:
-    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/BlobsBundle.java
-    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/BlobsBundleSchema.java
-    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/versions/fulu/BlobsBundleFulu.java
-    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/versions/fulu/BlobsBundleSchemaFulu.java
+    - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/BlobsBundle.java
+    - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/BlobsBundleSchema.java
+    - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/versions/fulu/BlobsBundleFulu.java
+    - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/versions/fulu/BlobsBundleSchemaFulu.java
   spec: |
     <spec dataclass="BlobsBundle" fork="fulu" style="full" hash="e265362d">
     class BlobsBundle(object):
@@ -39,8 +39,8 @@
 
 - name: GetPayloadResponseV1
   sources:
-    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
-    - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/methods/EngineGetPayloadV1.java
+    - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
+    - file: ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/methods/EngineGetPayloadV1.java
   spec: |
     <spec dataclass="GetPayloadResponse" fork="bellatrix" style="full" hash="bc71e6e6">
     class GetPayloadResponse(object):
@@ -49,8 +49,8 @@
 
 - name: GetPayloadResponseV2
   sources:
-    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
-    - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/GetPayloadV2Response.java
+    - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
+    - file: ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/GetPayloadV2Response.java
   spec: |
     <spec dataclass="GetPayloadResponse" fork="capella" style="full" hash="5f10deae">
     class GetPayloadResponse(object):
@@ -60,8 +60,8 @@
 
 - name: GetPayloadResponseV3
   sources:
-    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
-    - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/GetPayloadV3Response.java
+    - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
+    - file: ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/GetPayloadV3Response.java
   spec: |
     <spec dataclass="GetPayloadResponse" fork="deneb" style="full" hash="95f3156d">
     class GetPayloadResponse(object):
@@ -73,8 +73,8 @@
 
 - name: GetPayloadResponseV4
   sources:
-    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
-    - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/GetPayloadV4Response.java
+    - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
+    - file: ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/GetPayloadV4Response.java
   spec: |
     <spec dataclass="GetPayloadResponse" fork="electra" style="full" hash="7a57aa32">
     class GetPayloadResponse(object):
@@ -87,8 +87,8 @@
 
 - name: GetPayloadResponseV5
   sources:
-    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
-    - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/GetPayloadV5Response.java
+    - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
+    - file: ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/GetPayloadV5Response.java
   spec: |
     <spec dataclass="GetPayloadResponse" fork="fulu" style="full" hash="0fbc9ac9">
     class GetPayloadResponse(object):
@@ -101,7 +101,7 @@
 
 - name: NewPayloadRequest
   sources:
-    - ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/NewPayloadRequest.java
+    - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/NewPayloadRequest.java
   spec: |
     <spec dataclass="NewPayloadRequest" fork="bellatrix" style="full" hash="4d32e8c7">
     class NewPayloadRequest(object):
@@ -124,7 +124,7 @@
 
 - name: PayloadAttributesV1
   sources:
-    - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/PayloadAttributesV1.java
+    - file: ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/PayloadAttributesV1.java
   spec: |
     <spec dataclass="PayloadAttributes" fork="bellatrix" style="full" hash="8f6fc523">
     class PayloadAttributes(object):
@@ -135,7 +135,7 @@
 
 - name: PayloadAttributesV2
   sources:
-    - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/PayloadAttributesV2.java
+    - file: ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/PayloadAttributesV2.java
   spec: |
     <spec dataclass="PayloadAttributes" fork="capella" style="full" hash="f63ac439">
     class PayloadAttributes(object):
@@ -148,7 +148,7 @@
 
 - name: PayloadAttributesV3
   sources:
-    - ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/PayloadAttributesV3.java
+    - file: ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/PayloadAttributesV3.java
   spec: |
     <spec dataclass="PayloadAttributes" fork="deneb" style="full" hash="2beea525">
     class PayloadAttributes(object):

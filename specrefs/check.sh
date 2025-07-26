@@ -93,55 +93,18 @@ extract_spec_tags() {
     done | sort
 }
 
-# Function to validate that a source file exists and search string can be found
+# Function to validate that a source file exists
 validate_source_file() {
-    local source_path="$1"
+    local file_path="$1"
     local repo_root="$(dirname "$SCRIPT_DIR")"
-    
-    # Extract file path and line range (legacy format)
-    local file_path="$source_path"
-    local line_range=""
-    
-    if [[ "$source_path" =~ ^(.+)#(L[0-9]+-L[0-9]+|L[0-9]+)$ ]]; then
-        file_path="${BASH_REMATCH[1]}"
-        line_range="${BASH_REMATCH[2]}"
-    fi
     
     # Resolve full file path
     local full_path="$repo_root/$file_path"
     
     # Check if file exists
     if [[ ! -f "$full_path" ]]; then
-        echo "MISSING FILE: $source_path"
+        echo "MISSING FILE: $file_path"
         return 1
-    fi
-    
-    # If line range specified, validate it (legacy format)
-    if [[ -n "$line_range" ]]; then
-        local total_lines=$(awk 'END {print NR}' "$full_path")
-        
-        if [[ "$line_range" =~ ^L([0-9]+)-L([0-9]+)$ ]]; then
-            local start_line="${BASH_REMATCH[1]}"
-            local end_line="${BASH_REMATCH[2]}"
-            
-            if (( start_line > total_lines || end_line > total_lines )); then
-                echo "INVALID LINE RANGE: $source_path (file has $total_lines lines)"
-                return 1
-            fi
-            
-            if (( start_line > end_line )); then
-                echo "INVALID LINE RANGE: $source_path (start > end)"
-                return 1
-            fi
-            
-        elif [[ "$line_range" =~ ^L([0-9]+)$ ]]; then
-            local line_num="${BASH_REMATCH[1]}"
-            
-            if (( line_num > total_lines )); then
-                echo "INVALID LINE NUMBER: $source_path (file has $total_lines lines)"
-                return 1
-            fi
-        fi
     fi
     
     return 0
@@ -188,7 +151,6 @@ check_source_files() {
     local in_sources_section=false
     local current_file=""
     local current_search=""
-    local is_legacy_format=false
     
     # Extract all source file paths from the YAML file
     while IFS= read -r line; do
@@ -197,10 +159,9 @@ check_source_files() {
             in_sources_section=true
             current_file=""
             current_search=""
-            is_legacy_format=false
             
         # Check if we're leaving the sources section (new top-level key or end of sources)
-        elif [[ "$in_sources_section" == true ]] && [[ "$line" =~ ^[[:space:]]*[a-zA-Z_][a-zA-Z0-9_]*:[[:space:]]*.*$ ]]; then
+        elif [[ "$in_sources_section" == true ]] && [[ "$line" =~ ^[a-zA-Z_-].*:[[:space:]]*.*$ ]]; then
             # Validate any pending entry before leaving sources section
             if [[ -n "$current_file" ]]; then
                 total_count=$((total_count + 1))
@@ -223,7 +184,7 @@ check_source_files() {
         # Match source file lines only when in sources section
         elif [[ "$in_sources_section" == true ]]; then
             if [[ "$line" =~ ^[[:space:]]*-[[:space:]]*file:[[:space:]]*(.+)$ ]]; then
-                # New format: file field - validate any pending entry first
+                # file field - validate any pending entry first
                 if [[ -n "$current_file" ]]; then
                     total_count=$((total_count + 1))
                     if [[ -n "$current_search" ]]; then
@@ -244,17 +205,8 @@ check_source_files() {
                 current_search=""
                 
             elif [[ "$line" =~ ^[[:space:]]*search:[[:space:]]*(.+)$ ]]; then
-                # New format: search field
+                # search field
                 current_search="${BASH_REMATCH[1]}"
-                
-            elif [[ "$line" =~ ^[[:space:]]*-[[:space:]]+(.+)$ ]]; then
-                # Legacy format: direct file path (possibly with line numbers)
-                local source_path="${BASH_REMATCH[1]}"
-                total_count=$((total_count + 1))
-                
-                if ! validate_source_file "$source_path"; then
-                    error_count=$((error_count + 1))
-                fi
             fi
         fi
     done < "$yaml_file"
