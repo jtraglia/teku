@@ -1,4 +1,4 @@
-- name: AggregateAndProof
+- name: AggregateAndProof#phase0
   sources:
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/operations/AggregateAndProof.java
   spec: |
@@ -8,6 +8,18 @@
         aggregate: Attestation
         selection_proof: BLSSignature
     </spec>
+    <spec container="AggregateAndProof" fork="electra" hash="a7f482d7">
+    class AggregateAndProof(Container):
+        aggregator_index: ValidatorIndex
+        # [Modified in Electra:EIP7549]
+        aggregate: Attestation
+        selection_proof: BLSSignature
+    </spec>
+
+- name: AggregateAndProof#electra
+  sources:
+    - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/operations/AggregateAndProof.java
+  spec: |
     <spec container="AggregateAndProof" fork="electra" hash="a7f482d7">
     class AggregateAndProof(Container):
         aggregator_index: ValidatorIndex
@@ -60,7 +72,7 @@
         target: Checkpoint
     </spec>
 
-- name: AttesterSlashing
+- name: AttesterSlashingphase0
   sources:
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/operations/AttesterSlashing.java
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/operations/AttesterSlashingSchema.java
@@ -70,6 +82,12 @@
         attestation_1: IndexedAttestation
         attestation_2: IndexedAttestation
     </spec>
+
+- name: AttesterSlashing#electra
+  sources:
+    - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/operations/AttesterSlashing.java
+    - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/operations/AttesterSlashingSchema.java
+  spec: |
     <spec container="AttesterSlashing" fork="electra" hash="2b9f773d">
     class AttesterSlashing(Container):
         # [Modified in Electra:EIP7549]
@@ -1308,6 +1326,17 @@
         message: AggregateAndProof
         signature: BLSSignature
     </spec>
+    <spec container="SignedAggregateAndProof" fork="electra" hash="7e784e12">
+    class SignedAggregateAndProof(Container):
+        # [Modified in Electra:EIP7549]
+        message: AggregateAndProof
+        signature: BLSSignature
+    </spec>
+
+- name: SignedAggregateAndProof#electra
+  sources:
+    - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/operations/SignedAggregateAndProof.java
+  spec: |
     <spec container="SignedAggregateAndProof" fork="electra" hash="7e784e12">
     class SignedAggregateAndProof(Container):
         # [Modified in Electra:EIP7549]

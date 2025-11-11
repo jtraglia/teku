@@ -99,7 +99,7 @@
         execution_requests: Sequence[bytes]
     </spec>
 
-- name: NewPayloadRequest
+- name: NewPayloadRequest#bellatrix
   sources:
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/NewPayloadRequest.java
   spec: |
@@ -107,12 +107,22 @@
     class NewPayloadRequest(object):
         execution_payload: ExecutionPayload
     </spec>
+
+- name: NewPayloadRequest#deneb
+  sources:
+    - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/NewPayloadRequest.java
+  spec: |
     <spec dataclass="NewPayloadRequest" fork="deneb" hash="26cf2e26">
     class NewPayloadRequest(object):
         execution_payload: ExecutionPayload
         versioned_hashes: Sequence[VersionedHash]
         parent_beacon_block_root: Root
     </spec>
+
+- name: NewPayloadRequest#electra
+  sources:
+    - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/NewPayloadRequest.java
+  spec: |
     <spec dataclass="NewPayloadRequest" fork="electra" hash="b1f69cc9">
     class NewPayloadRequest(object):
         execution_payload: ExecutionPayload
