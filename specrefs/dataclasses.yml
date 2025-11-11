@@ -99,6 +99,57 @@
         execution_requests: Sequence[bytes]
     </spec>
 
+- name: LatestMessage#phase0
+  sources: []
+  spec: |
+    <spec dataclass="LatestMessage" fork="phase0" hash="44e832d0">
+    @dataclass(eq=True, frozen=True)
+    class LatestMessage(object):
+        epoch: Epoch
+        root: Root
+    </spec>
+
+- name: LatestMessage#gloas
+  sources: []
+  spec: |
+    <spec dataclass="LatestMessage" fork="gloas" style="diff" hash="a0030894">
+    --- phase0
+    +++ gloas
+    @@ -1,4 +1,5 @@
+     @dataclass(eq=True, frozen=True)
+     class LatestMessage(object):
+    -    epoch: Epoch
+    +    slot: Slot
+         root: Root
+    +    payload_present: boolean
+    </spec>
+
+- name: LightClientStore#altair
+  sources: []
+  spec: |
+    <spec dataclass="LightClientStore" fork="altair" hash="24725cec">
+    class LightClientStore(object):
+        # Header that is finalized
+        finalized_header: LightClientHeader
+        # Sync committees corresponding to the finalized header
+        current_sync_committee: SyncCommittee
+        next_sync_committee: SyncCommittee
+        # Best available header to switch finalized head to if we see nothing else
+        best_valid_update: Optional[LightClientUpdate]
+        # Most recent available reasonably-safe header
+        optimistic_header: LightClientHeader
+        # Max number of active participants in a sync committee (used to calculate safety threshold)
+        previous_max_active_participants: uint64
+        current_max_active_participants: uint64
+    </spec>
+
+- name: LightClientStore#capella
+  sources: []
+  spec: |
+    <spec dataclass="LightClientStore" fork="capella" style="diff" hash="04b41062">
+
+    </spec>
+
 - name: NewPayloadRequest#bellatrix
   sources:
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/NewPayloadRequest.java
@@ -130,6 +181,17 @@
         parent_beacon_block_root: Root
         # [New in Electra]
         execution_requests: ExecutionRequests
+    </spec>
+
+- name: OptimisticStore
+  sources: []
+  spec: |
+    <spec dataclass="OptimisticStore" fork="bellatrix" hash="a2b2182c">
+    class OptimisticStore(object):
+        optimistic_roots: Set[Root]
+        head_block_root: Root
+        blocks: Dict[Root, BeaconBlock] = field(default_factory=dict)
+        block_states: Dict[Root, BeaconState] = field(default_factory=dict)
     </spec>
 
 - name: PayloadAttributesV1
@@ -168,4 +230,39 @@
         withdrawals: Sequence[Withdrawal]
         # [New in Deneb:EIP4788]
         parent_beacon_block_root: Root
+    </spec>
+
+- name: Store#phase0
+  sources: []
+  spec: |
+    <spec dataclass="Store" fork="phase0" hash="abe525d6">
+    class Store(object):
+        time: uint64
+        genesis_time: uint64
+        justified_checkpoint: Checkpoint
+        finalized_checkpoint: Checkpoint
+        unrealized_justified_checkpoint: Checkpoint
+        unrealized_finalized_checkpoint: Checkpoint
+        proposer_boost_root: Root
+        equivocating_indices: Set[ValidatorIndex]
+        blocks: Dict[Root, BeaconBlock] = field(default_factory=dict)
+        block_states: Dict[Root, BeaconState] = field(default_factory=dict)
+        block_timeliness: Dict[Root, boolean] = field(default_factory=dict)
+        checkpoint_states: Dict[Checkpoint, BeaconState] = field(default_factory=dict)
+        latest_messages: Dict[ValidatorIndex, LatestMessage] = field(default_factory=dict)
+        unrealized_justifications: Dict[Root, Checkpoint] = field(default_factory=dict)
+    </spec>
+
+- name: Store#gloas
+  sources: []
+  spec: |
+    <spec dataclass="Store" fork="gloas" style="diff" hash="d979eb1c">
+    --- phase0
+    +++ gloas
+    @@ -13,3 +13,5 @@
+         checkpoint_states: Dict[Checkpoint, BeaconState] = field(default_factory=dict)
+         latest_messages: Dict[ValidatorIndex, LatestMessage] = field(default_factory=dict)
+         unrealized_justifications: Dict[Root, Checkpoint] = field(default_factory=dict)
+    +    execution_payload_states: Dict[Root, BeaconState] = field(default_factory=dict)
+    +    ptc_vote: Dict[Root, Vector[boolean, PTC_SIZE]] = field(default_factory=dict)
     </spec>

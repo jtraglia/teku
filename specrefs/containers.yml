@@ -853,6 +853,16 @@
         index: uint64
     </spec>
 
+- name: Eth1Block
+  sources: []
+  spec: |
+    <spec container="Eth1Block" fork="phase0" hash="0a5c6b45">
+    class Eth1Block(Container):
+        timestamp: uint64
+        deposit_root: Root
+        deposit_count: uint64
+    </spec>
+
 - name: Eth1Data
   sources:
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/blocks/Eth1Data.java
@@ -1087,6 +1097,15 @@
         epoch: Epoch
     </spec>
 
+- name: ForkChoiceNode
+  sources: []
+  spec: |
+    <spec container="ForkChoiceNode" fork="gloas" hash="755a4b34">
+    class ForkChoiceNode(Container):
+        root: Root
+        payload_status: PayloadStatus  # One of PAYLOAD_STATUS_* values
+    </spec>
+
 - name: ForkData
   sources:
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/state/ForkData.java
@@ -1170,6 +1189,36 @@
         current_sync_committee_branch: CurrentSyncCommitteeBranch
     </spec>
 
+- name: LightClientBootstrap#capella
+  sources: []
+  spec: |
+    <spec container="LightClientBootstrap" fork="capella" style="diff" hash="85f4f5fe">
+
+    </spec>
+
+- name: LightClientFinalityUpdate#altair
+  sources: []
+  spec: |
+    <spec container="LightClientFinalityUpdate" fork="altair" hash="d392e9f3">
+    class LightClientFinalityUpdate(Container):
+        # Header attested to by the sync committee
+        attested_header: LightClientHeader
+        # Finalized header corresponding to `attested_header.beacon.state_root`
+        finalized_header: LightClientHeader
+        finality_branch: FinalityBranch
+        # Sync committee aggregate signature
+        sync_aggregate: SyncAggregate
+        # Slot at which the aggregate signature was created (untrusted)
+        signature_slot: Slot
+    </spec>
+
+- name: LightClientFinalityUpdate#capella
+  sources: []
+  spec: |
+    <spec container="LightClientFinalityUpdate" fork="capella" style="diff" hash="9d2b55dd">
+
+    </spec>
+
 - name: LightClientHeader
   sources:
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/lightclient/LightClientHeader.java
@@ -1178,6 +1227,39 @@
     <spec container="LightClientHeader" fork="altair" hash="53de7cd2">
     class LightClientHeader(Container):
         beacon: BeaconBlockHeader
+    </spec>
+
+- name: LightClientHeader#capella
+  sources: []
+  spec: |
+    <spec container="LightClientHeader" fork="capella" style="diff" hash="b625e61e">
+    --- altair
+    +++ capella
+    @@ -1,2 +1,4 @@
+     class LightClientHeader(Container):
+         beacon: BeaconBlockHeader
+    +    execution: ExecutionPayloadHeader
+    +    execution_branch: ExecutionBranch
+    </spec>
+
+- name: LightClientOptimisticUpdate#altair
+  sources: []
+  spec: |
+    <spec container="LightClientOptimisticUpdate" fork="altair" hash="0818d65f">
+    class LightClientOptimisticUpdate(Container):
+        # Header attested to by the sync committee
+        attested_header: LightClientHeader
+        # Sync committee aggregate signature
+        sync_aggregate: SyncAggregate
+        # Slot at which the aggregate signature was created (untrusted)
+        signature_slot: Slot
+    </spec>
+
+- name: LightClientOptimisticUpdate#capella
+  sources: []
+  spec: |
+    <spec container="LightClientOptimisticUpdate" fork="capella" style="diff" hash="bdce7b1d">
+
     </spec>
 
 - name: LightClientUpdate
@@ -1199,6 +1281,13 @@
         sync_aggregate: SyncAggregate
         # Slot at which the aggregate signature was created (untrusted)
         signature_slot: Slot
+    </spec>
+
+- name: LightClientUpdate#capella
+  sources: []
+  spec: |
+    <spec container="LightClientUpdate" fork="capella" style="diff" hash="8d215165">
+
     </spec>
 
 - name: MatrixEntry
