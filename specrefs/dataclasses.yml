@@ -1,4 +1,4 @@
-- name: BlobParameters
+- name: BlobParameters#fulu
   sources:
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/logic/versions/fulu/helpers/BlobParameters.java
   spec: |
@@ -8,7 +8,7 @@
         max_blobs_per_block: uint64
     </spec>
 
-- name: BlobsBundleDeneb
+- name: BlobsBundle#deneb
   sources:
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/BlobsBundle.java
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/BlobsBundleSchema.java
@@ -22,7 +22,7 @@
         blobs: List[Blob, MAX_BLOB_COMMITMENTS_PER_BLOCK]
     </spec>
 
-- name: BlobsBundleFulu
+- name: BlobsBundle#fulu
   sources:
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/BlobsBundle.java
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/builder/BlobsBundleSchema.java
@@ -37,7 +37,7 @@
         blobs: List[Blob, MAX_BLOB_COMMITMENTS_PER_BLOCK]
     </spec>
 
-- name: GetPayloadResponseV1
+- name: GetPayloadResponse#bellatrix
   sources:
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
     - file: ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/methods/EngineGetPayloadV1.java
@@ -47,7 +47,7 @@
         execution_payload: ExecutionPayload
     </spec>
 
-- name: GetPayloadResponseV2
+- name: GetPayloadResponse#capella
   sources:
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
     - file: ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/GetPayloadV2Response.java
@@ -58,7 +58,7 @@
         block_value: uint256
     </spec>
 
-- name: GetPayloadResponseV3
+- name: GetPayloadResponse#deneb
   sources:
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
     - file: ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/GetPayloadV3Response.java
@@ -71,7 +71,7 @@
         blobs_bundle: BlobsBundle
     </spec>
 
-- name: GetPayloadResponseV4
+- name: GetPayloadResponse#electra
   sources:
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
     - file: ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/GetPayloadV4Response.java
@@ -85,7 +85,7 @@
         execution_requests: Sequence[bytes]
     </spec>
 
-- name: GetPayloadResponseV5
+- name: GetPayloadResponse#fulu
   sources:
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/datastructures/execution/GetPayloadResponse.java
     - file: ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/GetPayloadV5Response.java
@@ -183,7 +183,7 @@
         execution_requests: ExecutionRequests
     </spec>
 
-- name: OptimisticStore
+- name: OptimisticStore#bellatrix
   sources: []
   spec: |
     <spec dataclass="OptimisticStore" fork="bellatrix" hash="a2b2182c">
@@ -194,7 +194,7 @@
         block_states: Dict[Root, BeaconState] = field(default_factory=dict)
     </spec>
 
-- name: PayloadAttributesV1
+- name: PayloadAttributes#bellatrix
   sources:
     - file: ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/PayloadAttributesV1.java
   spec: |
@@ -205,7 +205,7 @@
         suggested_fee_recipient: ExecutionAddress
     </spec>
 
-- name: PayloadAttributesV2
+- name: PayloadAttributes#capella
   sources:
     - file: ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/PayloadAttributesV2.java
   spec: |
@@ -218,7 +218,7 @@
         withdrawals: Sequence[Withdrawal]
     </spec>
 
-- name: PayloadAttributesV3
+- name: PayloadAttributes#deneb
   sources:
     - file: ethereum/executionclient/src/main/java/tech/pegasys/teku/ethereum/executionclient/schema/PayloadAttributesV3.java
   spec: |
