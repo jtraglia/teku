@@ -15,6 +15,7 @@ package tech.pegasys.teku.storage.protoarray;
 
 import static tech.pegasys.teku.infrastructure.unsigned.UInt64.ZERO;
 
+import java.util.Optional;
 import org.apache.tuweni.bytes.Bytes32;
 import tech.pegasys.teku.infrastructure.unsigned.UInt64;
 import tech.pegasys.teku.spec.Spec;
@@ -66,5 +67,45 @@ public class ProtoArrayTestUtil {
 
   public static TestStoreImpl createStoreToManipulateVotes() {
     return new TestStoreFactory().createGenesisStore();
+  }
+
+  /**
+   * Adds a block to the ForkChoiceStrategy's protoarray. This is useful for test scenarios where we
+   * need to set up a chain structure without going through full block import.
+   */
+  public static void addBlockToProtoArray(
+      final ForkChoiceStrategy forkChoiceStrategy,
+      final UInt64 slot,
+      final Bytes32 blockRoot,
+      final Bytes32 parentRoot,
+      final Bytes32 stateRoot,
+      final BlockCheckpoints checkpoints) {
+    forkChoiceStrategy.processBlock(
+        slot,
+        blockRoot,
+        parentRoot,
+        stateRoot,
+        checkpoints,
+        ProtoNode.NO_EXECUTION_BLOCK_NUMBER,
+        ProtoNode.NO_EXECUTION_BLOCK_HASH);
+  }
+
+  /**
+   * Updates a node's parent index in the protoarray. This is useful when a block was added before
+   * its parent, and we need to establish the parent relationship after the fact.
+   */
+  public static void updateParentIndex(
+      final ForkChoiceStrategy forkChoiceStrategy,
+      final Bytes32 childBlockRoot,
+      final Bytes32 parentBlockRoot) {
+    final ProtoArray protoArray = forkChoiceStrategy.getProtoArray();
+    protoArray
+        .getProtoNode(childBlockRoot)
+        .ifPresent(
+            childNode ->
+                protoArray
+                    .getIndexByRoot(parentBlockRoot)
+                    .ifPresent(
+                        parentIndex -> childNode.setParentIndex(Optional.of(parentIndex))));
   }
 }

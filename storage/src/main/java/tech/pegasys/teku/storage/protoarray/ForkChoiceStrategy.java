@@ -526,6 +526,11 @@ public class ForkChoiceStrategy implements BlockMetadataStore, ReadOnlyForkChoic
   }
 
   @VisibleForTesting
+  ProtoArray getProtoArray() {
+    return protoArray;
+  }
+
+  @VisibleForTesting
   void processBlock(
       final UInt64 blockSlot,
       final Bytes32 blockRoot,

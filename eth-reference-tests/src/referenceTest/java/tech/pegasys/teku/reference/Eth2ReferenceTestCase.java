@@ -24,7 +24,6 @@ import tech.pegasys.teku.reference.altair.rewards.RewardsTestExecutorBellatrix;
 import tech.pegasys.teku.reference.common.epoch_processing.EpochProcessingTestExecutor;
 import tech.pegasys.teku.reference.common.operations.OperationsTestExecutor;
 import tech.pegasys.teku.reference.deneb.merkle_proof.MerkleProofTests;
-import tech.pegasys.teku.reference.fulu.network.NetworkingTests;
 import tech.pegasys.teku.reference.phase0.bls.BlsTests;
 import tech.pegasys.teku.reference.phase0.forkchoice.ForkChoiceTestExecutor;
 import tech.pegasys.teku.reference.phase0.genesis.GenesisTests;
@@ -60,6 +59,8 @@ public abstract class Eth2ReferenceTestCase {
   private static final ImmutableMap<String, TestExecutor> PHASE_0_TEST_TYPES =
       ImmutableMap.<String, TestExecutor>builder()
           .putAll(RewardsTestExecutorPhase0.REWARDS_TEST_TYPES)
+          .putAll(
+              tech.pegasys.teku.reference.phase0.networking.NetworkingTests.NETWORKING_TEST_TYPES)
           .build();
 
   private static final ImmutableMap<String, TestExecutor> ALTAIR_TEST_TYPES =
@@ -105,7 +106,7 @@ public abstract class Eth2ReferenceTestCase {
           .putAll(ForkUpgradeTestExecutor.FORK_UPGRADE_TEST_TYPES)
           .putAll(RewardsTestExecutorBellatrix.REWARDS_TEST_TYPES)
           .putAll(MerkleProofTests.MERKLE_PROOF_TEST_TYPES)
-          .putAll(NetworkingTests.NETWORKING_TEST_TYPES)
+          .putAll(tech.pegasys.teku.reference.fulu.network.NetworkingTests.NETWORKING_TEST_TYPES)
           .build();
 
   private static final ImmutableMap<String, TestExecutor> GLOAS_TEST_TYPES =
@@ -114,7 +115,7 @@ public abstract class Eth2ReferenceTestCase {
           .putAll(ForkUpgradeTestExecutor.FORK_UPGRADE_TEST_TYPES)
           .putAll(RewardsTestExecutorBellatrix.REWARDS_TEST_TYPES)
           .putAll(MerkleProofTests.MERKLE_PROOF_TEST_TYPES)
-          .putAll(NetworkingTests.NETWORKING_TEST_TYPES)
+          .putAll(tech.pegasys.teku.reference.fulu.network.NetworkingTests.NETWORKING_TEST_TYPES)
           .build();
 
   protected void runReferenceTest(final TestDefinition testDefinition) throws Throwable {
