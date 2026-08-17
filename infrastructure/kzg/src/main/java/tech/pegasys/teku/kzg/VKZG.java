@@ -69,7 +69,7 @@ public final class VKZG {
         "vkzg recovered cells for {} blob(s) in {} ms ({} ms/blob)",
         blobCount,
         recoverElapsedMs,
-        recoverElapsedMs / (double) blobCount);
+        String.format("%.2f", recoverElapsedMs / (double) blobCount));
 
     final int cellsPerBlobBytes = Vkzg.CELL_PROOFS_PER_BLOB * Vkzg.BYTES_PER_CELL;
     final byte[] blobs = new byte[blobCount * Vkzg.BYTES_PER_BLOB];
@@ -92,7 +92,7 @@ public final class VKZG {
         "vkzg computed cell KZG proofs for {} blob(s) in {} ms ({} ms/blob)",
         blobCount,
         proofsElapsedMs,
-        proofsElapsedMs / (double) blobCount);
+        String.format("%.2f", proofsElapsedMs / (double) blobCount));
 
     final List<KZGCell> allCells = KZGCell.splitBytes(Bytes.wrap(recoveredCells));
     final List<KZGProof> allProofs = KZGProof.splitBytes(Bytes.wrap(proofs));
