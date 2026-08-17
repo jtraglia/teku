@@ -912,7 +912,7 @@ public class BeaconChainController extends Service implements BeaconChainControl
                 null,
                 () -> {
                   try {
-                    VKZG.initialize();
+                    VKZG.initialize(beaconConfig.eth2NetworkConfig().getVkzgMaxBatchSize());
                   } catch (final Throwable t) {
                     vkzgInitException.set(t);
                   }

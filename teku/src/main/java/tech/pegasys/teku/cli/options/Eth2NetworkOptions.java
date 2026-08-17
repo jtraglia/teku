@@ -121,6 +121,18 @@ public class Eth2NetworkOptions {
   private boolean vkzgEnabled = Eth2NetworkConfiguration.DEFAULT_VKZG_ENABLED;
 
   @Option(
+      names = {"--Xvkzg-max-batch-size"},
+      paramLabel = "<INT>",
+      description =
+          "Number of blobs vkzg keeps in flight per GPU call when recovering EIP-7594 cells and"
+              + " their KZG proofs. Larger batches passed to it are chunked into calls of this"
+              + " size.",
+      arity = "1",
+      showDefaultValue = Visibility.ALWAYS,
+      hidden = true)
+  private int vkzgMaxBatchSize = Eth2NetworkConfiguration.DEFAULT_VKZG_MAX_BATCH_SIZE;
+
+  @Option(
       names = {"--Xkzg-precompute"},
       paramLabel = "<INT>",
       description =
@@ -583,6 +595,7 @@ public class Eth2NetworkOptions {
         .forkChoiceUpdatedAlwaysSendPayloadAttributes(forkChoiceUpdatedAlwaysSendPayloadAttributes)
         .rustKzgEnabled(rustKzgEnabled)
         .vkzgEnabled(vkzgEnabled)
+        .vkzgMaxBatchSize(vkzgMaxBatchSize)
         .dataColumnSidecarExtensionRetentionEpochs(dataColumnSidecarExtensionRetentionEpochs);
     kzgPrecompute.ifPresent(builder::kzgPrecompute);
     dataColumnSidecarRecoveryMaxDelayMillis.ifPresent(

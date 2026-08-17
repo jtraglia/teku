@@ -31,9 +31,16 @@ public final class VKZG {
 
   private VKZG() {}
 
-  /** Opens the GPU prover. Call once at startup, alongside the CKZG4844 trusted setup load. */
-  public static void initialize() {
-    Vkzg.init();
+  /**
+   * Opens the GPU prover. Call once at startup, alongside the CKZG4844 trusted setup load.
+   *
+   * @param maxBatchSize bounds how many blobs a single GPU call keeps in flight at once; batches
+   *     larger than this are chunked into multiple dispatches, each paying its own fixed
+   *     per-dispatch overhead. vkzg's own no-arg default is 4. GPU memory scales with this value
+   *     at roughly 9.1 MiB/blob, e.g. ~292 MiB at 32, ~583 MiB at 64, ~1.14 GiB at 128.
+   */
+  public static void initialize(final long maxBatchSize) {
+    Vkzg.init(maxBatchSize);
     Runtime.getRuntime().addShutdownHook(new Thread(Vkzg::deinit));
     LOG.info("vkzg initialized on {} ({} cores)", Vkzg.deviceName(), Vkzg.gpuCoreCount());
   }
@@ -50,6 +57,7 @@ public final class VKZG {
       return List.of();
     }
 
+    final long flattenStart = System.nanoTime();
     final byte[] cells = new byte[blobCount * Vkzg.CELL_PROOFS_PER_BLOB * Vkzg.BYTES_PER_CELL];
     final byte[] present = new byte[blobCount * Vkzg.CELL_PROOFS_PER_BLOB];
     for (int b = 0; b < blobCount; b++) {
@@ -61,6 +69,12 @@ public final class VKZG {
         present[b * Vkzg.CELL_PROOFS_PER_BLOB + column] = 1;
       }
     }
+    final long flattenElapsedMs = (System.nanoTime() - flattenStart) / 1_000_000;
+    LOG.info(
+        "vkzg flattened known cells for {} blob(s) in {} ms ({} ms/blob)",
+        blobCount,
+        flattenElapsedMs,
+        String.format("%.2f", flattenElapsedMs / (double) blobCount));
 
     final long recoverStart = System.nanoTime();
     final byte[] recoveredCells = Vkzg.recoverCellsBatch(cells, present, blobCount);
@@ -71,6 +85,7 @@ public final class VKZG {
         recoverElapsedMs,
         String.format("%.2f", recoverElapsedMs / (double) blobCount));
 
+    final long extractStart = System.nanoTime();
     final int cellsPerBlobBytes = Vkzg.CELL_PROOFS_PER_BLOB * Vkzg.BYTES_PER_CELL;
     final byte[] blobs = new byte[blobCount * Vkzg.BYTES_PER_BLOB];
     for (int b = 0; b < blobCount; b++) {
@@ -84,6 +99,12 @@ public final class VKZG {
           b * Vkzg.BYTES_PER_BLOB,
           Vkzg.BYTES_PER_BLOB);
     }
+    final long extractElapsedMs = (System.nanoTime() - extractStart) / 1_000_000;
+    LOG.info(
+        "vkzg extracted blobs from recovered cells for {} blob(s) in {} ms ({} ms/blob)",
+        blobCount,
+        extractElapsedMs,
+        String.format("%.2f", extractElapsedMs / (double) blobCount));
 
     final long proofsStart = System.nanoTime();
     final byte[] proofs = Vkzg.computeCellKzgProofsBatch(blobs, blobCount);
@@ -94,6 +115,7 @@ public final class VKZG {
         proofsElapsedMs,
         String.format("%.2f", proofsElapsedMs / (double) blobCount));
 
+    final long buildResultStart = System.nanoTime();
     final List<KZGCell> allCells = KZGCell.splitBytes(Bytes.wrap(recoveredCells));
     final List<KZGProof> allProofs = KZGProof.splitBytes(Bytes.wrap(proofs));
 
@@ -106,6 +128,12 @@ public final class VKZG {
       }
       result.add(blobCellsAndProofs);
     }
+    final long buildResultElapsedMs = (System.nanoTime() - buildResultStart) / 1_000_000;
+    LOG.info(
+        "vkzg built KZGCellAndProof results for {} blob(s) in {} ms ({} ms/blob)",
+        blobCount,
+        buildResultElapsedMs,
+        String.format("%.2f", buildResultElapsedMs / (double) blobCount));
     return result;
   }
 }

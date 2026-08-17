@@ -91,6 +91,12 @@ public class Eth2NetworkConfiguration {
 
   public static final boolean DEFAULT_VKZG_ENABLED = false;
 
+  // The batching is over blobs, not cells -- every blob always carries all
+  // 128 of its own cells regardless of batch size. This bounds how many
+  // blobs vkzg keeps in flight per GPU call; larger batches passed to it are
+  // chunked into calls of this size (see vkzg_compute_proofs_batch).
+  public static final int DEFAULT_VKZG_MAX_BATCH_SIZE = 32;
+
   // For regular nodes which will not recover data column sidecars, default
   // to a low value which uses less memory. A higher precompute value only
   // benefits nodes which compute KZG proofs for cells.
@@ -154,6 +160,7 @@ public class Eth2NetworkConfiguration {
   private final int pendingAttestationsMaxQueue;
   private final boolean rustKzgEnabled;
   private final boolean vkzgEnabled;
+  private final int vkzgMaxBatchSize;
   private final OptionalInt kzgPrecompute;
   private final OptionalLong dataColumnSidecarRecoveryMaxDelayMillis;
   private final boolean aggregatingAttestationPoolProfilingEnabled;
@@ -196,6 +203,7 @@ public class Eth2NetworkConfiguration {
       final int pendingAttestationsMaxQueue,
       final boolean rustKzgEnabled,
       final boolean vkzgEnabled,
+      final int vkzgMaxBatchSize,
       final OptionalInt kzgPrecompute,
       final OptionalLong dataColumnSidecarRecoveryMaxDelayMillis,
       final boolean aggregatingAttestationPoolProfilingEnabled,
@@ -240,6 +248,7 @@ public class Eth2NetworkConfiguration {
     this.pendingAttestationsMaxQueue = pendingAttestationsMaxQueue;
     this.rustKzgEnabled = rustKzgEnabled;
     this.vkzgEnabled = vkzgEnabled;
+    this.vkzgMaxBatchSize = vkzgMaxBatchSize;
     this.kzgPrecompute = kzgPrecompute;
     this.dataColumnSidecarRecoveryMaxDelayMillis = dataColumnSidecarRecoveryMaxDelayMillis;
     this.aggregatingAttestationPoolProfilingEnabled = aggregatingAttestationPoolProfilingEnabled;
@@ -404,6 +413,10 @@ public class Eth2NetworkConfiguration {
     return vkzgEnabled;
   }
 
+  public int getVkzgMaxBatchSize() {
+    return vkzgMaxBatchSize;
+  }
+
   public OptionalInt getKzgPrecompute() {
     return kzgPrecompute;
   }
@@ -553,6 +566,7 @@ public class Eth2NetworkConfiguration {
     private OptionalInt pendingAttestationsMaxQueue = OptionalInt.empty();
     private boolean rustKzgEnabled = DEFAULT_RUST_KZG_ENABLED;
     private boolean vkzgEnabled = DEFAULT_VKZG_ENABLED;
+    private int vkzgMaxBatchSize = DEFAULT_VKZG_MAX_BATCH_SIZE;
     private OptionalInt kzgPrecompute = OptionalInt.empty();
     private OptionalLong dataColumnSidecarRecoveryMaxDelayMillis = OptionalLong.empty();
     private int dataColumnSidecarExtensionRetentionEpochs =
@@ -662,6 +676,7 @@ public class Eth2NetworkConfiguration {
           pendingAttestationsMaxQueue.orElse(DEFAULT_MAX_QUEUE_PENDING_ATTESTATIONS),
           rustKzgEnabled,
           vkzgEnabled,
+          vkzgMaxBatchSize,
           kzgPrecompute,
           dataColumnSidecarRecoveryMaxDelayMillis,
           aggregatingAttestationPoolProfilingEnabled,
@@ -993,6 +1008,11 @@ public class Eth2NetworkConfiguration {
 
     public Builder vkzgEnabled(final boolean vkzgEnabled) {
       this.vkzgEnabled = vkzgEnabled;
+      return this;
+    }
+
+    public Builder vkzgMaxBatchSize(final int vkzgMaxBatchSize) {
+      this.vkzgMaxBatchSize = vkzgMaxBatchSize;
       return this;
     }
 
