@@ -90,6 +90,7 @@ import tech.pegasys.teku.infrastructure.metrics.TekuMetricCategory;
 import tech.pegasys.teku.infrastructure.time.TimeProvider;
 import tech.pegasys.teku.infrastructure.unsigned.UInt64;
 import tech.pegasys.teku.kzg.KZG;
+import tech.pegasys.teku.kzg.VKZG;
 import tech.pegasys.teku.networking.eth2.Eth2P2PNetwork;
 import tech.pegasys.teku.networking.eth2.Eth2P2PNetworkBuilder;
 import tech.pegasys.teku.networking.eth2.P2PConfig;
@@ -143,6 +144,7 @@ import tech.pegasys.teku.spec.logic.common.statetransition.availability.Availabi
 import tech.pegasys.teku.spec.logic.common.statetransition.results.BlockImportResult;
 import tech.pegasys.teku.spec.logic.common.util.BlockRewardCalculatorUtil;
 import tech.pegasys.teku.spec.logic.versions.deneb.helpers.MiscHelpersDeneb;
+import tech.pegasys.teku.spec.logic.versions.fulu.helpers.MiscHelpersFulu;
 import tech.pegasys.teku.spec.networks.Eth2Network;
 import tech.pegasys.teku.spec.schemas.SchemaDefinitionsElectra;
 import tech.pegasys.teku.spec.schemas.SchemaDefinitionsFulu;
@@ -896,6 +898,13 @@ public class BeaconChainController extends Service implements BeaconChainControl
         if (loadException.get() != null) {
           throw new RuntimeException("Failed to load KZG trusted setup", loadException.get());
         }
+      }
+
+      if (spec.isMilestoneSupported(SpecMilestone.FULU)
+          && beaconConfig.eth2NetworkConfig().isVkzgEnabled()) {
+        VKZG.initialize();
+        MiscHelpersFulu.required(spec.forMilestone(SpecMilestone.FULU).miscHelpers())
+            .setVkzgEnabled(true);
       }
     } else {
       kzg = KZG.DISABLED;

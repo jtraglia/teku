@@ -42,10 +42,12 @@ import tech.pegasys.teku.infrastructure.ssz.SszList;
 import tech.pegasys.teku.infrastructure.ssz.schema.SszListSchema;
 import tech.pegasys.teku.infrastructure.ssz.tree.MerkleUtil;
 import tech.pegasys.teku.infrastructure.unsigned.UInt64;
+import tech.pegasys.teku.kzg.KZG;
 import tech.pegasys.teku.kzg.KZGCell;
 import tech.pegasys.teku.kzg.KZGCellAndProof;
 import tech.pegasys.teku.kzg.KZGCellID;
 import tech.pegasys.teku.kzg.KZGCellWithColumnId;
+import tech.pegasys.teku.kzg.VKZG;
 import tech.pegasys.teku.spec.config.SpecConfigElectra;
 import tech.pegasys.teku.spec.config.SpecConfigFulu;
 import tech.pegasys.teku.spec.datastructures.blobs.DataColumnSchema;
@@ -79,6 +81,16 @@ import tech.pegasys.teku.spec.schemas.SchemaDefinitionsFulu;
 
 public class MiscHelpersFulu extends MiscHelpersElectra {
   private static final Logger LOG = LogManager.getLogger();
+
+  private volatile boolean vkzgEnabled = false;
+
+  /**
+   * Enables recovering cells and their KZG proofs on the GPU via vkzg in {@link #recoverMatrix},
+   * instead of the configured {@link KZG} implementation.
+   */
+  public void setVkzgEnabled(final boolean vkzgEnabled) {
+    this.vkzgEnabled = vkzgEnabled;
+  }
 
   public static MiscHelpersFulu required(final MiscHelpers miscHelpers) {
     return miscHelpers
@@ -538,33 +550,39 @@ public class MiscHelpersFulu extends MiscHelpersElectra {
    * <p>The data structure for storing cells is implementation-dependent.
    */
   public List<List<MatrixEntry>> recoverMatrix(final List<List<MatrixEntry>> partialMatrix) {
-    return IntStream.range(0, partialMatrix.size())
-        .parallel()
+    final List<List<KZGCellWithColumnId>> perBlobKnownCells =
+        IntStream.range(0, partialMatrix.size())
+            .mapToObj(
+                blobIndex ->
+                    partialMatrix.get(blobIndex).stream()
+                        .filter(entry -> entry.getRowIndex().intValue() == blobIndex)
+                        .map(
+                            entry ->
+                                new KZGCellWithColumnId(
+                                    new KZGCell(entry.getCell().getBytes()),
+                                    new KZGCellID(entry.getColumnIndex())))
+                        .toList())
+            .toList();
+
+    final List<List<KZGCellAndProof>> recovered =
+        vkzgEnabled
+            ? VKZG.recoverCellsAndProofs(perBlobKnownCells)
+            : perBlobKnownCells.parallelStream().map(getKzg()::recoverCellsAndProofs).toList();
+
+    return IntStream.range(0, recovered.size())
         .mapToObj(
-            blobIndex -> {
-              final List<KZGCellWithColumnId> cellWithColumnIds =
-                  partialMatrix.get(blobIndex).stream()
-                      .filter(entry -> entry.getRowIndex().intValue() == blobIndex)
-                      .map(
-                          entry ->
-                              new KZGCellWithColumnId(
-                                  new KZGCell(entry.getCell().getBytes()),
-                                  new KZGCellID(entry.getColumnIndex())))
-                      .toList();
-              final List<KZGCellAndProof> kzgCellAndProofs =
-                  getKzg().recoverCellsAndProofs(cellWithColumnIds);
-              return IntStream.range(0, kzgCellAndProofs.size())
-                  .mapToObj(
-                      kzgCellAndProofIndex ->
-                          schemaDefinitionsFulu
-                              .getMatrixEntrySchema()
-                              .create(
-                                  kzgCellAndProofs.get(kzgCellAndProofIndex).cell(),
-                                  kzgCellAndProofs.get(kzgCellAndProofIndex).proof(),
-                                  kzgCellAndProofIndex,
-                                  blobIndex))
-                  .toList();
-            })
+            blobIndex ->
+                IntStream.range(0, recovered.get(blobIndex).size())
+                    .mapToObj(
+                        columnIndex ->
+                            schemaDefinitionsFulu
+                                .getMatrixEntrySchema()
+                                .create(
+                                    recovered.get(blobIndex).get(columnIndex).cell(),
+                                    recovered.get(blobIndex).get(columnIndex).proof(),
+                                    columnIndex,
+                                    blobIndex))
+                    .toList())
         .toList();
   }
 

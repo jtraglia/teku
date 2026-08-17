@@ -6,6 +6,7 @@ dependencies {
 	implementation 'io.consensys.tuweni:tuweni-ssz'
 	implementation 'io.consensys.protocols:jc-kzg-4844'
 	implementation "io.github.crate-crypto:java-eth-kzg"
+	implementation 'com.github.jtraglia:vkzg'
 	implementation 'commons-io:commons-io'
 
 	testImplementation project(':infrastructure:json')

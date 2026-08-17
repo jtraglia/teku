@@ -110,6 +110,17 @@ public class Eth2NetworkOptions {
   private boolean rustKzgEnabled = Eth2NetworkConfiguration.DEFAULT_RUST_KZG_ENABLED;
 
   @Option(
+      names = {"--Xvkzg-enabled"},
+      paramLabel = "<BOOLEAN>",
+      description =
+          "Recover EIP-7594 cells and their KZG proofs on the GPU via Vulkan KZG",
+      arity = "0..1",
+      fallbackValue = "true",
+      showDefaultValue = Visibility.ALWAYS,
+      hidden = true)
+  private boolean vkzgEnabled = Eth2NetworkConfiguration.DEFAULT_VKZG_ENABLED;
+
+  @Option(
       names = {"--Xkzg-precompute"},
       paramLabel = "<INT>",
       description =
@@ -571,6 +582,7 @@ public class Eth2NetworkOptions {
         .attestationWaitLimitMillis(attestationWaitlimitMillis)
         .forkChoiceUpdatedAlwaysSendPayloadAttributes(forkChoiceUpdatedAlwaysSendPayloadAttributes)
         .rustKzgEnabled(rustKzgEnabled)
+        .vkzgEnabled(vkzgEnabled)
         .dataColumnSidecarExtensionRetentionEpochs(dataColumnSidecarExtensionRetentionEpochs);
     kzgPrecompute.ifPresent(builder::kzgPrecompute);
     dataColumnSidecarRecoveryMaxDelayMillis.ifPresent(
