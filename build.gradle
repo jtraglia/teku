@@ -745,6 +745,7 @@ licenseReport {
 		'org.jetbrains.kotlinx:kotlinx-coroutines-bom',
 		'org.jetbrains.kotlinx:kotlinx-coroutines-core',
 		'org.jetbrains.kotlin:kotlin-stdlib-common',
+		'com.github.jtraglia:vkzg',
 	]
 	allowedLicensesFile = new File("${rootDir}/gradle/license-report-config/allowed-licenses.json")
 	filters = [

@@ -902,7 +902,38 @@ public class BeaconChainController extends Service implements BeaconChainControl
 
       if (spec.isMilestoneSupported(SpecMilestone.FULU)
           && beaconConfig.eth2NetworkConfig().isVkzgEnabled()) {
-        VKZG.initialize();
+        // Vulkan/shader-compilation calls inside vkzg can need more native stack than whatever
+        // thread happens to be running initKzg() provides, so give it its own thread with a
+        // generous stack -- same reasoning as the kzg-loader thread above.
+        final long vkzgStackSize = 32 * 1024 * 1024; // 32MB
+        final AtomicReference<Throwable> vkzgInitException = new AtomicReference<>();
+        final Thread vkzgInitThread =
+            new Thread(
+                null,
+                () -> {
+                  try {
+                    VKZG.initialize();
+                  } catch (final Throwable t) {
+                    vkzgInitException.set(t);
+                  }
+                },
+                "vkzg-init",
+                vkzgStackSize);
+        vkzgInitThread.start();
+        try {
+          vkzgInitThread.join(Duration.ofMinutes(5).toMillis());
+          if (vkzgInitThread.isAlive()) {
+            vkzgInitThread.interrupt();
+            throw new RuntimeException("vkzg initialization timed out after five minutes");
+          }
+        } catch (InterruptedException e) {
+          Thread.currentThread().interrupt();
+          throw new RuntimeException("vkzg initialization was interrupted", e);
+        }
+        if (vkzgInitException.get() != null) {
+          throw new RuntimeException("Failed to initialize vkzg", vkzgInitException.get());
+        }
+
         MiscHelpersFulu.required(spec.forMilestone(SpecMilestone.FULU).miscHelpers())
             .setVkzgEnabled(true);
       }
