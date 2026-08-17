@@ -89,7 +89,7 @@ public final class VKZG {
     final byte[] proofs = Vkzg.computeCellKzgProofsBatch(blobs, blobCount);
     final long proofsElapsedMs = (System.nanoTime() - proofsStart) / 1_000_000;
     LOG.info(
-        "vkzg computed cell KZG proofs for {} blob(s) in {} ms ({} ms/blob)",
+        "vkzg computed proofs for {} blob(s) in {} ms ({} ms/blob)",
         blobCount,
         proofsElapsedMs,
         String.format("%.2f", proofsElapsedMs / (double) blobCount));
