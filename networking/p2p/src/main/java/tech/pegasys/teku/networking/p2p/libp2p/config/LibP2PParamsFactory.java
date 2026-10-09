@@ -36,13 +36,11 @@ public class LibP2PParamsFactory {
   public static final int MAX_SUBSCRIPTIONS_PER_MESSAGE = 200;
   private static final int MAX_PUBLISHED_MESSAGES = 1000;
   private static final int MAX_TOPICS_PER_PUBLISHED_MESSAGE = 1;
+  private static final int MAX_GRAFT_MESSAGES = 200;
+  private static final int MAX_PRUNE_MESSAGES = 200;
   private static final int MAX_IHAVE_MESSAGE_IDS = 5000;
+  private static final int MAX_IWANT_MESSAGE_IDS = 5000;
   private static final int MAX_IDONTWANT_MESSAGE_IDS = 5000;
-  // Inbound protobuf field-count budget, backstopping the 256 KiB control-byte budget against
-  // empty-envelope allocation amplification. Half the jvm-libp2p default: real Ethereum shapes
-  // hit the byte budget first (<= ~27k fields), and the outbound IHAVE estimate (4 fields per
-  // id) keeps an all-subnets heartbeat (~5.5k ids) in one RPC. Lower values split it.
-  private static final int MAX_TOTAL_FIELDS = 32768;
 
   public static GossipParams createGossipParams(
       final GossipConfig gossipConfig, final NetworkingSpecConfig networkingSpecConfig) {
@@ -92,14 +90,14 @@ public class LibP2PParamsFactory {
         .maxGossipMessageSize(maxMessageSize(maxPayloadSize))
         .maxPublishedMessages(MAX_PUBLISHED_MESSAGES)
         .maxTopicsPerPublishedMessage(MAX_TOPICS_PER_PUBLISHED_MESSAGE)
-        // Keeps our outbound subscription batches within what our own
-        // MaxCountTopicSubscriptionFilter accepts inbound.
-        .maxSubscriptionsPerRpc(MAX_SUBSCRIPTIONS_PER_MESSAGE)
+        .maxSubscriptions(MAX_SUBSCRIPTIONS_PER_MESSAGE)
+        .maxGraftMessages(MAX_GRAFT_MESSAGES)
+        .maxPruneMessages(MAX_PRUNE_MESSAGES)
         .maxPeersSentInPruneMsg(0)
         .maxPeersAcceptedInPruneMsg(0)
         .maxIHaveLength(MAX_IHAVE_MESSAGE_IDS)
-        .maxIDontWantMessageIds(MAX_IDONTWANT_MESSAGE_IDS)
-        .maxTotalFields(MAX_TOTAL_FIELDS);
+        .maxIWantMessageIds(MAX_IWANT_MESSAGE_IDS)
+        .maxIDontWantMessageIds(MAX_IDONTWANT_MESSAGE_IDS);
   }
 
   public static GossipScoreParams createGossipScoreParams(final GossipScoringConfig config) {
