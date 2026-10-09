@@ -13,6 +13,7 @@
 
 package tech.pegasys.teku.networking.eth2.gossip.topics;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -23,6 +24,7 @@ import io.libp2p.core.pubsub.ValidationResult;
 import java.util.Optional;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.tuweni.bytes.Bytes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -124,9 +126,9 @@ public class Eth2TopicHandlerTest {
     final Bytes invalidBytes = Bytes.fromHexString("0x0102");
     final SafeFuture<ValidationResult> result =
         topicHandler.handleMessage(topicHandler.prepareMessage(invalidBytes, Optional.empty()));
+    asyncRunner.executeQueuedActions();
     verify(debugDataDumper)
         .saveGossipMessageDecodingError(eq(topicHandler.getTopic()), any(), any(), any());
-    asyncRunner.executeQueuedActions();
 
     assertThatSafeFuture(result).isCompletedWithValue(ValidationResult.Invalid);
   }
@@ -147,9 +149,9 @@ public class Eth2TopicHandlerTest {
 
     final SafeFuture<ValidationResult> result =
         topicHandler.handleMessage(topicHandler.prepareMessage(blockBytes, Optional.empty()));
+    asyncRunner.executeQueuedActions();
     verify(debugDataDumper)
         .saveGossipMessageDecodingError(eq(topicHandler.getTopic()), any(), any(), any());
-    asyncRunner.executeQueuedActions();
 
     assertThatSafeFuture(result).isCompletedWithValue(ValidationResult.Invalid);
   }
@@ -170,9 +172,9 @@ public class Eth2TopicHandlerTest {
 
     final SafeFuture<ValidationResult> result =
         topicHandler.handleMessage(topicHandler.prepareMessage(blockBytes, Optional.empty()));
+    asyncRunner.executeQueuedActions();
     verify(debugDataDumper)
         .saveGossipMessageDecodingError(eq(topicHandler.getTopic()), any(), any(), any());
-    asyncRunner.executeQueuedActions();
 
     assertThatSafeFuture(result).isCompletedWithValue(ValidationResult.Invalid);
   }
@@ -193,9 +195,9 @@ public class Eth2TopicHandlerTest {
 
     final SafeFuture<ValidationResult> result =
         topicHandler.handleMessage(topicHandler.prepareMessage(blockBytes, Optional.empty()));
+    asyncRunner.executeQueuedActions();
     verify(debugDataDumper)
         .saveGossipMessageDecodingError(eq(topicHandler.getTopic()), any(), any(), any());
-    asyncRunner.executeQueuedActions();
 
     assertThatSafeFuture(result).isCompletedWithValue(ValidationResult.Invalid);
   }
@@ -313,6 +315,49 @@ public class Eth2TopicHandlerTest {
     asyncRunner.executeQueuedActions();
 
     assertThatSafeFuture(result).isCompletedWithValue(ValidationResult.Invalid);
+  }
+
+  @Test
+  public void handleMessage_shouldDeserializeOnAsyncRunner() {
+    final AtomicInteger deserializeCount = new AtomicInteger();
+    final MockEth2TopicHandler topicHandler =
+        new MockEth2TopicHandler(
+            recentChainData,
+            spec,
+            asyncRunner,
+            (b, __) -> SafeFuture.completedFuture(InternalValidationResult.ACCEPT),
+            debugDataDumper);
+    topicHandler.setDeserializer(
+        message -> {
+          deserializeCount.incrementAndGet();
+          return GossipEncoding.SSZ_SNAPPY.decodeMessage(
+              message, spec.getGenesisSchemaDefinitions().getSignedBeaconBlockSchema());
+        });
+
+    final SafeFuture<ValidationResult> result =
+        topicHandler.handleMessage(topicHandler.prepareMessage(blockBytes, Optional.empty()));
+    assertThat(deserializeCount).hasValue(0);
+
+    asyncRunner.executeQueuedActions();
+    assertThat(deserializeCount).hasValue(1);
+    assertThatSafeFuture(result).isCompletedWithValue(ValidationResult.Valid);
+  }
+
+  @Test
+  public void getMaxMessageSize_shouldAllowWorstCaseSnappyExpansionOfMaxPayload() {
+    final MockEth2TopicHandler topicHandler =
+        new MockEth2TopicHandler(
+            recentChainData,
+            spec,
+            asyncRunner,
+            (b, __) -> SafeFuture.completedFuture(InternalValidationResult.ACCEPT),
+            debugDataDumper);
+
+    // The gossip size gate runs against the compressed payload, so it must allow snappy's
+    // worst-case expansion of a MAX_PAYLOAD_SIZE payload (max_compressed_len from the spec)
+    final int maxPayloadSize = spec.getNetworkingConfig().getMaxPayloadSize();
+    assertThat(topicHandler.getMaxMessageSize())
+        .isEqualTo(maxPayloadSize + 32 + maxPayloadSize / 6);
   }
 
   private static class MockEth2TopicHandler extends Eth2TopicHandler<SignedBeaconBlock> {

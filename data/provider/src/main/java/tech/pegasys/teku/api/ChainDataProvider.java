@@ -74,11 +74,15 @@ import tech.pegasys.teku.spec.datastructures.forkchoice.ForkChoicePayloadStatus;
 import tech.pegasys.teku.spec.datastructures.forkchoice.ProtoNodeData;
 import tech.pegasys.teku.spec.datastructures.forkchoice.ReadOnlyForkChoiceStrategy;
 import tech.pegasys.teku.spec.datastructures.lightclient.LightClientBootstrap;
+import tech.pegasys.teku.spec.datastructures.lightclient.LightClientFinalityUpdate;
+import tech.pegasys.teku.spec.datastructures.lightclient.LightClientOptimisticUpdate;
+import tech.pegasys.teku.spec.datastructures.lightclient.LightClientUpdate;
 import tech.pegasys.teku.spec.datastructures.metadata.BlobSidecarsAndMetaData;
 import tech.pegasys.teku.spec.datastructures.metadata.BlobsAndMetaData;
 import tech.pegasys.teku.spec.datastructures.metadata.BlockAndMetaData;
 import tech.pegasys.teku.spec.datastructures.metadata.DataColumnSidecarsAndMetaData;
 import tech.pegasys.teku.spec.datastructures.metadata.ExecutionPayloadAndMetaData;
+import tech.pegasys.teku.spec.datastructures.metadata.LightClientUpdateWithContext;
 import tech.pegasys.teku.spec.datastructures.metadata.ObjectAndMetaData;
 import tech.pegasys.teku.spec.datastructures.metadata.StateAndMetaData;
 import tech.pegasys.teku.spec.datastructures.operations.Attestation;
@@ -95,6 +99,7 @@ import tech.pegasys.teku.spec.logic.common.statetransition.exceptions.EpochProce
 import tech.pegasys.teku.spec.logic.common.statetransition.exceptions.SlotProcessingException;
 import tech.pegasys.teku.spec.logic.versions.gloas.helpers.PredicatesGloas;
 import tech.pegasys.teku.spec.schemas.api.StateValidatorBalanceData;
+import tech.pegasys.teku.statetransition.lightclient.LightClientUpdateStore;
 import tech.pegasys.teku.storage.client.BlobReconstructionProvider;
 import tech.pegasys.teku.storage.client.BlobSidecarReconstructionProvider;
 import tech.pegasys.teku.storage.client.ChainDataUnavailableException;
@@ -113,6 +118,7 @@ public class ChainDataProvider {
   private final CombinedChainDataClient combinedChainDataClient;
   private final RecentChainData recentChainData;
   private final RewardCalculator rewardCalculator;
+  private final LightClientUpdateStore lightClientUpdateStore;
 
   public ChainDataProvider(
       final Spec spec,
@@ -120,7 +126,8 @@ public class ChainDataProvider {
       final CombinedChainDataClient combinedChainDataClient,
       final RewardCalculator rewardCalculator,
       final BlobSidecarReconstructionProvider blobSidecarReconstructionProvider,
-      final BlobReconstructionProvider blobReconstructionProvider) {
+      final BlobReconstructionProvider blobReconstructionProvider,
+      final LightClientUpdateStore lightClientUpdateStore) {
     this(
         spec,
         recentChainData,
@@ -132,7 +139,8 @@ public class ChainDataProvider {
         new BlobSelectorFactory(spec, combinedChainDataClient, blobReconstructionProvider),
         new DataColumnSidecarSelectorFactory(spec, combinedChainDataClient),
         new ExecutionPayloadSelectorFactory(spec, combinedChainDataClient),
-        rewardCalculator);
+        rewardCalculator,
+        lightClientUpdateStore);
   }
 
   @VisibleForTesting
@@ -146,7 +154,8 @@ public class ChainDataProvider {
       final BlobSelectorFactory blobSelectorFactory,
       final DataColumnSidecarSelectorFactory dataColumnSidecarSelectorFactory,
       final ExecutionPayloadSelectorFactory executionPayloadSelectorFactory,
-      final RewardCalculator rewardCalculator) {
+      final RewardCalculator rewardCalculator,
+      final LightClientUpdateStore lightClientUpdateStore) {
     this.spec = spec;
     this.combinedChainDataClient = combinedChainDataClient;
     this.recentChainData = recentChainData;
@@ -157,6 +166,42 @@ public class ChainDataProvider {
     this.dataColumnSidecarSelectorFactory = dataColumnSidecarSelectorFactory;
     this.executionPayloadSelectorFactory = executionPayloadSelectorFactory;
     this.rewardCalculator = rewardCalculator;
+    this.lightClientUpdateStore = lightClientUpdateStore;
+  }
+
+  public List<LightClientUpdateWithContext> getBestLightClientUpdates(
+      final UInt64 startPeriod, final int count) {
+    final List<LightClientUpdate> updates =
+        lightClientUpdateStore.getBestUpdatesInRange(startPeriod, count);
+
+    if (updates.isEmpty()) {
+      return List.of();
+    }
+
+    final Bytes32 genesisValidatorsRoot = getGenesisStateData().getGenesisValidatorsRoot();
+    return updates.stream()
+        .map(
+            update -> {
+              final UInt64 attestedSlot = attestedSlot(update);
+              return new LightClientUpdateWithContext(
+                  spec.computeForkDigest(
+                      genesisValidatorsRoot, spec.computeEpochAtSlot(attestedSlot)),
+                  spec.atSlot(attestedSlot).getMilestone(),
+                  update);
+            })
+        .toList();
+  }
+
+  private static UInt64 attestedSlot(final LightClientUpdate update) {
+    return update.getAttestedHeader().getBeacon().getSlot();
+  }
+
+  public Optional<LightClientFinalityUpdate> getLatestLightClientFinalityUpdate() {
+    return lightClientUpdateStore.getLatestFinalityUpdate();
+  }
+
+  public Optional<LightClientOptimisticUpdate> getLatestLightClientOptimisticUpdate() {
+    return lightClientUpdateStore.getLatestOptimisticUpdate();
   }
 
   public UInt64 getCurrentEpoch(final BeaconState state) {
@@ -315,20 +360,39 @@ public class ChainDataProvider {
 
   private List<ForkChoiceNodeDataV2> getForkChoiceNodeDataV2(
       final ReadOnlyForkChoiceStrategy forkChoiceStrategy) {
-    return forkChoiceStrategy.getBlockData().stream()
+    return forkChoiceStrategy.getBlockDataWithParent().stream()
         .map(
-            node ->
-                new ForkChoiceNodeDataV2(
-                    getForkChoicePayloadStatusV2(node),
-                    node,
-                    forkChoiceStrategy.getPayloadAttesterCount(node.getRoot()),
-                    forkChoiceStrategy.getPayloadAvailabilityYesCount(node.getRoot()),
-                    forkChoiceStrategy.getPayloadDataAvailabilityYesCount(node.getRoot())))
+            nodeWithParent -> {
+              final ProtoNodeData node = nodeWithParent.node();
+              return new ForkChoiceNodeDataV2(
+                  getForkChoicePayloadStatusV2(node),
+                  node,
+                  getParentRootV2(node),
+                  nodeWithParent.parent().map(this::getForkChoicePayloadStatusV2),
+                  forkChoiceStrategy.getPayloadAttesterCount(node.getRoot()),
+                  forkChoiceStrategy.getPayloadAvailabilityYesCount(node.getRoot()),
+                  forkChoiceStrategy.getPayloadDataAvailabilityYesCount(node.getRoot()));
+            })
         .toList();
   }
 
+  /**
+   * From Gloas, a block's {@code EMPTY} and {@code FULL} nodes have the same block's {@code
+   * PENDING} node as parent, so their parent root is the block's own root.
+   */
+  private Bytes32 getParentRootV2(final ProtoNodeData node) {
+    final boolean isGloasEmptyOrFullNode =
+        isGloasOrLater(node.getSlot())
+            && node.getPayloadStatus() != ForkChoicePayloadStatus.PAYLOAD_STATUS_PENDING;
+    return isGloasEmptyOrFullNode ? node.getRoot() : node.getParentRoot();
+  }
+
+  private boolean isGloasOrLater(final UInt64 slot) {
+    return spec.atSlot(slot).getMilestone().isGreaterThanOrEqualTo(SpecMilestone.GLOAS);
+  }
+
   private ForkChoicePayloadStatus getForkChoicePayloadStatusV2(final ProtoNodeData node) {
-    return spec.atSlot(node.getSlot()).getMilestone().isGreaterThanOrEqualTo(SpecMilestone.GLOAS)
+    return isGloasOrLater(node.getSlot())
         ? node.getPayloadStatus()
         : ForkChoicePayloadStatus.PAYLOAD_STATUS_FULL;
   }

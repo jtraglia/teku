@@ -19,13 +19,17 @@ import static org.assertj.core.api.Assumptions.assumeThat;
 import static tech.pegasys.teku.infrastructure.http.HttpStatusCodes.SC_INTERNAL_SERVER_ERROR;
 import static tech.pegasys.teku.infrastructure.http.HttpStatusCodes.SC_NOT_FOUND;
 import static tech.pegasys.teku.infrastructure.http.HttpStatusCodes.SC_OK;
+import static tech.pegasys.teku.infrastructure.http.RestApiConstants.HEADER_BUILDER_URL;
 import static tech.pegasys.teku.infrastructure.http.RestApiConstants.HEADER_CONSENSUS_BLOCK_VALUE;
+import static tech.pegasys.teku.infrastructure.http.RestApiConstants.HEADER_CONSENSUS_VERSION;
 import static tech.pegasys.teku.infrastructure.http.RestApiConstants.HEADER_EXECUTION_PAYLOAD_BLINDED;
 import static tech.pegasys.teku.infrastructure.http.RestApiConstants.HEADER_EXECUTION_PAYLOAD_VALUE;
+import static tech.pegasys.teku.infrastructure.http.RestApiConstants.HEADER_INCLUDE_PAYLOAD;
 import static tech.pegasys.teku.infrastructure.unsigned.UInt64.ONE;
 import static tech.pegasys.teku.spec.SpecMilestone.BELLATRIX;
 import static tech.pegasys.teku.spec.SpecMilestone.DENEB;
 import static tech.pegasys.teku.spec.SpecMilestone.FULU;
+import static tech.pegasys.teku.spec.SpecMilestone.GLOAS;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.net.MediaType;
@@ -48,6 +52,8 @@ import tech.pegasys.teku.spec.SpecMilestone;
 import tech.pegasys.teku.spec.TestSpecContext;
 import tech.pegasys.teku.spec.datastructures.blocks.BeaconBlock;
 import tech.pegasys.teku.spec.datastructures.blocks.BlockContainer;
+import tech.pegasys.teku.spec.datastructures.blocks.versions.gloas.BlockContentsGloas;
+import tech.pegasys.teku.spec.datastructures.builder.versions.gloas.BuilderConfig;
 import tech.pegasys.teku.spec.datastructures.metadata.BlockContainerAndMetaData;
 import tech.pegasys.teku.spec.schemas.SchemaDefinitionCache;
 import tech.pegasys.teku.validator.remote.typedef.AbstractTypeDefRequestTestBase;
@@ -80,8 +86,6 @@ public class ProduceBlockRequestTest extends AbstractTypeDefRequestTestBase {
   public void shouldGetUnblindedBeaconBlockAsJson() throws JsonProcessingException {
     assumeThat(specMilestone.isLessThan(DENEB)).isTrue();
     final BeaconBlock beaconBlock = dataStructureUtil.randomBeaconBlock(ONE);
-    final ProduceBlockRequest.ProduceBlockResponse blockResponse =
-        new ProduceBlockRequest.ProduceBlockResponse(beaconBlock);
 
     LOG.debug(
         "Expected block in JSON: {}",
@@ -99,14 +103,13 @@ public class ProduceBlockRequestTest extends AbstractTypeDefRequestTestBase {
     final BLSSignature signature = beaconBlock.getBlock().getBody().getRandaoReveal();
 
     final Optional<BlockContainerAndMetaData> maybeBlockContainerAndMetaData =
-        request.submit(signature, Optional.empty(), Optional.empty());
+        request.submitV3(signature, Optional.empty(), Optional.empty());
 
     assertThat(maybeBlockContainerAndMetaData).isPresent();
 
     final BeaconBlock actualBlock =
         maybeBlockContainerAndMetaData.get().blockContainer().getBlock();
-    final BeaconBlock expectedBlock = blockResponse.getData().getBlock();
-    assertThat(actualBlock).isEqualTo(expectedBlock);
+    assertThat(actualBlock).isEqualTo(beaconBlock.getBlock());
 
     assertThat(maybeBlockContainerAndMetaData.get().consensusBlockValue())
         .isEqualTo(UInt256.valueOf(123000000000L));
@@ -118,8 +121,6 @@ public class ProduceBlockRequestTest extends AbstractTypeDefRequestTestBase {
   public void shouldGetUnblindedBeaconBlockAsSsz() {
     assumeThat(specMilestone.isLessThan(DENEB)).isTrue();
     final BeaconBlock beaconBlock = dataStructureUtil.randomBeaconBlock(ONE);
-    final ProduceBlockRequest.ProduceBlockResponse blockResponse =
-        new ProduceBlockRequest.ProduceBlockResponse(beaconBlock);
 
     responseBodyBuffer.write(
         spec.getGenesisSchemaDefinitions()
@@ -131,6 +132,7 @@ public class ProduceBlockRequestTest extends AbstractTypeDefRequestTestBase {
         new MockResponse()
             .setResponseCode(SC_OK)
             .setHeader("Content-Type", MediaType.OCTET_STREAM)
+            .setHeader(HEADER_CONSENSUS_VERSION, specMilestone.lowerCaseName())
             .setBody(responseBodyBuffer);
 
     final UInt256 expectedConsensusBlockValue;
@@ -153,12 +155,11 @@ public class ProduceBlockRequestTest extends AbstractTypeDefRequestTestBase {
     final BLSSignature signature = beaconBlock.getBlock().getBody().getRandaoReveal();
 
     final Optional<BlockContainerAndMetaData> maybeBlockContainerAndMetaData =
-        request.submit(signature, Optional.empty(), Optional.empty());
+        request.submitV3(signature, Optional.empty(), Optional.empty());
 
     assertThat(maybeBlockContainerAndMetaData).isPresent();
 
-    assertThat(maybeBlockContainerAndMetaData.get().blockContainer())
-        .isEqualTo(blockResponse.getData());
+    assertThat(maybeBlockContainerAndMetaData.get().blockContainer()).isEqualTo(beaconBlock);
 
     assertThat(maybeBlockContainerAndMetaData.get().consensusBlockValue())
         .isEqualTo(expectedConsensusBlockValue);
@@ -170,8 +171,6 @@ public class ProduceBlockRequestTest extends AbstractTypeDefRequestTestBase {
   public void shouldGetBlindedBeaconBlockAsJson() {
     assumeThat(specMilestone).isBetween(BELLATRIX, FULU);
     final BeaconBlock blindedBeaconBlock = dataStructureUtil.randomBlindedBeaconBlock(ONE);
-    final ProduceBlockRequest.ProduceBlockResponse blockResponse =
-        new ProduceBlockRequest.ProduceBlockResponse(blindedBeaconBlock);
 
     final String mockResponse = readExpectedJsonResource(specMilestone, true, false);
 
@@ -184,18 +183,16 @@ public class ProduceBlockRequestTest extends AbstractTypeDefRequestTestBase {
     final BLSSignature signature = blindedBeaconBlock.getBlock().getBody().getRandaoReveal();
 
     final Optional<BlockContainerAndMetaData> maybeBlockContainerAndMetaData =
-        request.submit(signature, Optional.empty(), Optional.empty());
+        request.submitV3(signature, Optional.empty(), Optional.empty());
 
     assertThat(maybeBlockContainerAndMetaData.map(BlockContainerAndMetaData::blockContainer))
-        .hasValue(blockResponse.getData());
+        .hasValue(blindedBeaconBlock);
   }
 
   @TestTemplate
   public void shouldGetBlindedBeaconBlockAsSsz() {
     assumeThat(specMilestone).isBetween(BELLATRIX, FULU);
     final BeaconBlock blindedBeaconBlock = dataStructureUtil.randomBlindedBeaconBlock(ONE);
-    final ProduceBlockRequest.ProduceBlockResponse blockResponse =
-        new ProduceBlockRequest.ProduceBlockResponse(blindedBeaconBlock);
 
     responseBodyBuffer.write(
         spec.getGenesisSchemaDefinitions()
@@ -210,25 +207,23 @@ public class ProduceBlockRequestTest extends AbstractTypeDefRequestTestBase {
             .setHeader("Content-Type", MediaType.OCTET_STREAM)
             .setHeader(HEADER_CONSENSUS_BLOCK_VALUE, "123000000000")
             .setHeader(HEADER_EXECUTION_PAYLOAD_VALUE, "12345")
+            .setHeader(HEADER_CONSENSUS_VERSION, specMilestone.lowerCaseName())
             .setBody(responseBodyBuffer));
 
     final BLSSignature signature = blindedBeaconBlock.getBlock().getBody().getRandaoReveal();
 
     final Optional<BlockContainerAndMetaData> maybeBlockContainerAndMetaData =
-        request.submit(signature, Optional.empty(), Optional.empty());
+        request.submitV3(signature, Optional.empty(), Optional.empty());
 
     assertThat(maybeBlockContainerAndMetaData).isPresent();
 
-    assertThat(maybeBlockContainerAndMetaData.get().blockContainer())
-        .isEqualTo(blockResponse.getData());
+    assertThat(maybeBlockContainerAndMetaData.get().blockContainer()).isEqualTo(blindedBeaconBlock);
   }
 
   @TestTemplate
   public void shouldGetUnblindedBlockContentsPostDenebAsJson() {
     assumeThat(specMilestone).isBetween(DENEB, FULU);
     final BlockContainer blockContents = dataStructureUtil.randomBlockContents(ONE);
-    final ProduceBlockRequest.ProduceBlockResponse blockResponse =
-        new ProduceBlockRequest.ProduceBlockResponse(blockContents);
 
     final String mockResponse = readExpectedJsonResource(specMilestone, false, true);
 
@@ -241,20 +236,17 @@ public class ProduceBlockRequestTest extends AbstractTypeDefRequestTestBase {
     final BLSSignature signature = blockContents.getBlock().getBody().getRandaoReveal();
 
     final Optional<BlockContainerAndMetaData> maybeBlockContainerAndMetaData =
-        request.submit(signature, Optional.empty(), Optional.empty());
+        request.submitV3(signature, Optional.empty(), Optional.empty());
 
     assertThat(maybeBlockContainerAndMetaData).isPresent();
 
-    assertThat(maybeBlockContainerAndMetaData.get().blockContainer())
-        .isEqualTo(blockResponse.getData());
+    assertThat(maybeBlockContainerAndMetaData.get().blockContainer()).isEqualTo(blockContents);
   }
 
   @TestTemplate
   public void shouldGetUnblindedBlockContentsPostDenebAsSsz() {
     assumeThat(specMilestone).isBetween(DENEB, FULU);
     final BlockContainer blockContents = dataStructureUtil.randomBlockContents(ONE);
-    final ProduceBlockRequest.ProduceBlockResponse blockResponse =
-        new ProduceBlockRequest.ProduceBlockResponse(blockContents);
 
     responseBodyBuffer.write(
         spec.getGenesisSchemaDefinitions()
@@ -266,17 +258,128 @@ public class ProduceBlockRequestTest extends AbstractTypeDefRequestTestBase {
         new MockResponse()
             .setResponseCode(SC_OK)
             .setHeader("Content-Type", MediaType.OCTET_STREAM)
+            .setHeader(HEADER_CONSENSUS_VERSION, specMilestone.lowerCaseName())
             .setBody(responseBodyBuffer));
 
     final BLSSignature signature = blockContents.getBlock().getBody().getRandaoReveal();
 
     final Optional<BlockContainerAndMetaData> maybeBlockContainerAndMetaData =
-        request.submit(signature, Optional.empty(), Optional.empty());
+        request.submitV3(signature, Optional.empty(), Optional.empty());
 
     assertThat(maybeBlockContainerAndMetaData).isPresent();
 
-    assertThat(maybeBlockContainerAndMetaData.get().blockContainer())
-        .isEqualTo(blockResponse.getData());
+    assertThat(maybeBlockContainerAndMetaData.get().blockContainer()).isEqualTo(blockContents);
+  }
+
+  @TestTemplate
+  public void shouldGetBlockContentsAsSszV4() {
+    assumeThat(specMilestone).isGreaterThanOrEqualTo(GLOAS);
+
+    final BlockContainer blockContents = dataStructureUtil.randomBlockContents(ONE);
+    assertThat(blockContents).isInstanceOf(BlockContentsGloas.class);
+
+    responseBodyBuffer.write(blockContents.sszSerialize().toArrayUnsafe());
+
+    mockWebServer.enqueue(
+        new MockResponse()
+            .setResponseCode(SC_OK)
+            .setHeader("Content-Type", MediaType.OCTET_STREAM)
+            .setHeader(HEADER_INCLUDE_PAYLOAD, "true")
+            .setHeader(HEADER_CONSENSUS_BLOCK_VALUE, "123000000000")
+            .setHeader(HEADER_EXECUTION_PAYLOAD_VALUE, "12345")
+            .setHeader(HEADER_CONSENSUS_VERSION, specMilestone.lowerCaseName())
+            .setBody(responseBodyBuffer));
+
+    final BLSSignature signature = blockContents.getBlock().getBody().getRandaoReveal();
+
+    final Optional<BlockContainerAndMetaData> result =
+        request.submitV4(signature, Optional.empty(), true, BuilderConfig.NO_OP, specMilestone);
+
+    assertThat(result).isPresent();
+    assertThat(result.get().blockContainer()).isEqualTo(blockContents);
+    assertThat(result.get().executionPayloadValue()).isEqualTo(UInt256.valueOf(12345));
+    assertThat(result.get().consensusBlockValue()).isEqualTo(UInt256.valueOf(123000000000L));
+  }
+
+  @TestTemplate
+  public void shouldGetBeaconBlockAsSszV4WhenPayloadNotIncluded() {
+    assumeThat(specMilestone).isGreaterThanOrEqualTo(GLOAS);
+
+    final BeaconBlock beaconBlock = dataStructureUtil.randomBeaconBlock(ONE);
+
+    responseBodyBuffer.write(
+        schemaDefinitions.getBeaconBlockSchema().sszSerialize(beaconBlock).toArrayUnsafe());
+
+    mockWebServer.enqueue(
+        new MockResponse()
+            .setResponseCode(SC_OK)
+            .setHeader("Content-Type", MediaType.OCTET_STREAM)
+            .setHeader(HEADER_INCLUDE_PAYLOAD, "false")
+            .setHeader(HEADER_CONSENSUS_BLOCK_VALUE, "123000000000")
+            .setHeader(HEADER_EXECUTION_PAYLOAD_VALUE, "12345")
+            .setHeader(HEADER_CONSENSUS_VERSION, specMilestone.lowerCaseName())
+            .setBody(responseBodyBuffer));
+
+    final BLSSignature signature = beaconBlock.getBlock().getBody().getRandaoReveal();
+
+    final Optional<BlockContainerAndMetaData> result =
+        request.submitV4(signature, Optional.empty(), false, BuilderConfig.NO_OP, specMilestone);
+
+    assertThat(result).isPresent();
+    assertThat(result.get().blockContainer()).isEqualTo(beaconBlock);
+    assertThat(result.get().executionPayloadValue()).isEqualTo(UInt256.valueOf(12345));
+    assertThat(result.get().consensusBlockValue()).isEqualTo(UInt256.valueOf(123000000000L));
+  }
+
+  @TestTemplate
+  public void shouldGetBlockContentsAsJsonV4() {
+    assumeThat(specMilestone).isGreaterThanOrEqualTo(GLOAS);
+
+    final BlockContainer blockContents = dataStructureUtil.randomBlockContents(ONE);
+
+    final String mockResponse = readExpectedJsonResource(specMilestone, false, true);
+
+    mockWebServer.enqueue(
+        new MockResponse()
+            .setResponseCode(SC_OK)
+            .setBody(mockResponse)
+            .setHeader(HEADER_INCLUDE_PAYLOAD, "true"));
+
+    final BLSSignature signature = blockContents.getBlock().getBody().getRandaoReveal();
+
+    final Optional<BlockContainerAndMetaData> result =
+        request.submitV4(signature, Optional.empty(), true, BuilderConfig.NO_OP, specMilestone);
+
+    assertThat(result).isPresent();
+    assertThat(result.get().blockContainer()).isEqualTo(blockContents);
+    assertThat(result.get().payloadIncluded()).isTrue();
+  }
+
+  @TestTemplate
+  public void shouldGetBeaconBlockAsJsonV4WhenPayloadNotIncluded() {
+    assumeThat(specMilestone).isGreaterThanOrEqualTo(GLOAS);
+
+    final BeaconBlock beaconBlock = dataStructureUtil.randomBeaconBlock(ONE);
+
+    final String mockResponse = readExpectedJsonResource(specMilestone, false, false);
+
+    final String builderUrl = "https://foobar.com";
+    mockWebServer.enqueue(
+        new MockResponse()
+            .setResponseCode(SC_OK)
+            .setBody(mockResponse)
+            .setHeader(HEADER_INCLUDE_PAYLOAD, "false")
+            .setHeader(HEADER_BUILDER_URL, builderUrl));
+
+    final BLSSignature signature = beaconBlock.getBlock().getBody().getRandaoReveal();
+
+    final Optional<BlockContainerAndMetaData> result =
+        request.submitV4(signature, Optional.empty(), false, BuilderConfig.NO_OP, specMilestone);
+
+    assertThat(result).isPresent();
+    assertThat(result.get().blockContainer()).isEqualTo(beaconBlock);
+    assertThat(result.get().payloadIncluded()).isFalse();
+    assertThat(result.get().builderUrl()).hasValue(builderUrl);
   }
 
   @TestTemplate
@@ -290,7 +393,7 @@ public class ProduceBlockRequestTest extends AbstractTypeDefRequestTestBase {
     mockWebServer.enqueue(new MockResponse().setResponseCode(SC_NOT_FOUND));
 
     // no optional parameters
-    assertThat(request.submit(signature, Optional.empty(), Optional.empty())).isEmpty();
+    assertThat(request.submitV3(signature, Optional.empty(), Optional.empty())).isEmpty();
 
     recordedRequest = mockWebServer.takeRequest();
 
@@ -304,7 +407,7 @@ public class ProduceBlockRequestTest extends AbstractTypeDefRequestTestBase {
 
     // with all parameters
     assertThat(
-            request.submit(signature, Optional.of(Bytes32.ZERO), Optional.of(UInt64.valueOf(48))))
+            request.submitV3(signature, Optional.of(Bytes32.ZERO), Optional.of(UInt64.valueOf(48))))
         .isEmpty();
 
     recordedRequest = mockWebServer.takeRequest();
@@ -323,7 +426,7 @@ public class ProduceBlockRequestTest extends AbstractTypeDefRequestTestBase {
     mockWebServer.enqueue(new MockResponse().setResponseCode(SC_INTERNAL_SERVER_ERROR));
     assertThatThrownBy(
             () ->
-                request.submit(
+                request.submitV3(
                     BLSSignature.empty(),
                     Optional.of(Bytes32.ZERO),
                     Optional.of(UInt64.valueOf(48))))

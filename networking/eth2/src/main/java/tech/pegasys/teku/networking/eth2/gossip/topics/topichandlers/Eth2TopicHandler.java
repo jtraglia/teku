@@ -40,6 +40,7 @@ import tech.pegasys.teku.networking.eth2.gossip.topics.OperationProcessor;
 import tech.pegasys.teku.networking.eth2.gossip.topics.OperationValidator;
 import tech.pegasys.teku.networking.p2p.gossip.PreparedGossipMessage;
 import tech.pegasys.teku.networking.p2p.gossip.TopicHandler;
+import tech.pegasys.teku.networking.p2p.libp2p.config.LibP2PParamsFactory;
 import tech.pegasys.teku.service.serviceutils.ServiceCapacityExceededException;
 import tech.pegasys.teku.spec.config.NetworkingSpecConfig;
 import tech.pegasys.teku.statetransition.util.DebugDataDumper;
@@ -115,24 +116,24 @@ public class Eth2TopicHandler<MessageT extends SszData> implements TopicHandler 
 
   @Override
   public SafeFuture<ValidationResult> handleMessage(final PreparedGossipMessage message) {
-    return SafeFuture.of(() -> deserialize(message))
-        .thenCompose(
-            deserialized -> {
+    // SSZ decode on the async runner to avoid blocking the single gossipsub event thread
+    return asyncRunner
+        .runAsync(
+            () -> {
+              final MessageT deserialized = deserialize(message);
               if (!forkValidator.isValid(deserialized)) {
                 return SafeFuture.completedFuture(
                     GossipSubValidationUtil.fromInternalValidationResult(
                         InternalValidationResult.reject("Incorrect spec milestone")));
               }
-              return asyncRunner.runAsync(
-                  () ->
-                      processor
-                          .process(deserialized, message.getArrivalTimestamp())
-                          .thenApply(
-                              internalValidation -> {
-                                processMessage(internalValidation, message);
-                                return GossipSubValidationUtil.fromInternalValidationResult(
-                                    internalValidation);
-                              }));
+              return processor
+                  .process(deserialized, message.getArrivalTimestamp())
+                  .thenApply(
+                      internalValidation -> {
+                        processMessage(internalValidation, message);
+                        return GossipSubValidationUtil.fromInternalValidationResult(
+                            internalValidation);
+                      });
             })
         .exceptionally(error -> handleMessageProcessingError(message, error));
   }
@@ -204,7 +205,9 @@ public class Eth2TopicHandler<MessageT extends SszData> implements TopicHandler 
 
   @Override
   public int getMaxMessageSize() {
-    return networkingConfig.getMaxPayloadSize();
+    // the gate runs on the compressed payload, so allow snappy's worst-case expansion of a
+    // MAX_PAYLOAD_SIZE payload. The uncompressed bound is enforced when decompressing.
+    return LibP2PParamsFactory.maxCompressedLength(networkingConfig.getMaxPayloadSize());
   }
 
   protected MessageT deserialize(final PreparedGossipMessage message) throws DecodingException {

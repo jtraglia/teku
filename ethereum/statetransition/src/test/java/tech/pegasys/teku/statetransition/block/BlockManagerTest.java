@@ -45,6 +45,8 @@ import static tech.pegasys.teku.statetransition.block.BlockImportPerformance.PRO
 import static tech.pegasys.teku.statetransition.block.BlockImportPerformance.TRANSACTION_COMMITTED_EVENT_LABEL;
 import static tech.pegasys.teku.statetransition.block.BlockImportPerformance.TRANSACTION_PREPARED_EVENT_LABEL;
 import static tech.pegasys.teku.statetransition.validation.BlockBroadcastValidator.BroadcastValidationResult.SUCCESS;
+import static tech.pegasys.teku.statetransition.validation.ValidationResultCode.ValidationResultSubCode.IGNORE_ALREADY_SEEN;
+import static tech.pegasys.teku.statetransition.validation.ValidationResultCode.ValidationResultSubCode.IGNORE_EQUIVOCATION_DETECTED;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,24 +57,34 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Stream;
 import org.apache.tuweni.bytes.Bytes32;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Answers;
 import tech.pegasys.teku.bls.BLSSignatureVerifier;
+import tech.pegasys.teku.bls.impl.BlsException;
 import tech.pegasys.teku.infrastructure.async.AsyncRunner;
 import tech.pegasys.teku.infrastructure.async.ExceptionThrowingFutureSupplier;
 import tech.pegasys.teku.infrastructure.async.SafeFuture;
 import tech.pegasys.teku.infrastructure.async.SafeFutureAssert;
+import tech.pegasys.teku.infrastructure.async.Waiter;
 import tech.pegasys.teku.infrastructure.async.eventthread.InlineEventThread;
 import tech.pegasys.teku.infrastructure.collections.LimitedMap;
 import tech.pegasys.teku.infrastructure.logging.EventLogger;
 import tech.pegasys.teku.infrastructure.metrics.SettableLabelledGauge;
 import tech.pegasys.teku.infrastructure.metrics.StubMetricsSystem;
+import tech.pegasys.teku.infrastructure.metrics.TekuMetricCategory;
+import tech.pegasys.teku.infrastructure.ssz.InvalidValueSchemaException;
+import tech.pegasys.teku.infrastructure.ssz.sos.SszDeserializeException;
 import tech.pegasys.teku.infrastructure.time.StubTimeProvider;
 import tech.pegasys.teku.infrastructure.unsigned.UInt64;
 import tech.pegasys.teku.kzg.NoOpKZG;
+import tech.pegasys.teku.service.serviceutils.ServiceCapacityExceededException;
 import tech.pegasys.teku.spec.Spec;
 import tech.pegasys.teku.spec.TestSpecFactory;
 import tech.pegasys.teku.spec.datastructures.blobs.versions.deneb.BlobSidecar;
@@ -87,6 +99,8 @@ import tech.pegasys.teku.spec.executionlayer.PayloadStatus;
 import tech.pegasys.teku.spec.generator.ChainBuilder.BlockOptions;
 import tech.pegasys.teku.spec.logic.common.statetransition.availability.AvailabilityChecker;
 import tech.pegasys.teku.spec.logic.common.statetransition.availability.DataAndValidationResult;
+import tech.pegasys.teku.spec.logic.common.statetransition.exceptions.BlockProcessingException;
+import tech.pegasys.teku.spec.logic.common.statetransition.exceptions.StateTransitionException;
 import tech.pegasys.teku.spec.logic.common.statetransition.results.BlockImportResult;
 import tech.pegasys.teku.spec.logic.common.statetransition.results.BlockImportResult.FailureReason;
 import tech.pegasys.teku.spec.util.DataStructureUtil;
@@ -98,7 +112,6 @@ import tech.pegasys.teku.statetransition.forkchoice.ForkChoice;
 import tech.pegasys.teku.statetransition.forkchoice.ForkChoiceNotifier;
 import tech.pegasys.teku.statetransition.forkchoice.MergeTransitionBlockValidator;
 import tech.pegasys.teku.statetransition.forkchoice.NoopForkChoiceNotifier;
-import tech.pegasys.teku.statetransition.util.FutureItems;
 import tech.pegasys.teku.statetransition.util.PendingBlockPool;
 import tech.pegasys.teku.statetransition.util.PendingPool;
 import tech.pegasys.teku.statetransition.util.PoolFactory;
@@ -130,8 +143,14 @@ public class BlockManagerTest {
       mock(ExecutionPayloadEventsListener.class);
   private PendingPool<SignedBeaconBlock> pendingBlocks;
   private PendingBlockPool pendingBlockPool;
-  private final FutureItems<SignedBeaconBlock> futureBlocks =
-      FutureItems.create(SignedBeaconBlock::getSlot, mock(SettableLabelledGauge.class), "blocks");
+  private final StubMetricsSystem futureBlocksMetricsSystem = new StubMetricsSystem();
+  private final FutureBlockPool futureBlocks =
+      new FutureBlockPool(
+          4,
+          Long.MAX_VALUE,
+          block -> 0L,
+          mock(SettableLabelledGauge.class),
+          FutureBlockPool.createResultCounter(futureBlocksMetricsSystem));
   private final Map<Bytes32, BlockImportResult> invalidBlockRoots =
       LimitedMap.createSynchronizedLRU(500);
 
@@ -479,26 +498,46 @@ public class BlockManagerTest {
     assertThat(pendingBlocks.contains(nextNextBlock)).isTrue();
   }
 
-  @Test
-  public void onGossipedBlock_onKnownInternalErrorsShouldNotMarkAsInvalid() {
-    final RecentChainData localRecentChainData = mock(RecentChainData.class);
-    blockManager = setupBlockManagerWithMockRecentChainData(localRecentChainData, false);
+  static Stream<Arguments> internalErrorsNotProvingBlockIsInvalid() {
+    return Stream.of(
+        Arguments.of(new RejectedExecutionException("full")),
+        Arguments.of(new RuntimeException("wrapped", new RejectedExecutionException("full"))),
+        Arguments.of(new OutOfMemoryError("Java heap space")),
+        Arguments.of(new ServiceCapacityExceededException("queue is full")),
+        Arguments.of(new IllegalStateException("unexpected")),
+        Arguments.of(new RuntimeException("unknown")));
+  }
 
-    final UInt64 nextSlot = GENESIS_SLOT.plus(UInt64.ONE);
-    final SignedBeaconBlock nextBlock =
-        localChain.chainBuilder().generateBlockAtSlot(nextSlot).getBlock();
-    incrementSlot();
+  static Stream<Arguments> internalErrorsProvingBlockIsInvalid() {
+    return Stream.of(
+        Arguments.of(new StateTransitionException("state transition failed")),
+        Arguments.of(new BlockProcessingException("block processing failed")),
+        Arguments.of(new SszDeserializeException("malformed ssz")),
+        Arguments.of(new InvalidValueSchemaException("value doesn't match the schema")),
+        Arguments.of(new BlsException("invalid public key")),
+        Arguments.of(new ArithmeticException("uint64 overflow")),
+        Arguments.of(new RuntimeException("wrapped", new BlockProcessingException("invalid"))));
+  }
 
-    doAnswer(invocation -> SafeFuture.failedFuture(new RejectedExecutionException("full")))
-        .when(asyncRunner)
-        .runAsync((ExceptionThrowingFutureSupplier<?>) any());
+  @ParameterizedTest(name = "{0}")
+  @MethodSource("internalErrorsNotProvingBlockIsInvalid")
+  public void onGossipedBlock_onInternalErrorShouldNotMarkAsInvalid(final Throwable internalError) {
+    final SignedBeaconBlock nextBlock = setupBlockFailingImportWith(internalError);
 
     assertThatBlockImport(nextBlock).isCompletedWithValueMatching(result -> !result.isSuccessful());
     assertThat(invalidBlockRoots).isEmpty();
   }
 
-  @Test
-  public void onGossipedBlock_onInternalErrorsShouldMarkAsInvalid() {
+  @ParameterizedTest(name = "{0}")
+  @MethodSource("internalErrorsProvingBlockIsInvalid")
+  public void onGossipedBlock_onInternalErrorShouldMarkAsInvalid(final Throwable internalError) {
+    final SignedBeaconBlock nextBlock = setupBlockFailingImportWith(internalError);
+
+    assertThatBlockImport(nextBlock).isCompletedWithValueMatching(result -> !result.isSuccessful());
+    assertThat(invalidBlockRoots).containsOnlyKeys(nextBlock.getRoot());
+  }
+
+  private SignedBeaconBlock setupBlockFailingImportWith(final Throwable internalError) {
     final RecentChainData localRecentChainData = mock(RecentChainData.class);
     blockManager = setupBlockManagerWithMockRecentChainData(localRecentChainData, false);
 
@@ -507,12 +546,11 @@ public class BlockManagerTest {
         localChain.chainBuilder().generateBlockAtSlot(nextSlot).getBlock();
     incrementSlot();
 
-    doAnswer(invocation -> SafeFuture.failedFuture(new RuntimeException("unknown")))
+    doAnswer(invocation -> SafeFuture.failedFuture(internalError))
         .when(asyncRunner)
         .runAsync((ExceptionThrowingFutureSupplier<?>) any());
 
-    assertThatBlockImport(nextBlock).isCompletedWithValueMatching(result -> !result.isSuccessful());
-    assertThat(invalidBlockRoots).containsOnlyKeys(nextBlock.getRoot());
+    return nextBlock;
   }
 
   @Test
@@ -545,6 +583,89 @@ public class BlockManagerTest {
     // blob pool should be notified about new block only
     verify(blockEventsListenerRouter).onNewBlock(nextBlock, Optional.empty());
     verifyNoInteractions(blobSidecarManager);
+  }
+
+  @Test
+  public void onProposedBlock_futureBlock_shouldRerunGossipValidationAndImportOnRetry() {
+    incrementSlot();
+    final UInt64 nextSlot = currentSlot.plus(UInt64.ONE);
+    final SignedBeaconBlock futureBlock =
+        localChain.chainBuilder().generateBlockAtSlot(nextSlot).getBlock();
+
+    when(blockValidator.validateGossip(eq(futureBlock)))
+        .thenReturn(SafeFuture.completedFuture(InternalValidationResult.SAVE_FOR_FUTURE))
+        .thenReturn(
+            SafeFuture.completedFuture(
+                InternalValidationResult.ignore(
+                    IGNORE_ALREADY_SEEN, "retry validation found already seen")));
+
+    assertThatSafeFuture(blockManager.validateAndImportBlock(futureBlock, Optional.empty()))
+        .isCompletedWithValue(InternalValidationResult.SAVE_FOR_FUTURE);
+    Waiter.waitFor(() -> assertThat(futureBlocks.size()).isEqualTo(1));
+    assertThat(futureBlocks.contains(futureBlock)).isTrue();
+    assertThat(invalidBlockRoots).isEmpty();
+
+    incrementSlot();
+
+    Waiter.waitFor(() -> verify(blockValidator, times(2)).validateGossip(eq(futureBlock)));
+    Waiter.waitFor(
+        () ->
+            verify(receivedBlockEventsChannelPublisher, times(1))
+                .onBlockImported(futureBlock, false));
+    Waiter.waitFor(() -> assertThat(invalidBlockRoots).isEmpty());
+    Waiter.waitFor(() -> assertThat(futureBlocks.size()).isEqualTo(0));
+    verify(blockEventsListenerRouter).onBlockImported(futureBlock);
+  }
+
+  @Test
+  public void onProposedBlock_tooFarInFuture_shouldNotQueueOrRetryGossipValidation() {
+    incrementSlot();
+    final UInt64 tooFarSlot = currentSlot.plus(FutureBlockPool.FUTURE_SLOT_TOLERANCE).plus(1);
+    final SignedBeaconBlock futureBlock =
+        localChain.chainBuilder().generateBlockAtSlot(tooFarSlot).getBlock();
+
+    when(blockValidator.validateGossip(eq(futureBlock)))
+        .thenReturn(SafeFuture.completedFuture(InternalValidationResult.SAVE_FOR_FUTURE));
+
+    assertThatSafeFuture(blockManager.validateAndImportBlock(futureBlock, Optional.empty()))
+        .isCompletedWithValue(InternalValidationResult.SAVE_FOR_FUTURE);
+    Waiter.waitFor(() -> assertThat(futureBlocksResultCount("dropped")).isEqualTo(1));
+    assertThat(futureBlocks.size()).isZero();
+    assertThat(futureBlocks.contains(futureBlock)).isFalse();
+
+    incrementSlotTo(tooFarSlot);
+
+    // the dropped block is neither dequeued nor re-validated once its slot arrives
+    assertThat(futureBlocksResultCount("dequeued")).isZero();
+    verify(blockValidator, times(1)).validateGossip(eq(futureBlock));
+  }
+
+  @Test
+  public void onProposedBlock_futureBlock_shouldCleanupEquivocationOnRetry() {
+    incrementSlot();
+    final UInt64 nextSlot = currentSlot.plus(UInt64.ONE);
+    final SignedBeaconBlock futureBlock =
+        localChain.chainBuilder().generateBlockAtSlot(nextSlot).getBlock();
+
+    when(blockValidator.validateGossip(eq(futureBlock)))
+        .thenReturn(SafeFuture.completedFuture(InternalValidationResult.SAVE_FOR_FUTURE))
+        .thenReturn(
+            SafeFuture.completedFuture(
+                InternalValidationResult.ignore(
+                    IGNORE_EQUIVOCATION_DETECTED, "retry validation found equivocation")));
+
+    assertThatSafeFuture(blockManager.validateAndImportBlock(futureBlock, Optional.empty()))
+        .isCompletedWithValue(InternalValidationResult.SAVE_FOR_FUTURE);
+    Waiter.waitFor(() -> assertThat(futureBlocks.size()).isEqualTo(1));
+    assertThat(futureBlocks.contains(futureBlock)).isTrue();
+    assertThat(invalidBlockRoots).isEmpty();
+
+    incrementSlot();
+
+    Waiter.waitFor(() -> verify(blockValidator, times(2)).validateGossip(eq(futureBlock)));
+    Waiter.waitFor(() -> assertThat(invalidBlockRoots).isEmpty());
+    Waiter.waitFor(() -> assertThat(futureBlocks.size()).isEqualTo(0));
+    verify(blockEventsListenerRouter).removeAllForBlock(futureBlock.getSlotAndBlockRoot());
   }
 
   @Test
@@ -1189,6 +1310,11 @@ public class BlockManagerTest {
 
   private void assertImportBlockSuccessfully(final SignedBeaconBlock block) {
     assertThatBlockImport(block).isCompletedWithValueMatching(BlockImportResult::isSuccessful);
+  }
+
+  private long futureBlocksResultCount(final String result) {
+    return futureBlocksMetricsSystem.getLabelledCounterValue(
+        TekuMetricCategory.BEACON, "future_blocks_total", result);
   }
 
   private void incrementSlotTo(final UInt64 toSlotInclusive) {

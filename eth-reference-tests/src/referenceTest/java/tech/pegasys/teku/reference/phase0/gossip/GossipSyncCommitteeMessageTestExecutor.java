@@ -13,7 +13,6 @@
 
 package tech.pegasys.teku.reference.phase0.gossip;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static tech.pegasys.teku.reference.TestDataUtils.createAnchorFromState;
 import static tech.pegasys.teku.reference.TestDataUtils.loadSsz;
 import static tech.pegasys.teku.reference.TestDataUtils.loadStateFromSsz;
@@ -38,7 +37,6 @@ import tech.pegasys.teku.statetransition.synccommittee.SyncCommitteeMessageValid
 import tech.pegasys.teku.statetransition.synccommittee.SyncCommitteeStateUtils;
 import tech.pegasys.teku.statetransition.validation.GossipValidationHelper;
 import tech.pegasys.teku.statetransition.validation.InternalValidationResult;
-import tech.pegasys.teku.statetransition.validation.ValidationResultCode;
 import tech.pegasys.teku.storage.client.RecentChainData;
 import tech.pegasys.teku.storage.server.StateStorageMode;
 import tech.pegasys.teku.storage.storageSystem.InMemoryStorageSystemBuilder;
@@ -78,8 +76,7 @@ public class GossipSyncCommitteeMessageTestExecutor implements TestExecutor {
             new GossipValidationHelper(spec, recentChainData, metricsSystem));
 
     for (final GossipSyncCommitteeMessageMetaData.Message message : metaData.getMessages()) {
-      final UInt64 messageTimeMs =
-          UInt64.valueOf(metaData.getCurrentTimeMs()).plus(UInt64.valueOf(message.getOffsetMs()));
+      final UInt64 messageTimeMs = UInt64.valueOf(message.getCurrentTimeMs());
       setStoreTimeMillis(recentChainData, messageTimeMs);
 
       final SyncCommitteeMessage syncCommitteeMessage =
@@ -93,41 +90,10 @@ public class GossipSyncCommitteeMessageTestExecutor implements TestExecutor {
           ValidatableSyncCommitteeMessage.fromNetwork(syncCommitteeMessage, message.getSubnetId());
       final InternalValidationResult result = validator.validate(validatable).join();
 
-      switch (message.getExpected()) {
-        case "valid" ->
-            assertThat(result.code())
-                .describedAs(
-                    "Expected sync committee message %s on subnet %s to be valid but got %s: %s",
-                    message.getMessage(),
-                    message.getSubnetId(),
-                    result.code(),
-                    result.getDescription().orElse(""))
-                .isEqualTo(ValidationResultCode.ACCEPT);
-        case "reject" ->
-            assertThat(result.code())
-                .describedAs(
-                    "Expected sync committee message %s on subnet %s to be rejected but got %s: %s",
-                    message.getMessage(),
-                    message.getSubnetId(),
-                    result.code(),
-                    result.getDescription().orElse(""))
-                .isEqualTo(ValidationResultCode.REJECT);
-        case "ignore" ->
-            assertThat(result.code())
-                .describedAs(
-                    "Expected sync committee message %s on subnet %s to be ignored but got %s: %s",
-                    message.getMessage(),
-                    message.getSubnetId(),
-                    result.code(),
-                    result.getDescription().orElse(""))
-                .isIn(ValidationResultCode.IGNORE, ValidationResultCode.SAVE_FOR_FUTURE);
-        default ->
-            throw new AssertionError(
-                "Unexpected expected value: "
-                    + message.getExpected()
-                    + " for message: "
-                    + message.getMessage());
-      }
+      GossipTestContext.assertValidationResult(
+          "sync committee message " + message.getMessage() + " on subnet " + message.getSubnetId(),
+          message.getExpected(),
+          result);
     }
   }
 
@@ -148,18 +114,11 @@ public class GossipSyncCommitteeMessageTestExecutor implements TestExecutor {
     @JsonProperty(value = "messages", required = true)
     private List<Message> messages;
 
-    @JsonProperty(value = "current_time_ms", required = true)
-    private long currentTimeMs;
-
     @JsonProperty(value = "bls_setting", required = false, defaultValue = "0")
     private int blsSetting;
 
     public List<Message> getMessages() {
       return messages;
-    }
-
-    public long getCurrentTimeMs() {
-      return currentTimeMs;
     }
 
     public BlsSetting getBlsSetting() {
@@ -168,8 +127,8 @@ public class GossipSyncCommitteeMessageTestExecutor implements TestExecutor {
 
     private static class Message {
 
-      @JsonProperty(value = "offset_ms", required = true)
-      private long offsetMs;
+      @JsonProperty(value = "current_time_ms")
+      private long currentTimeMs;
 
       @JsonProperty(value = "subnet_id", required = true)
       private int subnetId;
@@ -183,8 +142,8 @@ public class GossipSyncCommitteeMessageTestExecutor implements TestExecutor {
       @JsonProperty(value = "reason", required = false)
       private String reason;
 
-      public long getOffsetMs() {
-        return offsetMs;
+      public long getCurrentTimeMs() {
+        return currentTimeMs;
       }
 
       public int getSubnetId() {
