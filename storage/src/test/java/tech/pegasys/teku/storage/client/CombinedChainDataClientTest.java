@@ -1,5 +1,5 @@
 /*
- * Copyright Consensys Software Inc., 2026
+ * Copyright (c) 2026 Consensys Incorporated. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -15,8 +15,10 @@ package tech.pegasys.teku.storage.client;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -28,24 +30,34 @@ import java.util.concurrent.ExecutionException;
 import org.apache.tuweni.bytes.Bytes32;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tech.pegasys.teku.dataproviders.lookup.BlockProvider;
+import tech.pegasys.teku.dataproviders.lookup.EarliestBlobSidecarSlotProvider;
+import tech.pegasys.teku.dataproviders.lookup.StateAndBlockSummaryProvider;
 import tech.pegasys.teku.infrastructure.async.SafeFuture;
 import tech.pegasys.teku.infrastructure.async.SafeFutureAssert;
+import tech.pegasys.teku.infrastructure.async.SyncAsyncRunner;
+import tech.pegasys.teku.infrastructure.metrics.StubMetricsSystem;
 import tech.pegasys.teku.infrastructure.unsigned.UInt64;
+import tech.pegasys.teku.kzg.KZGProof;
 import tech.pegasys.teku.spec.Spec;
 import tech.pegasys.teku.spec.TestSpecFactory;
 import tech.pegasys.teku.spec.datastructures.blobs.DataColumnSidecar;
 import tech.pegasys.teku.spec.datastructures.blobs.versions.deneb.BlobSidecar;
 import tech.pegasys.teku.spec.datastructures.blocks.SignedBeaconBlock;
+import tech.pegasys.teku.spec.datastructures.blocks.SignedBlockAndState;
 import tech.pegasys.teku.spec.datastructures.blocks.SlotAndBlockRoot;
 import tech.pegasys.teku.spec.datastructures.metadata.BlockAndMetaData;
+import tech.pegasys.teku.spec.datastructures.state.AnchorPoint;
 import tech.pegasys.teku.spec.datastructures.state.Checkpoint;
 import tech.pegasys.teku.spec.datastructures.state.CommitteeAssignment;
 import tech.pegasys.teku.spec.datastructures.state.beaconstate.BeaconState;
 import tech.pegasys.teku.spec.datastructures.util.DataColumnSlotAndIdentifier;
 import tech.pegasys.teku.spec.datastructures.util.SlotAndBlockRootAndBlobIndex;
+import tech.pegasys.teku.spec.generator.ChainBuilder;
 import tech.pegasys.teku.spec.util.DataStructureUtil;
 import tech.pegasys.teku.storage.api.StorageQueryChannel;
 import tech.pegasys.teku.storage.protoarray.ForkChoiceStrategy;
+import tech.pegasys.teku.storage.store.StoreBuilder;
 import tech.pegasys.teku.storage.store.UpdatableStore;
 
 /** Note: Most tests should be added to the integration-test directory */
@@ -151,6 +163,38 @@ class CombinedChainDataClientTest {
   }
 
   @Test
+  void getStateAtSlotExact_shouldFallBackWhenAnchorStateIsLaterThanRequestedSlot()
+      throws Exception {
+    final ChainBuilder chain = ChainBuilder.create(spec);
+    chain.generateGenesis();
+    final UInt64 checkpointSlot = spec.computeStartSlotAtEpoch(UInt64.ONE);
+    final SignedBlockAndState block = chain.generateBlockAtSlot(checkpointSlot.minus(1));
+    final AnchorPoint anchor =
+        AnchorPoint.fromInitialState(spec, spec.processSlots(block.getState(), checkpointSlot));
+    final UpdatableStore anchorStore =
+        StoreBuilder.create()
+            .onDiskStoreData(StoreBuilder.forkChoiceStoreBuilder(spec, anchor, UInt64.ZERO))
+            .asyncRunner(SyncAsyncRunner.SYNC_RUNNER)
+            .metricsSystem(new StubMetricsSystem())
+            .specProvider(spec)
+            .blockProvider(BlockProvider.NOOP)
+            .stateProvider(StateAndBlockSummaryProvider.NOOP)
+            .earliestBlobSidecarSlotProvider(EarliestBlobSidecarSlotProvider.NOOP)
+            .build();
+    when(recentChainData.getStore()).thenReturn(anchorStore);
+    when(recentChainData.getBlockRootInEffectBySlot(block.getSlot()))
+        .thenReturn(Optional.of(anchor.getRoot()));
+    final CombinedChainDataClient clientWithHistoricalState = spy(client);
+    doReturn(SafeFuture.completedFuture(Optional.of(block.toUnsigned())))
+        .when(clientWithHistoricalState)
+        .getBlockAndStateInEffectAtSlot(block.getSlot());
+
+    assertThat(clientWithHistoricalState.getStateAtSlotExact(block.getSlot()))
+        .isCompletedWithValue(Optional.of(block.getState()));
+    verify(clientWithHistoricalState).getBlockAndStateInEffectAtSlot(block.getSlot());
+  }
+
+  @Test
   void getStateForBlockProduction_retrievesStateUsingSelectedParentRoot() {
     final UInt64 proposalSlot = UInt64.valueOf(2);
     final Bytes32 parentRoot = dataStructureUtil.randomBytes32();
@@ -250,6 +294,29 @@ class CombinedChainDataClientTest {
 
     assertThat(result).containsExactly(firstSidecar, secondSidecar);
     verify(historicalChainData, never()).getSidecar(otherBlockIdentifier);
+  }
+
+  @Test
+  void getDataColumnSidecarProofs_returnsStoredProofs() {
+    final UInt64 slot = UInt64.valueOf(42);
+    final List<List<KZGProof>> proofs =
+        List.of(
+            List.of(dataStructureUtil.randomKZGProof(), dataStructureUtil.randomKZGProof()),
+            List.of(dataStructureUtil.randomKZGProof()));
+    when(historicalChainData.getDataColumnSidecarsProofs(slot))
+        .thenReturn(SafeFuture.completedFuture(Optional.of(proofs)));
+
+    assertThat(SafeFutureAssert.safeJoin(client.getDataColumnSidecarProofs(slot)))
+        .isEqualTo(proofs);
+  }
+
+  @Test
+  void getDataColumnSidecarProofs_returnsEmptyListWhenAbsent() {
+    final UInt64 slot = UInt64.valueOf(42);
+    when(historicalChainData.getDataColumnSidecarsProofs(slot))
+        .thenReturn(SafeFuture.completedFuture(Optional.empty()));
+
+    assertThat(SafeFutureAssert.safeJoin(client.getDataColumnSidecarProofs(slot))).isEmpty();
   }
 
   @Test

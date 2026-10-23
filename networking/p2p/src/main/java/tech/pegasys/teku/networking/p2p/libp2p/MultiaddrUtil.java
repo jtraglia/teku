@@ -1,5 +1,5 @@
 /*
- * Copyright Consensys Software Inc., 2026
+ * Copyright (c) 2026 Consensys Incorporated. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -28,16 +28,23 @@ import tech.pegasys.teku.networking.p2p.peer.NodeId;
 
 public class MultiaddrUtil {
 
+  /**
+   * Resolves the address this node would dial a discovered peer on, given the transports enabled
+   * locally: QUIC when both sides have it, otherwise TCP when both sides have it, otherwise
+   * nothing. Dialing an address for a transport this node has not started fails immediately, so
+   * such addresses are never produced.
+   */
   public static Optional<Multiaddr> fromDiscoveryPeer(
-      final DiscoveryPeer peer, final boolean localNodeQuicEnabled) {
-    // Only dial a peer over QUIC if this node has the QUIC transport enabled, otherwise we have no
-    // QuicTransport to perform the dial and would fail even though the peer also advertises TCP.
+      final DiscoveryPeer peer,
+      final boolean localNodeTcpEnabled,
+      final boolean localNodeQuicEnabled) {
     final Optional<Multiaddr> quicMultiaddr =
         localNodeQuicEnabled
             ? peer.getQuicAddress()
                 .map(quicAddr -> fromInetSocketAddressAsQuic(quicAddr, getNodeId(peer)))
             : Optional.empty();
-    return quicMultiaddr.or(() -> fromDiscoveryPeerAsTcp(peer));
+    return quicMultiaddr.or(
+        () -> localNodeTcpEnabled ? fromDiscoveryPeerAsTcp(peer) : Optional.empty());
   }
 
   public static Optional<Multiaddr> fromDiscoveryPeerAsTcp(final DiscoveryPeer peer) {

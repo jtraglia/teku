@@ -1,5 +1,5 @@
 /*
- * Copyright Consensys Software Inc., 2026
+ * Copyright (c) 2026 Consensys Incorporated. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -389,9 +389,9 @@ class FastConfirmationCalculator {
   }
 
   /**
-   * Implements {@code get_block_support_between_slots}: the total effective balance (per {@code
+   * Implements {@code get_node_support_between_slots}: the total effective balance (per {@code
    * balanceSource}) of unslashed, active, non-equivocating validators assigned to the inclusive
-   * slot range whose latest vote is exactly {@code blockRoot}.
+   * slot range whose latest vote supports exactly {@code node} (per {@code get_supported_node}).
    */
   UInt64 getNodeSupportBetweenSlots(
       final BeaconState balanceSource,

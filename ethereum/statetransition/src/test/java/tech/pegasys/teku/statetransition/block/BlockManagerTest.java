@@ -1,5 +1,5 @@
 /*
- * Copyright Consensys Software Inc., 2026
+ * Copyright (c) 2026 Consensys Incorporated. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -432,7 +432,6 @@ public class BlockManagerTest {
     setupWithSpec(
         TestSpecFactory.createMinimalGloas(
             builder -> builder.blsSignatureVerifier(BLSSignatureVerifier.NOOP)));
-    forkChoice.applyGenesisExecutionPayloadForGloas().join();
 
     final List<ParentExecutionPayloadDependency> requiredParentExecutionPayloads =
         new ArrayList<>();
@@ -480,6 +479,25 @@ public class BlockManagerTest {
     assertThat(pendingBlocks.size()).isEqualTo(0);
     assertThat(futureBlocks.size()).isEqualTo(1);
     assertThat(futureBlocks.contains(nextBlock)).isTrue();
+  }
+
+  @Test
+  public void onGossipedBlock_rejectedFutureBlockShouldNotBeQueued() {
+    final UInt64 nextSlot = GENESIS_SLOT.plus(UInt64.ONE);
+    final SignedBeaconBlock nextBlock =
+        localChain.chainBuilder().generateBlockAtSlot(nextSlot).getBlock();
+    when(blockValidator.validateGossip(eq(nextBlock)))
+        .thenReturn(
+            SafeFuture.completedFuture(
+                InternalValidationResult.reject("Block signature is invalid")));
+
+    assertThat(blockManager.validateAndImportBlock(nextBlock, Optional.empty()))
+        .isCompletedWithValueMatching(InternalValidationResult::isReject);
+
+    assertThat(futureBlocks.size()).isZero();
+    assertThat(pendingBlocks.size()).isZero();
+    verify(blockEventsListenerRouter).removeAllForBlock(nextBlock.getSlotAndBlockRoot());
+    verify(blockEventsListenerRouter, never()).onNewBlock(eq(nextBlock), any());
   }
 
   @Test

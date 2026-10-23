@@ -267,6 +267,34 @@
             increase_balance(state, validator_index, deposit.amount)
     </spec>
 
+- name: apply_pending_deposit#heze
+  sources:
+    - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/logic/versions/heze/statetransition/epoch/EpochProcessorHeze.java
+      search: public void applyPendingDeposits(
+  spec: |
+    <spec fn="apply_pending_deposit" fork="heze" hash="bdef283e">
+    def apply_pending_deposit(state: BeaconState, deposit: PendingDeposit) -> None:
+        """
+        Applies ``deposit`` to the ``state`` without creating validators with BLS withdrawal credentials.
+        """
+        validator_pubkeys = [validator.pubkey for validator in state.validators]
+        if deposit.pubkey not in validator_pubkeys:
+            # [New in Heze:EIP8365]
+            # Do not create validators with BLS withdrawal credentials
+            if deposit.withdrawal_credentials[:1] == BLS_WITHDRAWAL_PREFIX:
+                return
+            # Verify the deposit signature (proof of possession) which is not checked by the deposit contract
+            if is_valid_deposit_signature(
+                deposit.pubkey, deposit.withdrawal_credentials, deposit.amount, deposit.signature
+            ):
+                add_validator_to_registry(
+                    state, deposit.pubkey, deposit.withdrawal_credentials, deposit.amount
+                )
+        else:
+            validator_index = ValidatorIndex(validator_pubkeys.index(deposit.pubkey))
+            increase_balance(state, validator_index, deposit.amount)
+    </spec>
+
 - name: apply_withdrawals#capella
   sources:
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/logic/versions/capella/withdrawals/WithdrawalsHelpersCapella.java
@@ -3315,7 +3343,7 @@
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/logic/common/util/ForkChoiceUtil.java
       search: public Optional<Bytes32> getAncestor(
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/logic/common/util/ForkChoiceUtil.java
-      search: public boolean blockDescendsFromLatestFinalizedBlock(
+      search: protected boolean blockDescendsFromLatestFinalizedBlock(
   spec: |
     <spec fn="get_checkpoint_block" fork="phase0" hash="6b5f6dd9">
     def get_checkpoint_block(store: Store, root: Root, epoch: Epoch) -> Root:
@@ -3332,6 +3360,8 @@
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/logic/common/util/ForkChoiceUtil.java
       search: public Optional<Bytes32> getAncestor(
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/logic/common/util/ForkChoiceUtil.java
+      search: protected boolean blockDescendsFromLatestFinalizedBlock(
+    - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/logic/versions/gloas/util/ForkChoiceUtilGloas.java
       search: public boolean blockDescendsFromLatestFinalizedBlock(
   spec: |
     <spec fn="get_checkpoint_block" fork="gloas" hash="1acad623">
@@ -5193,7 +5223,9 @@
 - name: get_parent_payload_status#gloas
   sources:
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/logic/versions/gloas/util/ForkChoiceUtilGloas.java
-      search: SafeFuture<ForkChoicePayloadStatus> getParentPayloadStatus(
+      search: private ForkChoiceNode getParentNode(
+    - file: storage/src/main/java/tech/pegasys/teku/storage/protoarray/ForkChoiceModelGloas.java
+      search: Optional<ProtoNode> resolveParentNode(
   spec: |
     <spec fn="get_parent_payload_status" fork="gloas" hash="4ab82d16">
     def get_parent_payload_status(store: Store, block: BeaconBlock) -> PayloadStatus:
@@ -7720,7 +7752,7 @@
 - name: is_parent_node_full#gloas
   sources:
     - file: ethereum/spec/src/main/java/tech/pegasys/teku/spec/logic/versions/gloas/util/ForkChoiceUtilGloas.java
-      search: SafeFuture<Boolean> isParentNodeFull(final ReadOnlyStore store, final BeaconBlock block) {
+      search: getParentNode(block, blockSlotState).payloadStatus() == PAYLOAD_STATUS_FULL
   spec: |
     <spec fn="is_parent_node_full" fork="gloas" hash="4fc2d12c">
     def is_parent_node_full(store: Store, block: BeaconBlock) -> bool:

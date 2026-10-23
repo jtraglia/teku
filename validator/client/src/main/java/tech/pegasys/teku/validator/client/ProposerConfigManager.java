@@ -1,5 +1,5 @@
 /*
- * Copyright Consensys Software Inc., 2026
+ * Copyright (c) 2026 Consensys Incorporated. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -15,6 +15,9 @@ package tech.pegasys.teku.validator.client;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,16 +25,21 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.tuweni.bytes.Bytes;
 import tech.pegasys.teku.bls.BLSPublicKey;
 import tech.pegasys.teku.ethereum.execution.types.Eth1Address;
 import tech.pegasys.teku.infrastructure.async.SafeFuture;
+import tech.pegasys.teku.infrastructure.collections.cache.LRUCache;
 import tech.pegasys.teku.infrastructure.unsigned.UInt64;
 import tech.pegasys.teku.spec.Spec;
+import tech.pegasys.teku.spec.datastructures.builder.versions.gloas.BuilderConfigSchema;
 import tech.pegasys.teku.validator.api.ValidatorConfig;
 import tech.pegasys.teku.validator.api.ValidatorTimingChannel;
 import tech.pegasys.teku.validator.client.ProposerConfig.BuilderConfig;
+import tech.pegasys.teku.validator.client.ProposerConfig.BuilderEntry;
 import tech.pegasys.teku.validator.client.ProposerConfig.Config;
 import tech.pegasys.teku.validator.client.ProposerConfig.RegistrationOverrides;
+import tech.pegasys.teku.validator.client.ResolvedBuilderConfig.ResolvedBuilderEntry;
 import tech.pegasys.teku.validator.client.loader.OwnedValidators;
 import tech.pegasys.teku.validator.client.proposerconfig.ProposerConfigProvider;
 
@@ -54,6 +62,10 @@ public class ProposerConfigManager
       new AtomicReference<>(Optional.empty());
   // keeps the "configured gas limit is above the recommended one" warning to one per validator
   private final Map<BLSPublicKey, UInt64> warnedGasLimitByPublicKey = new ConcurrentHashMap<>();
+
+  // caching the default auth data by host to avoid recomputing it
+  private final LRUCache<String, Bytes> cachedDefaultAuthDataByHost =
+      LRUCache.create((int) BuilderConfigSchema.MAX_BUILDER_ENTRIES);
 
   private Optional<OwnedValidators> ownedValidators = Optional.empty();
 
@@ -148,6 +160,20 @@ public class ProposerConfigManager
     runtimeProposerConfig.updateGasLimit(publicKey, gasLimit);
   }
 
+  public void setBuilderConfig(
+      final BLSPublicKey publicKey,
+      final tech.pegasys.teku.validator.client.restapi.apis.schema.BuilderConfig builderConfig)
+      throws SetBuilderConfigException {
+    if (!isOwnedValidator(publicKey)) {
+      throw new SetBuilderConfigException(
+          "Validator public key not found when attempting to set builder config.");
+    }
+    if (isBuilderConfigInProposerConfig(publicKey)) {
+      throw new SetBuilderConfigException("Cannot update builder config via api.");
+    }
+    runtimeProposerConfig.updateBuilderConfig(publicKey, builderConfig);
+  }
+
   public boolean deleteFeeRecipient(final BLSPublicKey publicKey) {
     Optional<Eth1Address> maybeEth1Address = getFeeRecipientFromProposerConfig(publicKey);
     if (maybeEth1Address.isPresent()) {
@@ -163,6 +189,14 @@ public class ProposerConfigManager
       return false;
     }
     runtimeProposerConfig.deleteGasLimit(publicKey);
+    return true;
+  }
+
+  public boolean deleteBuilderConfig(final BLSPublicKey publicKey) {
+    if (isBuilderConfigInProposerConfig(publicKey)) {
+      return false;
+    }
+    runtimeProposerConfig.deleteBuilderConfig(publicKey);
     return true;
   }
 
@@ -252,6 +286,76 @@ public class ProposerConfigManager
   }
 
   @Override
+  public ResolvedBuilderConfig resolveBuilderConfig(final BLSPublicKey publicKey) {
+    final UInt64 minBid =
+        getAttributeWithFallback(
+                config -> config.getBuilder().flatMap(BuilderConfig::getMinBid), publicKey)
+            .orElse(config.getBuilderMinBid());
+    final UInt64 builderBoostFactor =
+        getAttributeWithFallback(
+                config -> config.getBuilder().flatMap(BuilderConfig::getBuilderBoostFactor),
+                publicKey)
+            .orElse(config.getBuilderBoostFactor());
+
+    // the builder flow is on unless the proposer config disables it
+    final boolean builderEnabled =
+        getAttributeWithFallback(
+                config -> config.getBuilder().flatMap(BuilderConfig::isEnabled), publicKey)
+            .orElse(true);
+
+    if (!builderEnabled) {
+      return new ResolvedBuilderConfig(minBid, builderBoostFactor, List.of());
+    }
+
+    final Optional<List<BuilderEntry>> maybeProposerConfigBuilders =
+        getAttributeWithFallback(
+            config -> config.getBuilder().flatMap(BuilderConfig::getBuilders), publicKey);
+
+    final List<ResolvedBuilderEntry> resolvedBuilders =
+        maybeProposerConfigBuilders
+            .map(
+                builders ->
+                    builders.stream()
+                        .map(
+                            builder ->
+                                new ResolvedBuilderEntry(
+                                    builder.getUrl(),
+                                    builder
+                                        .getAuthData()
+                                        .orElseGet(() -> getDefaultAuthData(builder.getUrl())),
+                                    builder.getBuilderPubkeys().orElse(List.of()),
+                                    builder
+                                        .getMaxExecutionPayment()
+                                        .orElse(config.getBuilderMaxExecutionPayment()),
+                                    builder.getMinBid().orElse(minBid),
+                                    builder.getBuilderBoostFactor().orElse(builderBoostFactor)))
+                        .toList())
+            .orElseGet(
+                () ->
+                    config.getBuilderUrls().stream()
+                        .map(
+                            url ->
+                                new ResolvedBuilderEntry(
+                                    url,
+                                    getDefaultAuthData(url),
+                                    List.of(),
+                                    config.getBuilderMaxExecutionPayment(),
+                                    minBid,
+                                    builderBoostFactor))
+                        .toList());
+    return new ResolvedBuilderConfig(minBid, builderBoostFactor, resolvedBuilders);
+  }
+
+  private Bytes getDefaultAuthData(final URL builderUrl) {
+    return cachedDefaultAuthDataByHost.get(
+        builderUrl.getHost(),
+        __ ->
+            Bytes.of(
+                AuthDataResolver.resolveDefaultAuthData(builderUrl)
+                    .getBytes(StandardCharsets.US_ASCII)));
+  }
+
+  @Override
   public Optional<UInt64> getBuilderRegistrationTimestampOverride(final BLSPublicKey publicKey) {
     return getAttributeWithFallback(
             config ->
@@ -278,17 +382,16 @@ public class ProposerConfigManager
 
   private <T> Optional<T> getAttributeWithFallback(
       final Function<Config, Optional<T>> selector, final BLSPublicKey publicKey) {
-    final Optional<ProposerConfig> localMaybeProposerConfig = maybeProposerConfig.get();
-
-    if (localMaybeProposerConfig.isEmpty()) {
-      return runtimeProposerConfig.getProposerConfig(publicKey).flatMap(selector);
-    }
-    return localMaybeProposerConfig
+    return maybeProposerConfig
         .get()
-        .getConfigForPubKey(publicKey)
-        .flatMap(selector)
-        .or(() -> runtimeProposerConfig.getProposerConfig(publicKey).flatMap(selector))
-        .or(() -> selector.apply(localMaybeProposerConfig.get().getDefaultConfig()));
+        .map(
+            proposerConfig ->
+                proposerConfig
+                    .getConfigForPubKey(publicKey)
+                    .flatMap(selector)
+                    .or(() -> runtimeProposerConfig.getProposerConfig(publicKey).flatMap(selector))
+                    .or(() -> selector.apply(proposerConfig.getDefaultConfig())))
+        .orElseGet(() -> runtimeProposerConfig.getProposerConfig(publicKey).flatMap(selector));
   }
 
   private Optional<Eth1Address> getFeeRecipientFromProposerConfig(final BLSPublicKey publicKey) {
@@ -303,6 +406,19 @@ public class ProposerConfigManager
         .get()
         .flatMap(config -> config.getConfigForPubKey(publicKey))
         .flatMap(Config::getGasLimit);
+  }
+
+  private boolean isBuilderConfigInProposerConfig(final BLSPublicKey publicKey) {
+    return maybeProposerConfig
+        .get()
+        .flatMap(config -> config.getConfigForPubKey(publicKey))
+        .flatMap(Config::getBuilder)
+        .filter(
+            builder ->
+                builder.getMinBid().isPresent()
+                    || builder.getBuilderBoostFactor().isPresent()
+                    || builder.getBuilders().isPresent())
+        .isPresent();
   }
 
   public boolean isOwnedValidator(final BLSPublicKey publicKey) {

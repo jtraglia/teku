@@ -1,5 +1,5 @@
 /*
- * Copyright Consensys Software Inc., 2026
+ * Copyright (c) 2026 Consensys Incorporated. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -57,11 +57,8 @@ public class WithdrawalsHelpersGloas extends WithdrawalsHelpersElectra {
 
   @Override
   public void processWithdrawals(final MutableBeaconState state) {
-    final MutableBeaconStateGloas stateGloas = MutableBeaconStateGloas.required(state);
     // Return early if the parent block is empty
-    if (!stateGloas
-        .getLatestBlockHash()
-        .equals(stateGloas.getLatestExecutionPayloadBid().getBlockHash())) {
+    if (!MiscHelpersGloas.isParentBlockFull(MutableBeaconStateGloas.required(state))) {
       return;
     }
     super.processWithdrawals(state);

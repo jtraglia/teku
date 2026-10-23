@@ -1,5 +1,5 @@
 /*
- * Copyright Consensys Software Inc., 2026
+ * Copyright (c) 2026 Consensys Incorporated. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -42,7 +42,8 @@ public class MultiaddrPeerAddressTest {
   @Test
   public void fromDiscoveryPeer_shouldFallBackToTcpWhenDialingQuic() throws Exception {
     final MultiaddrPeerAddress result =
-        MultiaddrPeerAddress.fromDiscoveryPeer(createPeer(Optional.of(9100)), true).orElseThrow();
+        MultiaddrPeerAddress.fromDiscoveryPeer(createPeer(Optional.of(9100)), true, true)
+            .orElseThrow();
     assertThat(result.getMultiaddr()).isEqualTo(QUIC_MULTIADDR);
     assertThat(result.getFallbackMultiaddr()).contains(TCP_MULTIADDR);
   }
@@ -50,7 +51,8 @@ public class MultiaddrPeerAddressTest {
   @Test
   public void fromDiscoveryPeer_shouldHaveNoFallbackWhenPeerHasNoQuicAddress() throws Exception {
     final MultiaddrPeerAddress result =
-        MultiaddrPeerAddress.fromDiscoveryPeer(createPeer(Optional.empty()), true).orElseThrow();
+        MultiaddrPeerAddress.fromDiscoveryPeer(createPeer(Optional.empty()), true, true)
+            .orElseThrow();
     assertThat(result.getMultiaddr()).isEqualTo(TCP_MULTIADDR);
     assertThat(result.getFallbackMultiaddr()).isEmpty();
   }
@@ -58,7 +60,8 @@ public class MultiaddrPeerAddressTest {
   @Test
   public void fromDiscoveryPeer_shouldHaveNoFallbackWhenLocalNodeQuicDisabled() throws Exception {
     final MultiaddrPeerAddress result =
-        MultiaddrPeerAddress.fromDiscoveryPeer(createPeer(Optional.of(9100)), false).orElseThrow();
+        MultiaddrPeerAddress.fromDiscoveryPeer(createPeer(Optional.of(9100)), true, false)
+            .orElseThrow();
     assertThat(result.getMultiaddr()).isEqualTo(TCP_MULTIADDR);
     assertThat(result.getFallbackMultiaddr()).isEmpty();
   }
@@ -68,7 +71,7 @@ public class MultiaddrPeerAddressTest {
       throws Exception {
     final MultiaddrPeerAddress result =
         MultiaddrPeerAddress.fromDiscoveryPeer(
-                createPeer(Optional.empty(), Optional.of(9100)), true)
+                createPeer(Optional.empty(), Optional.of(9100)), true, true)
             .orElseThrow();
     assertThat(result.getMultiaddr()).isEqualTo(QUIC_MULTIADDR);
     assertThat(result.getFallbackMultiaddr()).isEmpty();
@@ -79,7 +82,22 @@ public class MultiaddrPeerAddressTest {
       throws Exception {
     assertThat(
             MultiaddrPeerAddress.fromDiscoveryPeer(
-                createPeer(Optional.empty(), Optional.of(9100)), false))
+                createPeer(Optional.empty(), Optional.of(9100)), true, false))
+        .isEmpty();
+  }
+
+  @Test
+  public void fromDiscoveryPeer_shouldHaveNoTcpFallbackWhenLocalNodeTcpDisabled() throws Exception {
+    final MultiaddrPeerAddress result =
+        MultiaddrPeerAddress.fromDiscoveryPeer(createPeer(Optional.of(9100)), false, true)
+            .orElseThrow();
+    assertThat(result.getMultiaddr()).isEqualTo(QUIC_MULTIADDR);
+    assertThat(result.getFallbackMultiaddr()).isEmpty();
+  }
+
+  @Test
+  public void fromDiscoveryPeer_shouldBeEmptyWhenLocalNodeCannotDialTcpOnlyPeer() throws Exception {
+    assertThat(MultiaddrPeerAddress.fromDiscoveryPeer(createPeer(Optional.empty()), false, true))
         .isEmpty();
   }
 
